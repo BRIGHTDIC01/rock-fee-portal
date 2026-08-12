@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -20,7 +18,6 @@ def parent_register(request):
         return redirect(
             "parent_dashboard"
         )
-
 
     if request.method == "POST":
 
@@ -54,11 +51,6 @@ def parent_register(request):
             ""
         )
 
-
-        # ====================================================
-        # REQUIRED FIELDS
-        # ====================================================
-
         if not all([
             full_name,
             phone,
@@ -78,11 +70,6 @@ def parent_register(request):
                 "parents/register.html"
             )
 
-
-        # ====================================================
-        # PASSWORD
-        # ====================================================
-
         if password != confirm_password:
 
             messages.error(
@@ -94,11 +81,6 @@ def parent_register(request):
                 request,
                 "parents/register.html"
             )
-
-
-        # ====================================================
-        # USERNAME
-        # ====================================================
 
         if User.objects.filter(
             username__iexact=username
@@ -114,11 +96,6 @@ def parent_register(request):
                 "parents/register.html"
             )
 
-
-        # ====================================================
-        # EMAIL
-        # ====================================================
-
         if User.objects.filter(
             email__iexact=email
         ).exists():
@@ -133,21 +110,11 @@ def parent_register(request):
                 "parents/register.html"
             )
 
-
-        # ====================================================
-        # CREATE USER
-        # ====================================================
-
         user = User.objects.create_user(
             username=username,
             email=email,
             password=password
         )
-
-
-        # ====================================================
-        # CREATE PARENT
-        # ====================================================
 
         from parents.models import Parent
 
@@ -157,11 +124,6 @@ def parent_register(request):
             phone=phone
         )
 
-
-        # ====================================================
-        # LOGIN
-        # ====================================================
-
         login(
             request,
             user
@@ -170,7 +132,6 @@ def parent_register(request):
         return redirect(
             "parent_dashboard"
         )
-
 
     return render(
         request,
@@ -190,7 +151,6 @@ def parent_login(request):
             "parent_dashboard"
         )
 
-
     if request.method == "POST":
 
         username = request.POST.get(
@@ -202,7 +162,6 @@ def parent_login(request):
             "password",
             ""
         )
-
 
         if not username or not password:
 
@@ -216,13 +175,11 @@ def parent_login(request):
                 "parents/login.html"
             )
 
-
         user = authenticate(
             request=request,
             username=username,
             password=password
         )
-
 
         if user is None:
 
@@ -235,7 +192,6 @@ def parent_login(request):
                 request,
                 "parents/login.html"
             )
-
 
         from parents.models import Parent
 
@@ -255,7 +211,6 @@ def parent_login(request):
                 "parents/login.html"
             )
 
-
         if not parent.is_active:
 
             messages.error(
@@ -268,7 +223,6 @@ def parent_login(request):
                 "parents/login.html"
             )
 
-
         login(
             request,
             user
@@ -277,7 +231,6 @@ def parent_login(request):
         return redirect(
             "parent_dashboard"
         )
-
 
     return render(
         request,
@@ -297,7 +250,6 @@ def parent_dashboard(request):
             "parent_login"
         )
 
-
     from parents.models import Parent
 
     try:
@@ -317,7 +269,6 @@ def parent_dashboard(request):
             "parent_login"
         )
 
-
     if not parent.is_active:
 
         logout(request)
@@ -331,115 +282,60 @@ def parent_dashboard(request):
             "parent_login"
         )
 
-
-    # ========================================================
-    # GET ACTIVE SESSION
-    # ========================================================
-
-    active_session = (
-        FeeStructure.objects
-        .filter(
-            session__is_active=True
-        )
-        .select_related(
-            "session"
-        )
-        .order_by(
-            "-created_at"
-        )
-        .first()
-    )
-
+    # --------------------------------------------------------
+    # Get parent's students
+    # --------------------------------------------------------
 
     students = list(
         parent.students.all()
     )
 
-
-    # ========================================================
-    # GET FEE FOR EACH STUDENT
-    # ========================================================
+    # --------------------------------------------------------
+    # Find EXACT current fee for every student
+    # --------------------------------------------------------
 
     for student in students:
 
         student.current_fee = None
 
+        fee_query = FeeStructure.objects.filter(
+            session__is_active=True,
+            student_class=student.student_class,
+            student_type=student.student_type,
+        )
 
-        if active_session:
+        # SSS = department matters
+        if student.student_class.startswith("SSS"):
 
-            fee_query = FeeStructure.objects.filter(
-
-                session=active_session.session,
-
-                student_class=student.student_class,
-
-                student_type=student.student_type
-
+            fee_query = fee_query.filter(
+                department=student.department
             )
 
+        # Other classes = no department
+        else:
 
-            if student.student_class.startswith("SSS"):
-
-                fee_query = fee_query.filter(
-                    department=student.department
-                )
-
-            else:
-
-                fee_query = fee_query.filter(
-                    department__isnull=True
-                )
-
-
-            student.current_fee = (
-                fee_query
-                .select_related(
-                    "session",
-                    "term"
-                )
-                .order_by(
-                    "-created_at"
-                )
-                .first()
+            fee_query = fee_query.filter(
+                department__isnull=True
             )
 
-
-        # ====================================================
-        # INSTALLMENTS
-        # ====================================================
-
-        if student.current_fee:
-
-            total_fee = (
-                student.current_fee.total_fee
+        student.current_fee = (
+            fee_query
+            .select_related(
+                "session",
+                "term"
             )
-
-            student.current_fee.first_installment = (
-                total_fee *
-                Decimal("0.75")
-            ).quantize(
-                Decimal("1")
+            .order_by(
+                "-created_at"
             )
-
-            student.current_fee.final_installment = (
-                total_fee -
-                student.current_fee.first_installment
-            )
-
-
-    # ========================================================
-    # RENDER
-    # ========================================================
+            .first()
+        )
 
     return render(
         request,
         "parents/dashboard.html",
         {
-            "parent":
-                parent,
-
-            "students":
-                students,
+            "parent": parent,
+            "students": students,
         }
     )
 
@@ -456,7 +352,6 @@ def add_student(request):
             "parent_login"
         )
 
-
     from parents.models import Parent
 
     try:
@@ -476,7 +371,6 @@ def add_student(request):
             "parent_login"
         )
 
-
     if not parent.is_active:
 
         logout(request)
@@ -489,7 +383,6 @@ def add_student(request):
         return redirect(
             "parent_login"
         )
-
 
     if request.method == "POST":
 
@@ -513,11 +406,6 @@ def add_student(request):
             ""
         ).strip()
 
-
-        # ====================================================
-        # NAME
-        # ====================================================
-
         if not full_name:
 
             messages.error(
@@ -529,11 +417,6 @@ def add_student(request):
                 request,
                 "parents/add_student.html"
             )
-
-
-        # ====================================================
-        # CLASSES
-        # ====================================================
 
         valid_classes = [
 
@@ -550,9 +433,7 @@ def add_student(request):
             "SSS 1",
             "SSS 2",
             "SSS 3",
-
         ]
-
 
         if student_class not in valid_classes:
 
@@ -565,11 +446,6 @@ def add_student(request):
                 request,
                 "parents/add_student.html"
             )
-
-
-        # ====================================================
-        # STUDENT TYPE
-        # ====================================================
 
         if student_type not in [
             "old",
@@ -585,11 +461,6 @@ def add_student(request):
                 request,
                 "parents/add_student.html"
             )
-
-
-        # ====================================================
-        # DEPARTMENT
-        # ====================================================
 
         if student_class.startswith("SSS"):
 
@@ -612,11 +483,6 @@ def add_student(request):
 
             department = None
 
-
-        # ====================================================
-        # CREATE STUDENT
-        # ====================================================
-
         student = Student.objects.create(
 
             full_name=full_name,
@@ -632,29 +498,20 @@ def add_student(request):
             parent_phone=parent.phone,
 
             parent_email=parent.user.email
-
         )
-
-
-        # ====================================================
-        # LINK STUDENT TO PARENT
-        # ====================================================
 
         parent.students.add(
             student
         )
-
 
         messages.success(
             request,
             f"{student.full_name} has been added successfully."
         )
 
-
         return redirect(
             "parent_dashboard"
         )
-
 
     return render(
         request,

@@ -5,6 +5,10 @@ from django.core.validators import MinValueValidator
 from students.models import Student
 
 
+# ============================================================
+# ACADEMIC SESSION
+# ============================================================
+
 class AcademicSession(models.Model):
 
     name = models.CharField(
@@ -36,6 +40,10 @@ class AcademicSession(models.Model):
         super().save(*args, **kwargs)
 
 
+# ============================================================
+# TERM
+# ============================================================
+
 class Term(models.Model):
 
     name = models.CharField(
@@ -46,6 +54,10 @@ class Term(models.Model):
     def __str__(self):
         return self.name
 
+
+# ============================================================
+# FEE STRUCTURE
+# ============================================================
 
 class FeeStructure(models.Model):
 
@@ -131,6 +143,7 @@ class FeeStructure(models.Model):
         department = ""
 
         if self.department:
+
             department = (
                 f" - {self.get_department_display()}"
             )
@@ -142,31 +155,16 @@ class FeeStructure(models.Model):
             f" - ₦{self.total_fee:,.0f}"
         )
 
-    @property
-    def seventy_five_percent(self):
 
-        return (
-            self.total_fee *
-            75 /
-            100
-        )
-
-    @property
-    def twenty_five_percent(self):
-
-        return (
-            self.total_fee *
-            25 /
-            100
-        )
-
+# ============================================================
+# PAYMENT
+# FULL PAYMENT ONLY
+# ============================================================
 
 class Payment(models.Model):
 
     PAYMENT_TYPE_CHOICES = [
         ("FULL", "Full Payment"),
-        ("75", "75% Payment"),
-        ("25", "25% Payment"),
     ]
 
     STATUS_CHOICES = [
@@ -195,7 +193,8 @@ class Payment(models.Model):
 
     payment_type = models.CharField(
         max_length=10,
-        choices=PAYMENT_TYPE_CHOICES
+        choices=PAYMENT_TYPE_CHOICES,
+        default="FULL"
     )
 
     amount = models.DecimalField(
@@ -235,6 +234,9 @@ class Payment(models.Model):
                 "ROCK-"
                 + uuid.uuid4().hex[:10].upper()
             )
+
+        # Always force full payment
+        self.payment_type = "FULL"
 
         super().save(*args, **kwargs)
 

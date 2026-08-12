@@ -2,41 +2,128 @@ from io import BytesIO
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import (
+    get_object_or_404,
+    redirect,
+    render,
+)
 from django.template.loader import get_template
 
 from xhtml2pdf import pisa
 
 from .forms import PaymentForm
-from .models import Payment, Student, FeeStructure
+from .models import Payment, FeeStructure
 
+from students.models import Student
+from parents.models import Parent
+
+
+# ============================================================
+# MAKE PAYMENT
+# FULL PAYMENT ONLY
+# ============================================================
 
 @login_required
 def make_payment(request, student_id):
+
+    # --------------------------------------------------------
+    # GET LOGGED-IN PARENT
+    # --------------------------------------------------------
+
+    try:
+
+        parent = request.user.parent_profile
+
+    except Parent.DoesNotExist:
+
+        return redirect(
+            "parent_login"
+        )
+
+    # --------------------------------------------------------
+    # GET STUDENT
+    # --------------------------------------------------------
 
     student = get_object_or_404(
         Student,
         id=student_id
     )
 
-    # Get the currently active fee structure
-    fee_structure = (
-        FeeStructure.objects
-        .filter(
-            session__is_active=True,
-            student_class=student.student_class,
+    # --------------------------------------------------------
+    # SECURITY CHECK
+    #
+    # Student has a MANY-TO-MANY relationship with parents.
+    # Make sure this student belongs to this parent.
+    # --------------------------------------------------------
+
+    if not parent.students.filter(
+        id=student.id
+    ).exists():
+
+        return redirect(
+            "parent_dashboard"
         )
+
+    # --------------------------------------------------------
+    # FIND EXACT CURRENT FEE
+    #
+    # Match:
+    #   ACTIVE SESSION
+    #   STUDENT CLASS
+    #   STUDENT TYPE
+    #   DEPARTMENT
+    # --------------------------------------------------------
+
+    fee_query = FeeStructure.objects.filter(
+
+        session__is_active=True,
+
+        student_class=student.student_class,
+
+        student_type=student.student_type
+
+    )
+
+    # --------------------------------------------------------
+    # SSS STUDENTS
+    # --------------------------------------------------------
+
+    if student.student_class.startswith("SSS"):
+
+        fee_query = fee_query.filter(
+            department=student.department
+        )
+
+    # --------------------------------------------------------
+    # NON-SSS STUDENTS
+    # --------------------------------------------------------
+
+    else:
+
+        fee_query = fee_query.filter(
+            department__isnull=True
+        )
+
+    # --------------------------------------------------------
+    # GET EXACT FEE
+    # --------------------------------------------------------
+
+    fee_structure = (
+        fee_query
         .select_related(
             "session",
             "term",
         )
         .order_by(
-            "-session__created_at"
+            "-created_at"
         )
         .first()
     )
 
-    # No fee structure found
+    # --------------------------------------------------------
+    # NO FEE FOUND
+    # --------------------------------------------------------
+
     if not fee_structure:
 
         return render(
@@ -50,7 +137,10 @@ def make_payment(request, student_id):
             }
         )
 
-    # POST = submit payment
+    # --------------------------------------------------------
+    # POST PAYMENT
+    # --------------------------------------------------------
+
     if request.method == "POST":
 
         form = PaymentForm(
@@ -60,26 +150,56 @@ def make_payment(request, student_id):
 
         if form.is_valid():
 
-            payment = form.save(
-                commit=False
-            )
+            amount = form.cleaned_data["amount"]
 
-            payment.student = student
+            # ------------------------------------------------
+            # FULL PAYMENT MUST EQUAL EXACT FEE
+            # ------------------------------------------------
 
-            payment.fee_structure = fee_structure
+            if amount != fee_structure.total_fee:
 
-            payment.status = "PENDING"
+                form.add_error(
+                    "amount",
+                    (
+                        "Full payment must be exactly "
+                        f"₦{fee_structure.total_fee:,.0f}."
+                    )
+                )
 
-            payment.save()
+            else:
 
-            return redirect(
-                "receipt",
-                payment_id=payment.id
-            )
+                payment = form.save(
+                    commit=False
+                )
+
+                payment.student = student
+
+                payment.fee_structure = fee_structure
+
+                payment.payment_type = "FULL"
+
+                payment.amount = fee_structure.total_fee
+
+                payment.status = "PENDING"
+
+                payment.save()
+
+                return redirect(
+                    "receipt",
+                    payment_id=payment.id
+                )
 
     else:
 
-        form = PaymentForm()
+        form = PaymentForm(
+            initial={
+                "amount": fee_structure.total_fee
+            }
+        )
+
+    # --------------------------------------------------------
+    # RENDER PAYMENT PAGE
+    # --------------------------------------------------------
 
     return render(
         request,
@@ -91,6 +211,10 @@ def make_payment(request, student_id):
         }
     )
 
+
+# ============================================================
+# RECEIPT
+# ============================================================
 
 @login_required
 def receipt(request, payment_id):
@@ -113,6 +237,10 @@ def receipt(request, payment_id):
         }
     )
 
+
+# ============================================================
+# DOWNLOAD RECEIPT
+# ============================================================
 
 @login_required
 def download_receipt(request, payment_id):
