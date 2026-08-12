@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Make Payment | Rock Foundation
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+
+            --orange: #f97316;
+            --orange-dark: #ea580c;
+            --orange-light: #fff7ed;
+
+            --black: #171717;
+            --text: #262626;
+            --muted: #737373;
+
+            --white: #ffffff;
+            --border: #eeeeee;
+
+            --green: #16a34a;
+            --red: #dc2626;
+            --yellow: #d97706;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                #f7f7f7;
+
+            color:
+                var(--text);
+        }
+
+        .page {
+
+            min-height:
+                100vh;
+
+            animation:
+                pageEnter
+                0.6s
+                ease;
+        }
+
+        @keyframes pageEnter {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(15px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+        /* HEADER */
+
+        .topbar {
+
+            background:
+                white;
+
+            border-bottom:
+                1px solid
+                var(--border);
+
+            position:
+                sticky;
+
+            top: 0;
+
+            z-index: 100;
+        }
+
+        .topbar-inner {
+
+            max-width:
+                1180px;
+
+            min-height:
+                76px;
+
+            margin:
+                auto;
+
+            padding:
+                0 24px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+        }
+
+        .brand {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+        }
+
+        .brand-logo {
+
+            width:
+                45px;
+
+            height:
+                45px;
+
+            border-radius:
+                13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--orange),
+                    var(--orange-dark)
+                );
+
+            color:
+                white;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            font-size:
+                20px;
+
+            font-weight:
+                900;
+        }
+
+        .brand-text strong {
+
+            display:
+                block;
+
+            font-size:
+                15px;
+        }
+
+        .brand-text span {
+
+            display:
+                block;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+            margin-top:
+                3px;
+        }
+
+        .back-btn {
+
+            text-decoration:
+                none;
+
+            color:
+                var(--black);
+
+            border:
+                1px solid
+                var(--border);
+
+            background:
+                white;
+
+            padding:
+                10px 16px;
+
+            border-radius:
+                10px;
+
+            font-size:
+                13px;
+
+            font-weight:
+                bold;
+
+            transition:
+                0.2s ease;
+        }
+
+        .back-btn:hover {
+
+            border-color:
+                var(--orange);
+
+            color:
+                var(--orange-dark);
+
+            transform:
+                translateY(-2px);
+        }
+
+        /* MAIN */
+
+        .container {
+
+            width:
+                min(
+                    900px,
+                    100%
+                );
+
+            margin:
+                auto;
+
+            padding:
+                45px 24px 70px;
+        }
+
+        /* HERO */
+
+        .hero {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #171717,
+                    #292929
+                );
+
+            color:
+                white;
+
+            border-radius:
+                24px;
+
+            padding:
+                38px;
+
+            margin-bottom:
+                25px;
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            box-shadow:
+                0 20px 50px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.12
+                );
+        }
+
+        .hero::after {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            width:
+                280px;
+
+            height:
+                280px;
+
+            right:
+                -100px;
+
+            top:
+                -130px;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(
+                    249,
+                    115,
+                    22,
+                    0.25
+                );
+        }
+
+        .hero-content {
+
+            position:
+                relative;
+
+            z-index:
+                2;
+        }
+
+        .hero-label {
+
+            color:
+                #fb923c;
+
+            font-size:
+                11px;
+
+            font-weight:
+                900;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1.5px;
+
+            margin-bottom:
+                10px;
+        }
+
+        .hero h1 {
+
+            margin:
+                0;
+
+            font-size:
+                34px;
+        }
+
+        .hero p {
+
+            margin:
+                10px 0 0;
+
+            color:
+                #d4d4d4;
+
+            line-height:
+                1.6;
+
+            font-size:
+                14px;
+        }
+
+        /* STUDENT */
+
+        .student-card {
+
+            background:
+                white;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius:
+                20px;
+
+            padding:
+                25px;
+
+            margin-bottom:
+                20px;
+        }
+
+        .student-label {
+
+            color:
+                var(--muted);
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.7px;
+
+            font-size:
+                10px;
+
+            font-weight:
+                900;
+
+            margin-bottom:
+                8px;
+        }
+
+        .student-name {
+
+            font-size:
+                22px;
+
+            font-weight:
+                900;
+
+            margin:
+                0;
+        }
+
+        .student-id {
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            margin-top:
+                6px;
+        }
+
+        /* FEE SUMMARY */
+
+        .fee-summary {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    3,
+                    1fr
+                );
+
+            gap:
+                15px;
+
+            margin-bottom:
+                20px;
+        }
+
+        .fee-box {
+
+            background:
+                white;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius:
+                18px;
+
+            padding:
+                22px;
+        }
+
+        .fee-label {
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+            font-weight:
+                900;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.5px;
+        }
+
+        .fee-value {
+
+            display:
+                block;
+
+            margin-top:
+                9px;
+
+            font-size:
+                20px;
+
+            font-weight:
+                900;
+        }
+
+        .naira {
+
+            color:
+                var(--orange-dark);
+        }
+
+        /* PAYMENT CARD */
+
+        .payment-card {
+
+            background:
+                white;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius:
+                22px;
+
+            padding:
+                30px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.05
+                );
+        }
+
+        .payment-title {
+
+            margin:
+                0 0 5px;
+
+            font-size:
+                21px;
+        }
+
+        .payment-subtitle {
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            margin:
+                0 0 25px;
+        }
+
+        /* BANK DETAILS */
+
+        .bank-details {
+
+            background:
+                var(--orange-light);
+
+            border:
+                1px solid
+                #fed7aa;
+
+            border-radius:
+                16px;
+
+            padding:
+                20px;
+
+            margin-bottom:
+                25px;
+        }
+
+        .bank-title {
+
+            font-weight:
+                900;
+
+            margin-bottom:
+                12px;
+
+            color:
+                var(--orange-dark);
+        }
+
+        .bank-row {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            gap:
+                15px;
+
+            padding:
+                8px 0;
+
+            border-bottom:
+                1px solid
+                #ffedd5;
+
+            font-size:
+                13px;
+        }
+
+        .bank-row:last-child {
+
+            border-bottom:
+                none;
+        }
+
+        .bank-label {
+
+            color:
+                var(--muted);
+        }
+
+        .bank-value {
+
+            font-weight:
+                900;
+
+            text-align:
+                right;
+        }
+
+        /* FORM */
+
+        .form-group {
+
+            margin-bottom:
+                22px;
+        }
+
+        label {
+
+            display:
+                block;
+
+            margin-bottom:
+                8px;
+
+            font-size:
+                12px;
+
+            font-weight:
+                900;
+        }
+
+        select,
+        input[type="number"],
+        input[type="file"] {
+
+            width:
+                100%;
+
+            padding:
+                14px;
+
+            border-radius:
+                12px;
+
+            border:
+                1px solid
+                #dddddd;
+
+            background:
+                white;
+
+            font-size:
+                14px;
+
+            outline:
+                none;
+        }
+
+        select:focus,
+        input[type="number"]:focus,
+        input[type="file"]:focus {
+
+            border-color:
+                var(--orange);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(
+                    249,
+                    115,
+                    22,
+                    0.1
+                );
+        }
+
+        /* AMOUNT */
+
+        .amount-wrapper {
+
+            position:
+                relative;
+        }
+
+        .amount-prefix {
+
+            position:
+                absolute;
+
+            left:
+                14px;
+
+            top:
+                50%;
+
+            transform:
+                translateY(-50%);
+
+            font-weight:
+                900;
+
+            color:
+                var(--orange-dark);
+        }
+
+        .amount-input {
+
+            padding-left:
+                35px !important;
+        }
+
+        /* FILE */
+
+        .file-box {
+
+            border:
+                2px dashed
+                #dddddd;
+
+            border-radius:
+                15px;
+
+            padding:
+                22px;
+
+            text-align:
+                center;
+        }
+
+        .file-box small {
+
+            display:
+                block;
+
+            color:
+                var(--muted);
+
+            margin-top:
+                8px;
+
+            font-size:
+                11px;
+        }
+
+        /* BUTTON */
+
+        .submit-btn {
+
+            width:
+                100%;
+
+            border:
+                none;
+
+            border-radius:
+                13px;
+
+            padding:
+                15px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--orange),
+                    var(--orange-dark)
+                );
+
+            color:
+                white;
+
+            font-size:
+                14px;
+
+            font-weight:
+                900;
+
+            cursor:
+                pointer;
+
+            transition:
+                0.25s ease;
+        }
+
+        .submit-btn:hover {
+
+            transform:
+                translateY(-2px);
+        }
+
+        /* MESSAGES */
+
+        .messages {
+
+            margin-bottom:
+                20px;
+        }
+
+        .message {
+
+            padding:
+                13px 16px;
+
+            border-radius:
+                12px;
+
+            margin-bottom:
+                10px;
+
+            font-size:
+                13px;
+
+            font-weight:
+                bold;
+        }
+
+        .message.error {
+
+            background:
+                #fef2f2;
+
+            color:
+                var(--red);
+
+            border:
+                1px solid
+                #fecaca;
+        }
+
+        .message.success {
+
+            background:
+                #ecfdf5;
+
+            color:
+                var(--green);
+
+            border:
+                1px solid
+                #bbf7d0;
+        }
+
+        /* PAYMENT STATUS */
+
+        .payment-status {
+
+            margin-top:
+                25px;
+
+            padding:
+                18px;
+
+            background:
+                #fafafa;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius:
+                15px;
+        }
+
+        .payment-status-title {
+
+            font-size:
+                13px;
+
+            font-weight:
+                900;
+
+            margin-bottom:
+                12px;
+        }
+
+        .status-row {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            padding:
+                7px 0;
+
+            font-size:
+                13px;
+        }
+
+        .status-row span:first-child {
+
+            color:
+                var(--muted);
+        }
+
+        .status-row strong {
+
+            font-weight:
+                900;
+        }
+
+        .green {
+
+            color:
+                var(--green);
+        }
+
+        .yellow {
+
+            color:
+                var(--yellow);
+        }
+
+        .red {
+
+            color:
+                var(--red);
+        }
+
+        footer {
+
+            text-align:
+                center;
+
+            color:
+                #a3a3a3;
+
+            font-size:
+                11px;
+
+            padding:
+                20px;
+        }
+
+        footer strong {
+
+            color:
+                var(--orange);
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .topbar-inner {
+
+                padding:
+                    0 16px;
+
+                min-height:
+                    68px;
+            }
+
+            .brand-text span {
+
+                display:
+                    none;
+            }
+
+            .container {
+
+                padding:
+                    25px 15px 50px;
+            }
+
+            .hero {
+
+                padding:
+                    28px 23px;
+            }
+
+            .hero h1 {
+
+                font-size:
+                    28px;
+            }
+
+            .student-card,
+            .payment-card {
+
+                padding:
+                    22px;
+            }
+
+            .fee-summary {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+            .bank-row {
+
+                flex-direction:
+                    column;
+
+                gap:
+                    4px;
+            }
+
+            .bank-value {
+
+                text-align:
+                    left;
+            }
+
+            .back-btn {
+
+                padding:
+                    9px 12px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <!-- HEADER -->
+
+    <header class="topbar">
+
+        <div class="topbar-inner">
+
+            <div class="brand">
+
+                <div class="brand-logo">
+                    R
+                </div>
+
+                <div class="brand-text">
+
+                    <strong>
+                        Rock Foundation
+                    </strong>
+
+                    <span>
+                        Parent Portal
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'parent_dashboard' %}"
+                class="back-btn"
+            >
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <div class="hero-label">
+                    School Fees
+                </div>
+
+                <h1>
+                    Make a Payment
+                </h1>
+
+                <p>
+                    Submit your school fee payment and upload
+                    your payment evidence for verification.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- MESSAGES -->
+
+        {% if messages %}
+
+            <div class="messages">
+
+                {% for message in messages %}
+
+                    <div class="message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- STUDENT -->
+
+        <section class="student-card">
+
+            <div class="student-label">
+                Paying For
+            </div>
+
+            <h2 class="student-name">
+                {{ student.full_name }}
+            </h2>
+
+            <div class="student-id">
+
+                Student ID:
+                {{ student.student_id }}
+
+                &nbsp; • &nbsp;
+
+                {{ student.student_class }}
+
+            </div>
+
+        </section>
+
+
+        <!-- FEE SUMMARY -->
+
+        <div class="fee-summary">
+
+            <div class="fee-box">
+
+                <span class="fee-label">
+                    Academic Session
+                </span>
+
+                <span class="fee-value">
+                    {{ fee_structure.session.name }}
+                </span>
+
+            </div>
+
+
+            <div class="fee-box">
+
+                <span class="fee-label">
+                    Term
+                </span>
+
+                <span class="fee-value">
+                    {{ fee_structure.term.name }}
+                </span>
+
+            </div>
+
+
+            <div class="fee-box">
+
+                <span class="fee-label">
+                    Balance
+                </span>
+
+                <span class="fee-value naira">
+
+                    ₦{{ balance|floatformat:"0" }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- PAYMENT CARD -->
+
+        <section class="payment-card">
+
+            <h2 class="payment-title">
+                Payment Details
+            </h2>
+
+            <p class="payment-subtitle">
+
+                Complete your payment using the school
+                payment details below, then submit your proof.
+
+            </p>
+
+
+            <!-- BANK DETAILS -->
+
+            <div class="bank-details">
+
+                <div class="bank-title">
+                    School Payment Details
+                </div>
+
+
+                <div class="bank-row">
+
+                    <span class="bank-label">
+                        Bank Name
+                    </span>
+
+                    <span class="bank-value">
+                        SMARTCASH PSB
+                    </span>
+
+                </div>
+
+
+                <div class="bank-row">
+
+                    <span class="bank-label">
+                        Account Name
+                    </span>
+
+                    <span class="bank-value">
+                        THANKGOD BLOSSOM
+                    </span>
+
+                </div>
+
+
+                <div class="bank-row">
+
+                    <span class="bank-label">
+                        Account Number
+                    </span>
+
+                    <span class="bank-value">
+                        9016250879
+                    </span>
+
+                </div>
+
+
+                <div class="bank-row">
+
+                    <span class="bank-label">
+                        Payment Note
+                    </span>
+
+                    <span class="bank-value">
+                        Use student's name as narration
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORM -->
+
+            {% if balance > 0 %}
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                {% csrf_token %}
+
+
+                <!-- PAYMENT TYPE -->
+
+                <div class="form-group">
+
+                    <label for="payment_type">
+                        Payment Type
+                    </label>
+
+                    <select
+                        name="payment_type"
+                        id="payment_type"
+                        required
+                    >
+
+                        <option value="">
+                            Select payment type
+                        </option>
+
+
+                        {% if payment_options.75 %}
+
+                            <option
+                                value="75"
+                                data-amount="{{ first_payment|floatformat:'0' }}"
+                            >
+                                75% Installment —
+                                ₦{{ first_payment|floatformat:"0" }}
+                            </option>
+
+                        {% endif %}
+
+
+                        {% if payment_options.25 %}
+
+                            <option
+                                value="25"
+                                data-amount="{{ balance|floatformat:'0' }}"
+                            >
+                                Final 25% Payment —
+                                ₦{{ balance|floatformat:"0" }}
+                            </option>
+
+                        {% endif %}
+
+
+                        {% if payment_options.full %}
+
+                            <option
+                                value="FULL"
+                                data-amount="{{ balance|floatformat:'0' }}"
+                            >
+                                Full Payment —
+                                ₦{{ balance|floatformat:"0" }}
+                            </option>
+
+                        {% endif %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- AMOUNT -->
+
+                <div class="form-group">
+
+                    <label for="amount">
+                        Amount Paid
+                    </label>
+
+                    <div class="amount-wrapper">
+
+                        <span class="amount-prefix">
+                            ₦
+                        </span>
+
+                        <input
+                            type="number"
+                            name="amount"
+                            id="amount"
+                            class="amount-input"
+                            placeholder="Select payment type"
+                            min="1"
+                            step="1"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PAYMENT PROOF -->
+
+                <div class="form-group">
+
+                    <label for="payment_proof">
+                        Upload Payment Proof
+                    </label>
+
+                    <div class="file-box">
+
+                        <input
+                            type="file"
+                            name="payment_proof"
+                            id="payment_proof"
+                            accept="image/*"
+                            required
+                        >
+
+                        <small>
+                            Upload a clear screenshot or photo
+                            of your payment receipt.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                >
+                    Submit Payment for Verification
+                </button>
+
+            </form>
+
+
+            {% else %}
+
+                <div
+                    style="
+                        padding:20px;
+                        border-radius:15px;
+                        background:#ecfdf5;
+                        border:1px solid #bbf7d0;
+                        color:#16a34a;
+                        font-weight:800;
+                        text-align:center;
+                    "
+                >
+
+                    ✓ This student's school fees have been
+                    fully paid.
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- PAYMENT STATUS -->
+
+            <div class="payment-status">
+
+                <div class="payment-status-title">
+                    Payment Progress
+                </div>
+
+
+                <div class="status-row">
+
+                    <span>
+                        Total School Fee
+                    </span>
+
+                    <strong>
+                        ₦{{ total_fee|floatformat:"0" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <span>
+                        Verified Amount Paid
+                    </span>
+
+                    <strong class="green">
+                        ₦{{ total_paid|floatformat:"0" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <span>
+                        Remaining Balance
+                    </span>
+
+                    <strong class="yellow">
+                        ₦{{ balance|floatformat:"0" }}
+                    </strong>
+
+                </div>
+
+
+                {% if pending_75_payment %}
+
+                    <div class="status-row">
+
+                        <span>
+                            75% Installment
+                        </span>
+
+                        <strong class="yellow">
+                            Awaiting Verification
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if pending_25_payment %}
+
+                    <div class="status-row">
+
+                        <span>
+                            Final Payment
+                        </span>
+
+                        <strong class="yellow">
+                            Awaiting Verification
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if pending_full_payment %}
+
+                    <div class="status-row">
+
+                        <span>
+                            Full Payment
+                        </span>
+
+                        <strong class="yellow">
+                            Awaiting Verification
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        © 2026
+
+        <strong>
+            Rock Foundation Academy
+        </strong>
+
+        • Secure Parent Fee Portal
+
+    </footer>
+
+</div>
+
+
+<script>
+
+    const paymentType =
+        document.getElementById(
+            "payment_type"
+        );
+
+    const amountInput =
+        document.getElementById(
+            "amount"
+        );
+
+
+    paymentType.addEventListener(
+        "change",
+        function () {
+
+            const selected =
+                this.options[
+                    this.selectedIndex
+                ];
+
+            const amount =
+                selected.dataset.amount;
+
+
+            if (amount) {
+
+                amountInput.value =
+                    amount;
+
+            } else {
+
+                amountInput.value =
+                    "";
+
+            }
+
+        }
+    );
+
+
+    amountInput.addEventListener(
+        "input",
+        function () {
+
+            if (
+                this.value.includes(".")
+            ) {
+
+                this.value =
+                    this.value.split(".")[0];
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+
+</html>

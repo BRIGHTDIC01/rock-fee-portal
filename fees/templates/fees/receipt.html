@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Payment Receipt | Rock Foundation</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --orange: #f97316;
+            --orange-dark: #ea580c;
+            --orange-light: #fff7ed;
+            --black: #171717;
+            --text: #262626;
+            --muted: #737373;
+            --white: #ffffff;
+            --border: #eeeeee;
+            --green: #16a34a;
+            --yellow: #d97706;
+            --red: #dc2626;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+            color: var(--text);
+        }
+
+        .page {
+            min-height: 100vh;
+            padding-bottom: 50px;
+            animation: pageEnter 0.5s ease;
+        }
+
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .topbar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar-inner {
+            width: min(1000px, 100%);
+            min-height: 76px;
+            margin: auto;
+            padding: 0 24px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+
+            background: linear-gradient(
+                135deg,
+                var(--orange),
+                var(--orange-dark)
+            );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+            font-weight: 900;
+
+            box-shadow:
+                0 8px 20px rgba(249, 115, 22, 0.25);
+        }
+
+        .brand-text strong {
+            display: block;
+            font-size: 15px;
+        }
+
+        .brand-text span {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--black);
+
+            border: 1px solid var(--border);
+            background: white;
+
+            padding: 10px 16px;
+            border-radius: 10px;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            transition: 0.2s ease;
+        }
+
+        .back-btn:hover {
+            border-color: var(--orange);
+            color: var(--orange-dark);
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            width: min(820px, 100%);
+            margin: auto;
+            padding: 45px 24px;
+        }
+
+        /* =========================
+           SUCCESS HERO
+        ========================= */
+
+        .success-box {
+            text-align: center;
+            background: white;
+
+            border: 1px solid var(--border);
+            border-radius: 24px;
+
+            padding: 38px 25px;
+            margin-bottom: 20px;
+
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .success-icon {
+            width: 68px;
+            height: 68px;
+
+            margin: 0 auto 18px;
+
+            border-radius: 50%;
+
+            background: #ecfdf5;
+            border: 2px solid #bbf7d0;
+
+            color: var(--green);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 32px;
+            font-weight: 900;
+        }
+
+        .success-box h1 {
+            margin: 0;
+
+            font-size: 29px;
+            letter-spacing: -0.5px;
+        }
+
+        .success-box p {
+            margin: 10px auto 0;
+
+            max-width: 560px;
+
+            color: var(--muted);
+
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           RECEIPT
+        ========================= */
+
+        .receipt {
+            background: white;
+
+            border: 1px solid var(--border);
+            border-radius: 22px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .receipt-header {
+            background: linear-gradient(
+                135deg,
+                #171717,
+                #292929
+            );
+
+            color: white;
+
+            padding: 28px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 20px;
+        }
+
+        .receipt-title {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .receipt-subtitle {
+            margin: 6px 0 0;
+
+            color: #d4d4d4;
+
+            font-size: 12px;
+        }
+
+        .receipt-status {
+            padding: 8px 13px;
+
+            border-radius: 999px;
+
+            font-size: 11px;
+            font-weight: 900;
+
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-verified {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* =========================
+           RECEIPT BODY
+        ========================= */
+
+        .receipt-body {
+            padding: 30px;
+        }
+
+        .reference-box {
+            background: var(--orange-light);
+
+            border: 1px solid #fed7aa;
+
+            border-radius: 15px;
+
+            padding: 18px;
+
+            margin-bottom: 25px;
+
+            text-align: center;
+        }
+
+        .reference-label {
+            display: block;
+
+            color: var(--muted);
+
+            text-transform: uppercase;
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 7px;
+        }
+
+        .reference-number {
+            font-size: 20px;
+
+            font-weight: 900;
+
+            color: var(--orange-dark);
+
+            letter-spacing: 0.5px;
+
+            word-break: break-word;
+        }
+
+        /* =========================
+           DETAILS
+        ========================= */
+
+        .section-title {
+            margin: 0 0 14px;
+
+            font-size: 15px;
+            font-weight: 900;
+        }
+
+        .details {
+            border: 1px solid var(--border);
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            margin-bottom: 25px;
+        }
+
+        .detail-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            padding: 15px 17px;
+
+            border-bottom: 1px solid var(--border);
+
+            font-size: 13px;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--muted);
+        }
+
+        .detail-value {
+            text-align: right;
+
+            font-weight: 800;
+
+            word-break: break-word;
+        }
+
+        /* =========================
+           AMOUNT
+        ========================= */
+
+        .amount-box {
+            background: #fafafa;
+
+            border: 1px solid var(--border);
+
+            border-radius: 17px;
+
+            padding: 23px;
+
+            margin-bottom: 25px;
+
+            text-align: center;
+        }
+
+        .amount-label {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.8px;
+        }
+
+        .amount {
+            display: block;
+
+            margin-top: 8px;
+
+            font-size: 32px;
+
+            font-weight: 900;
+
+            color: var(--orange-dark);
+        }
+
+        /* =========================
+           NOTICE
+        ========================= */
+
+        .notice {
+            padding: 17px;
+
+            border-radius: 14px;
+
+            background: #fff7ed;
+
+            border: 1px solid #fed7aa;
+
+            color: #9a3412;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+
+            margin-bottom: 25px;
+        }
+
+        .notice strong {
+            font-weight: 900;
+        }
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .actions {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+        }
+
+        .action-btn {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            text-decoration: none;
+
+            border-radius: 12px;
+
+            padding: 14px;
+
+            font-size: 13px;
+
+            font-weight: 900;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .primary-btn {
+            background: linear-gradient(
+                135deg,
+                var(--orange),
+                var(--orange-dark)
+            );
+
+            color: white;
+
+            border: none;
+
+            box-shadow:
+                0 8px 20px rgba(249, 115, 22, 0.2);
+        }
+
+        .secondary-btn {
+            background: white;
+
+            color: var(--black);
+
+            border: 1px solid var(--border);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            text-align: center;
+
+            color: #a3a3a3;
+
+            font-size: 11px;
+
+            padding: 25px 20px 0;
+        }
+
+        footer strong {
+            color: var(--orange);
+        }
+
+        /* =========================
+           PRINT
+        ========================= */
+
+        @media print {
+
+            body {
+                background: white;
+            }
+
+            .topbar,
+            footer,
+            .actions {
+                display: none !important;
+            }
+
+            .container {
+                width: 100%;
+                padding: 0;
+            }
+
+            .success-box {
+                box-shadow: none;
+                border: none;
+            }
+
+            .receipt {
+                box-shadow: none;
+            }
+
+            .page {
+                padding: 0;
+            }
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 650px) {
+
+            .topbar-inner {
+                padding: 0 15px;
+                min-height: 68px;
+            }
+
+            .brand-text span {
+                display: none;
+            }
+
+            .back-btn {
+                padding: 9px 11px;
+                font-size: 12px;
+            }
+
+            .container {
+                padding: 25px 15px 45px;
+            }
+
+            .success-box {
+                padding: 30px 20px;
+            }
+
+            .success-box h1 {
+                font-size: 25px;
+            }
+
+            .receipt-header {
+                padding: 23px 20px;
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .receipt-body {
+                padding: 22px 18px;
+            }
+
+            .detail-row {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .detail-value {
+                text-align: left;
+            }
+
+            .amount {
+                font-size: 28px;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- HEADER -->
+
+    <header class="topbar">
+
+        <div class="topbar-inner">
+
+            <div class="brand">
+
+                <div class="brand-logo">
+                    R
+                </div>
+
+                <div class="brand-text">
+
+                    <strong>
+                        Rock Foundation
+                    </strong>
+
+                    <span>
+                        Parent Portal
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'parent_dashboard' %}"
+                class="back-btn"
+            >
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+        <!-- SUCCESS -->
+
+        <section class="success-box">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <h1>
+                Payment Submitted
+            </h1>
+
+            <p>
+                Your payment has been successfully submitted.
+                The school will review your payment proof and
+                update the payment status after verification.
+            </p>
+
+        </section>
+
+
+        <!-- RECEIPT -->
+
+        <section class="receipt">
+
+            <!-- RECEIPT HEADER -->
+
+            <div class="receipt-header">
+
+                <div>
+
+                    <h2 class="receipt-title">
+                        Payment Receipt
+                    </h2>
+
+                    <p class="receipt-subtitle">
+                        Rock Foundation Academy
+                    </p>
+
+                </div>
+
+
+                {% if payment.status == "VERIFIED" %}
+
+                    <div class="receipt-status status-verified">
+                        Verified
+                    </div>
+
+                {% elif payment.status == "REJECTED" %}
+
+                    <div class="receipt-status status-rejected">
+                        Rejected
+                    </div>
+
+                {% else %}
+
+                    <div class="receipt-status status-pending">
+                        Pending Verification
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- RECEIPT BODY -->
+
+            <div class="receipt-body">
+
+
+                <!-- PAYMENT REFERENCE -->
+
+                <div class="reference-box">
+
+                    <span class="reference-label">
+                        Payment Reference
+                    </span>
+
+                    <div class="reference-number">
+                        {{ payment.payment_reference }}
+                    </div>
+
+                </div>
+
+
+                <!-- STUDENT INFORMATION -->
+
+                <h3 class="section-title">
+                    Student Information
+                </h3>
+
+                <div class="details">
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Student Name
+                        </span>
+
+                        <span class="detail-value">
+                            {{ payment.student.full_name }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Student ID
+                        </span>
+
+                        <span class="detail-value">
+                            {{ payment.student.student_id }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Class
+                        </span>
+
+                        <span class="detail-value">
+                            {{ payment.student.student_class }}
+                        </span>
+
+                    </div>
+
+
+                    {% if payment.student.department %}
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Department
+                        </span>
+
+                        <span class="detail-value">
+                            {{ payment.student.department }}
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- FEE INFORMATION -->
+
+                <h3 class="section-title">
+                    Fee Information
+                </h3>
+
+                <div class="details">
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Academic Session
+                        </span>
+
+                        <span class="detail-value">
+                            {{ payment.fee_structure.session.name }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Term
+                        </span>
+
+                        <span class="detail-value">
+                            {{ payment.fee_structure.term.name }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Total School Fee
+                        </span>
+
+                        <span class="detail-value">
+                            ₦{{ payment.fee_structure.total_fee|floatformat:"0" }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Payment Type
+                        </span>
+
+                        <span class="detail-value">
+
+                            {% if payment.payment_type == "75" %}
+
+                                75% Installment
+
+                            {% elif payment.payment_type == "25" %}
+
+                                25% Final Payment
+
+                            {% elif payment.payment_type == "FULL" %}
+
+                                Full Payment
+
+                            {% else %}
+
+                                {{ payment.payment_type }}
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AMOUNT -->
+
+                <div class="amount-box">
+
+                    <span class="amount-label">
+                        Amount Submitted
+                    </span>
+
+                    <span class="amount">
+                        ₦{{ payment.amount|floatformat:"0" }}
+                    </span>
+
+                </div>
+
+
+                <!-- TRANSACTION INFORMATION -->
+
+                <h3 class="section-title">
+                    Transaction Information
+                </h3>
+
+                <div class="details">
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Transaction Date
+                        </span>
+
+                        <span class="detail-value">
+                            {{ payment.transaction_date|date:"F j, Y - g:i A" }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Payment Status
+                        </span>
+
+                        <span class="detail-value">
+
+                            {% if payment.status == "VERIFIED" %}
+
+                                Verified
+
+                            {% elif payment.status == "REJECTED" %}
+
+                                Rejected
+
+                            {% else %}
+
+                                Pending Verification
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                    {% if payment.verified_at %}
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Verified At
+                        </span>
+
+                        <span class="detail-value">
+                            {{ payment.verified_at|date:"F j, Y - g:i A" }}
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- NOTICE -->
+
+                {% if payment.status == "PENDING" %}
+
+                    <div class="notice">
+
+                        <strong>
+                            Payment awaiting verification:
+                        </strong>
+
+                        Your payment proof has been received.
+                        Please keep this receipt/reference number
+                        until the school confirms your payment.
+
+                    </div>
+
+                {% elif payment.status == "VERIFIED" %}
+
+                    <div class="notice">
+
+                        <strong>
+                            Payment verified:
+                        </strong>
+
+                        This payment has been reviewed and verified
+                        by Rock Foundation Academy.
+
+                    </div>
+
+                {% elif payment.status == "REJECTED" %}
+
+                    <div class="notice">
+
+                        <strong>
+                            Payment rejected:
+                        </strong>
+
+                        This payment has not been approved by the
+                        school. Please contact the school or submit
+                        a new payment if necessary.
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- ACTIONS -->
+
+                <div class="actions">
+
+    <a
+        href="{% url 'parent_dashboard' %}"
+        class="action-btn primary-btn"
+    >
+        Return to Dashboard
+    </a>
+
+    <a
+        href="{% url 'download_receipt' payment.id %}"
+        class="action-btn secondary-btn"
+    >
+        ⬇ Download PDF Receipt
+    </a>
+
+</div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        © 2026
+        <strong>
+            Rock Foundation Academy
+        </strong>
+
+        • Secure Parent Fee Portal
+
+    </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Make Payment | Rock Foundation</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --orange: #f97316;
+            --orange-dark: #ea580c;
+            --orange-light: #fff7ed;
+
+            --black: #171717;
+            --text: #262626;
+            --muted: #737373;
+
+            --white: #ffffff;
+            --border: #eeeeee;
+
+            --green: #16a34a;
+            --red: #dc2626;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7f7;
+            color: var(--text);
+        }
+
+        .page {
+            min-height: 100vh;
+            animation: pageEnter 0.5s ease;
+        }
+
+        @keyframes pageEnter {
+
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        .topbar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar-inner {
+            width: min(1000px, 100%);
+            min-height: 76px;
+            margin: auto;
+            padding: 0 24px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--orange),
+                    var(--orange-dark)
+                );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+            font-weight: 900;
+
+            box-shadow:
+                0 8px 20px
+                rgba(249, 115, 22, 0.25);
+        }
+
+        .brand-text strong {
+            display: block;
+            font-size: 15px;
+        }
+
+        .brand-text span {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--black);
+
+            border: 1px solid var(--border);
+            background: white;
+
+            padding: 10px 16px;
+            border-radius: 10px;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            transition: 0.2s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--orange-dark);
+            border-color: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            width: min(850px, 100%);
+            margin: auto;
+            padding: 40px 24px 70px;
+        }
+
+        .page-header {
+            background:
+                linear-gradient(
+                    135deg,
+                    #171717,
+                    #292929
+                );
+
+            color: white;
+            border-radius: 22px;
+            padding: 32px;
+            margin-bottom: 22px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0, 0, 0, 0.10);
+        }
+
+        .page-label {
+            color: #fb923c;
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.3px;
+            margin-bottom: 9px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+
+            font-size:
+                clamp(
+                    27px,
+                    5vw,
+                    36px
+                );
+        }
+
+        .page-header p {
+            margin: 10px 0 0;
+            color: #d4d4d4;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .student-card {
+            background: white;
+
+            border: 1px solid var(--border);
+            border-radius: 20px;
+
+            padding: 25px;
+            margin-bottom: 20px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(0, 0, 0, 0.05);
+        }
+
+        .student-title {
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .student-name {
+            font-size: 21px;
+            font-weight: 900;
+            margin: 7px 0 5px;
+        }
+
+        .student-id {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .fee-summary {
+            background: var(--orange-light);
+
+            border:
+                1px solid
+                #fed7aa;
+
+            border-radius: 17px;
+
+            margin-bottom: 20px;
+
+            overflow: hidden;
+        }
+
+        .fee-summary-header {
+            padding: 19px 21px;
+
+            border-bottom:
+                1px solid
+                #fed7aa;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .fee-summary-header h2 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        .session {
+            color: var(--muted);
+            font-size: 12px;
+            text-align: right;
+            line-height: 1.5;
+        }
+
+        .fee-grid {
+            padding: 20px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+        }
+
+        .fee-box {
+            background: white;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 13px;
+
+            padding: 16px;
+        }
+
+        .fee-box.total {
+            background: var(--black);
+            color: white;
+            border-color: var(--black);
+        }
+
+        .fee-label {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .fee-box.total .fee-label {
+            color: #a3a3a3;
+        }
+
+        .fee-value {
+            display: block;
+            margin-top: 7px;
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .fee-box.total .fee-value {
+            color: #fb923c;
+            font-size: 23px;
+        }
+
+        .form-card {
+            background: white;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 20px;
+
+            padding: 28px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(0, 0, 0, 0.05);
+        }
+
+        .form-card h2 {
+            margin: 0 0 7px;
+            font-size: 21px;
+        }
+
+        .form-description {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 0 0 24px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .required {
+            color: var(--red);
+        }
+
+        select,
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border:
+                1px solid
+                #d4d4d4;
+
+            border-radius: 11px;
+
+            background: white;
+
+            font-family: inherit;
+            font-size: 13px;
+
+            outline: none;
+
+            transition: 0.2s ease;
+        }
+
+        select:focus,
+        input[type="number"]:focus,
+        input[type="file"]:focus {
+            border-color: var(--orange);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(249, 115, 22, 0.10);
+        }
+
+        .help-text {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.5;
+            margin-top: 7px;
+        }
+
+        .amount-display {
+            background: #fafafa;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            text-align: center;
+
+            margin: 5px 0 23px;
+        }
+
+        .amount-display-label {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.8px;
+        }
+
+        .amount-display-value {
+            display: block;
+
+            margin-top: 7px;
+
+            color: var(--orange-dark);
+
+            font-size: 30px;
+
+            font-weight: 900;
+        }
+
+        .instructions {
+            background: #fff7ed;
+
+            border:
+                1px solid
+                #fed7aa;
+
+            border-radius: 15px;
+
+            padding: 19px;
+
+            margin-bottom: 23px;
+        }
+
+        .instructions h3 {
+            margin: 0 0 10px;
+
+            font-size: 14px;
+
+            color: var(--orange-dark);
+        }
+
+        .instructions p {
+            margin: 5px 0;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+
+            color: #7c2d12;
+        }
+
+        .instructions ol {
+            margin: 8px 0 0;
+
+            padding-left: 20px;
+
+            color: #7c2d12;
+
+            font-size: 12px;
+
+            line-height: 1.8;
+        }
+
+        .submit-btn {
+            width: 100%;
+
+            border: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--orange),
+                    var(--orange-dark)
+                );
+
+            color: white;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            font-size: 14px;
+
+            font-weight: 900;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+
+            box-shadow:
+                0 8px 20px
+                rgba(249, 115, 22, 0.20);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(249, 115, 22, 0.27);
+        }
+
+        .cancel-btn {
+            display: block;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            margin-top: 13px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+        .cancel-btn:hover {
+            color: var(--orange-dark);
+        }
+
+        .no-fee {
+            background: #fff7ed;
+
+            border:
+                1px solid
+                #fed7aa;
+
+            color: var(--orange-dark);
+
+            border-radius: 17px;
+
+            padding: 25px;
+
+            text-align: center;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+        .error-box {
+            background: #fef2f2;
+
+            border:
+                1px solid
+                #fecaca;
+
+            color: #991b1b;
+
+            border-radius: 12px;
+
+            padding: 13px 15px;
+
+            margin-top: 8px;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+        .field-error {
+            color: #dc2626;
+            font-size: 11px;
+            margin-top: 7px;
+        }
+
+        footer {
+            text-align: center;
+
+            color: #a3a3a3;
+
+            font-size: 11px;
+
+            padding: 20px;
+        }
+
+        footer strong {
+            color: var(--orange);
+        }
+
+        @media (max-width: 650px) {
+
+            .topbar-inner {
+                min-height: 68px;
+                padding: 0 15px;
+            }
+
+            .brand-text span {
+                display: none;
+            }
+
+            .back-btn {
+                padding: 9px 11px;
+                font-size: 12px;
+            }
+
+            .container {
+                padding: 25px 15px 50px;
+            }
+
+            .page-header {
+                padding: 27px 22px;
+                border-radius: 19px;
+            }
+
+            .student-card,
+            .form-card {
+                padding: 21px;
+            }
+
+            .fee-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .fee-summary-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .session {
+                text-align: left;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+    <header class="topbar">
+
+        <div class="topbar-inner">
+
+            <div class="brand">
+
+                <div class="brand-logo">
+                    R
+                </div>
+
+                <div class="brand-text">
+
+                    <strong>
+                        Rock Foundation
+                    </strong>
+
+                    <span>
+                        Parent Fee Portal
+                    </span>
+
+                </div>
+
+            </div>
+
+            <a
+                href="{% url 'parent_dashboard' %}"
+                class="back-btn"
+            >
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <section class="page-header">
+
+            <div class="page-label">
+                Secure Payment
+            </div>
+
+            <h1>
+                Make School Fee Payment
+            </h1>
+
+            <p>
+                Submit your payment details and upload
+                your payment proof for verification by
+                Rock Foundation Academy.
+            </p>
+
+        </section>
+
+
+        <section class="student-card">
+
+            <div class="student-title">
+                Student
+            </div>
+
+            <div class="student-name">
+                {{ student.full_name }}
+            </div>
+
+            <div class="student-id">
+                Student ID:
+                {{ student.student_id }}
+            </div>
+
+        </section>
+
+
+        {% if fee_structure %}
+
+            <section class="fee-summary">
+
+                <div class="fee-summary-header">
+
+                    <h2>
+                        Current School Fee
+                    </h2>
+
+                    <div class="session">
+
+                        {{ fee_structure.session.name }}
+
+                        <br>
+
+                        {{ fee_structure.term.name }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="fee-grid">
+
+                    <div class="fee-box total">
+
+                        <span class="fee-label">
+                            Total Fee
+                        </span>
+
+                        <span
+                            class="fee-value"
+                            id="totalFee"
+                            data-total="{{ fee_structure.total_fee }}"
+                        >
+                            ₦{{ fee_structure.total_fee|floatformat:"0" }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="fee-box">
+
+                        <span class="fee-label">
+                            75% Installment
+                        </span>
+
+                        <span class="fee-value">
+
+                            ₦{{ fee_structure.first_installment|floatformat:"0" }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="fee-box">
+
+                        <span class="fee-label">
+                            25% Installment
+                        </span>
+
+                        <span class="fee-value">
+
+                            ₦{{ fee_structure.final_installment|floatformat:"0" }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="form-card">
+
+                <h2>
+                    Payment Details
+                </h2>
+
+                <p class="form-description">
+
+                    Select the payment type you are making,
+                    enter the amount paid and upload your
+                    payment evidence.
+
+                </p>
+
+
+                {% if form.non_field_errors %}
+
+                    <div class="error-box">
+
+                        {{ form.non_field_errors }}
+
+                    </div>
+
+                {% endif %}
+
+
+                <form
+                    method="POST"
+                    enctype="multipart/form-data"
+                >
+
+                    {% csrf_token %}
+
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="payment_type"
+                        >
+
+                            Payment Type
+
+                            <span class="required">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <select
+                            name="payment_type"
+                            id="payment_type"
+                            required
+                        >
+
+                            <option
+                                value=""
+                                {% if not form.payment_type.value %}
+                                    selected
+                                {% endif %}
+                                disabled
+                            >
+                                Select payment type
+                            </option>
+
+
+                            {% for value, label in form.fields.payment_type.choices %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if form.payment_type.value == value %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+
+                        {% for error in form.payment_type.errors %}
+
+                            <div class="field-error">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+
+                        <div class="help-text">
+
+                            Choose the payment option that
+                            matches the amount you paid.
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="amount"
+                        >
+
+                            Amount Paid
+
+                            <span class="required">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            name="amount"
+                            id="amount"
+                            min="1"
+                            step="1"
+                            placeholder="Enter amount paid"
+                            value="{{ form.amount.value|default:'' }}"
+                            required
+                        >
+
+
+                        {% for error in form.amount.errors %}
+
+                            <div class="field-error">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+
+                        <div class="help-text">
+
+                            The amount should match your
+                            selected payment type.
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="amount-display">
+
+                        <span class="amount-display-label">
+                            Payment Amount
+                        </span>
+
+                        <span
+                            class="amount-display-value"
+                            id="amountPreview"
+                        >
+                            ₦0
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="payment_proof"
+                        >
+
+                            Payment Proof
+
+                            <span class="required">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="file"
+                            name="payment_proof"
+                            id="payment_proof"
+                            accept=".jpg,.jpeg,.png,.pdf"
+                            required
+                        >
+
+
+                        {% for error in form.payment_proof.errors %}
+
+                            <div class="field-error">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+
+                        <div class="help-text">
+
+                            Upload a clear JPG, JPEG, PNG
+                            or PDF showing your payment
+                            confirmation.
+
+                            Maximum file size: 5 MB.
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="instructions">
+
+                        <h3>
+                            Before submitting
+                        </h3>
+
+                        <ol>
+
+                            <li>
+                                Make your school fee payment.
+                            </li>
+
+                            <li>
+                                Keep your payment confirmation.
+                            </li>
+
+                            <li>
+                                Select the correct payment type.
+                            </li>
+
+                            <li>
+                                Enter the exact amount paid.
+                            </li>
+
+                            <li>
+                                Upload your payment proof.
+                            </li>
+
+                            <li>
+                                Submit the payment for review.
+                            </li>
+
+                        </ol>
+
+                        <p>
+
+                            Your payment will remain
+                            <strong>Pending</strong>
+                            until it is reviewed and verified
+                            by the school.
+
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="submit-btn"
+                    >
+                        Submit Payment
+                    </button>
+
+
+                    <a
+                        href="{% url 'parent_dashboard' %}"
+                        class="cancel-btn"
+                    >
+                        Cancel and return to dashboard
+                    </a>
+
+                </form>
+
+            </section>
+
+
+        {% else %}
+
+            <section class="no-fee">
+
+                <strong>
+                    No fee structure available.
+                </strong>
+
+                <br><br>
+
+                A school fee has not yet been configured
+                for
+                <strong>
+                    {{ student.full_name }}
+                </strong>.
+
+                Please check back later or contact
+                Rock Foundation Academy.
+
+            </section>
+
+        {% endif %}
+
+    </main>
+
+
+    <footer>
+
+        © 2026
+
+        <strong>
+            Rock Foundation Academy
+        </strong>
+
+        • Secure Parent Fee Portal
+
+    </footer>
+
+</div>
+
+
+<script>
+
+    const paymentType =
+        document.getElementById("payment_type");
+
+    const amountInput =
+        document.getElementById("amount");
+
+    const amountPreview =
+        document.getElementById("amountPreview");
+
+    const totalElement =
+        document.getElementById("totalFee");
+
+
+    if (
+        paymentType &&
+        amountInput &&
+        amountPreview &&
+        totalElement
+    ) {
+
+        const total =
+            parseFloat(
+                totalElement.dataset.total
+            ) || 0;
+
+
+        const seventyFive =
+            Math.round(total * 0.75);
+
+
+        const twentyFive =
+            Math.round(total * 0.25);
+
+
+        function formatMoney(amount) {
+
+            return new Intl.NumberFormat(
+                "en-NG"
+            ).format(
+                Math.round(amount)
+            );
+
+        }
+
+
+        function updatePreview() {
+
+            const amount =
+                parseFloat(
+                    amountInput.value
+                ) || 0;
+
+            amountPreview.textContent =
+                "₦" +
+                formatMoney(amount);
+        }
+
+
+        paymentType.addEventListener(
+            "change",
+            function () {
+
+                let amount = 0;
+
+
+                if (
+                    this.value === "FULL"
+                ) {
+
+                    amount = total;
+
+                }
+
+                else if (
+                    this.value === "75"
+                ) {
+
+                    amount = seventyFive;
+
+                }
+
+                else if (
+                    this.value === "25"
+                ) {
+
+                    amount = twentyFive;
+
+                }
+
+
+                amountInput.value =
+                    Math.round(amount);
+
+                updatePreview();
+
+            }
+        );
+
+
+        amountInput.addEventListener(
+            "input",
+            updatePreview
+        );
+
+
+        updatePreview();
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Parent Portal | Rock Foundation</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --orange: #f97316;
+            --orange-dark: #ea580c;
+            --orange-light: #fff7ed;
+
+            --black: #171717;
+            --text: #262626;
+            --muted: #737373;
+
+            --white: #ffffff;
+            --border: #eeeeee;
+
+            --green: #16a34a;
+            --yellow: #d97706;
+            --red: #dc2626;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f8f8f8;
+
+            color: var(--text);
+        }
+
+        .page {
+            animation:
+                pageEnter
+                0.7s
+                ease
+                both;
+        }
+
+        @keyframes pageEnter {
+
+            from {
+                opacity: 0;
+                transform:
+                    translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+        /* =========================
+           TOP BAR
+        ========================= */
+
+        .topbar {
+
+            background: white;
+
+            border-bottom:
+                1px solid var(--border);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+        }
+
+        .topbar-inner {
+
+            max-width: 1180px;
+
+            margin: auto;
+
+            min-height: 76px;
+
+            padding:
+                0 24px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content:
+                space-between;
+        }
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .brand-logo {
+
+            width: 45px;
+            height: 45px;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--orange),
+                    var(--orange-dark)
+                );
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 20px;
+
+            font-weight: 900;
+
+            box-shadow:
+                0 8px 20px
+                rgba(
+                    249,
+                    115,
+                    22,
+                    0.25
+                );
+        }
+
+        .brand-text strong {
+
+            display: block;
+
+            font-size: 15px;
+        }
+
+        .brand-text span {
+
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin-top: 3px;
+        }
+
+        .logout {
+
+            text-decoration: none;
+
+            color: var(--black);
+
+            border:
+                1px solid var(--border);
+
+            background: white;
+
+            padding:
+                10px 16px;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+
+            font-size: 13px;
+
+            transition:
+                0.2s ease;
+        }
+
+        .logout:hover {
+
+            color:
+                var(--orange-dark);
+
+            border-color:
+                var(--orange);
+
+            transform:
+                translateY(-2px);
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+
+            width:
+                min(
+                    1180px,
+                    100%
+                );
+
+            margin: auto;
+
+            padding:
+                40px 24px 70px;
+        }
+
+        /* =========================
+           WELCOME
+        ========================= */
+
+        .welcome {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #171717,
+                    #292929
+                );
+
+            color: white;
+
+            border-radius: 24px;
+
+            padding: 40px;
+
+            margin-bottom: 35px;
+
+            box-shadow:
+                0 20px 50px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.12
+                );
+
+            animation:
+                welcomeEnter
+                0.8s
+                ease
+                0.1s
+                both;
+        }
+
+        @keyframes welcomeEnter {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(25px)
+                    scale(0.98);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+
+        }
+
+        .welcome::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 300px;
+            height: 300px;
+
+            right: -100px;
+
+            top: -140px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(
+                    249,
+                    115,
+                    22,
+                    0.25
+                );
+        }
+
+        .welcome-content {
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+        .welcome-label {
+
+            color:
+                #fb923c;
+
+            font-size: 12px;
+
+            font-weight: 900;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1.5px;
+
+            margin-bottom: 10px;
+        }
+
+        .welcome h1 {
+
+            margin: 0;
+
+            font-size:
+                clamp(
+                    28px,
+                    5vw,
+                    42px
+                );
+
+            letter-spacing:
+                -1px;
+        }
+
+        .welcome p {
+
+            color:
+                #d4d4d4;
+
+            max-width:
+                650px;
+
+            line-height:
+                1.7;
+
+            margin:
+                12px 0 0;
+        }
+
+        /* =========================
+           SECTION
+        ========================= */
+
+        .section-heading {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap: 15px;
+
+            margin-bottom: 18px;
+        }
+
+        .section-heading h2 {
+
+            margin: 0;
+
+            font-size: 22px;
+        }
+
+        .section-heading span {
+
+            display: block;
+
+            color:
+                var(--muted);
+
+            font-size: 13px;
+
+            margin-top: 5px;
+        }
+
+        .add-student {
+
+            text-decoration: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--orange),
+                    var(--orange-dark)
+                );
+
+            color: white;
+
+            padding:
+                11px 16px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            transition:
+                0.2s ease;
+
+            white-space:
+                nowrap;
+
+            box-shadow:
+                0 8px 20px
+                rgba(
+                    249,
+                    115,
+                    22,
+                    0.18
+                );
+        }
+
+        .add-student:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(
+                    249,
+                    115,
+                    22,
+                    0.25
+                );
+        }
+
+        /* =========================
+           STUDENT CARD
+        ========================= */
+
+        .student-card {
+
+            background: white;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 22px;
+
+            margin-bottom: 28px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 8px 30px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.05
+                );
+
+            animation:
+                cardEnter
+                0.7s
+                ease
+                both;
+
+            transition:
+                0.25s ease;
+        }
+
+        .student-card:hover {
+
+            transform:
+                translateY(-4px);
+
+            box-shadow:
+                0 18px 45px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.09
+                );
+        }
+
+        @keyframes cardEnter {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(20px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+        /* =========================
+           STUDENT HEADER
+        ========================= */
+
+        .student-header {
+
+            padding:
+                26px 28px;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap: 20px;
+
+            border-bottom:
+                1px solid
+                var(--border);
+        }
+
+        .student-info {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .student-avatar {
+
+            width: 55px;
+            height: 55px;
+
+            border-radius: 16px;
+
+            background:
+                var(--orange-light);
+
+            color:
+                var(--orange-dark);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+
+            font-weight: 900;
+
+            flex-shrink: 0;
+        }
+
+        .student-name {
+
+            margin: 0;
+
+            font-size: 21px;
+        }
+
+        .student-id {
+
+            color:
+                var(--muted);
+
+            font-size: 13px;
+
+            margin-top: 5px;
+        }
+
+        /* =========================
+           BADGES
+        ========================= */
+
+        .active-badge,
+        .inactive-badge {
+
+            padding:
+                7px 12px;
+
+            border-radius:
+                999px;
+
+            font-size: 11px;
+
+            font-weight: 900;
+
+            white-space:
+                nowrap;
+        }
+
+        .active-badge {
+
+            background:
+                #ecfdf5;
+
+            color:
+                var(--green);
+        }
+
+        .inactive-badge {
+
+            background:
+                #fef2f2;
+
+            color:
+                var(--red);
+        }
+
+        /* =========================
+           INFO GRID
+        ========================= */
+
+        .info-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    3,
+                    1fr
+                );
+
+            gap: 15px;
+
+            padding:
+                24px 28px;
+        }
+
+        .info-box {
+
+            background:
+                #fafafa;
+
+            border:
+                1px solid
+                #f0f0f0;
+
+            padding: 18px;
+
+            border-radius: 15px;
+
+            transition:
+                0.2s ease;
+        }
+
+        .info-box:hover {
+
+            transform:
+                translateY(-3px);
+
+            border-color:
+                #fed7aa;
+        }
+
+        .info-box-label {
+
+            color:
+                var(--muted);
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.5px;
+        }
+
+        .info-box-value {
+
+            display: block;
+
+            margin-top: 8px;
+
+            font-size: 17px;
+
+            font-weight: 800;
+        }
+
+        /* =========================
+           FEE PANEL
+        ========================= */
+
+        .fee-panel {
+
+            margin:
+                0 28px 28px;
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            border:
+                1px solid
+                #fed7aa;
+
+            background:
+                #fffaf5;
+        }
+
+        .fee-header {
+
+            padding:
+                20px 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff7ed,
+                    #ffffff
+                );
+
+            border-bottom:
+                1px solid
+                #fed7aa;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap: 15px;
+        }
+
+        .fee-header h3 {
+
+            margin: 0;
+
+            font-size: 18px;
+        }
+
+        .fee-session {
+
+            font-size: 12px;
+
+            color:
+                var(--muted);
+
+            text-align:
+                right;
+        }
+
+        .fee-content {
+
+            padding: 22px;
+
+            display: grid;
+
+            grid-template-columns:
+                1.4fr
+                1fr
+                1fr
+                1fr;
+
+            gap: 14px;
+        }
+
+        .fee-box {
+
+            background: white;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 14px;
+
+            padding: 17px;
+        }
+
+        .fee-box.main {
+
+            background:
+                var(--black);
+
+            color: white;
+
+            border-color:
+                var(--black);
+        }
+
+        .fee-label {
+
+            display: block;
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.5px;
+
+            color:
+                var(--muted);
+        }
+
+        .fee-box.main .fee-label {
+
+            color:
+                #a3a3a3;
+        }
+
+        .fee-value {
+
+            display: block;
+
+            margin-top: 7px;
+
+            font-size: 20px;
+
+            font-weight: 900;
+        }
+
+        .fee-box.main .fee-value {
+
+            color:
+                #fb923c;
+
+            font-size: 25px;
+        }
+
+        .fee-note {
+
+            padding:
+                0 22px 22px;
+
+            color:
+                var(--muted);
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+
+        .no-fee {
+
+            margin:
+                0 28px 28px;
+
+            padding: 20px;
+
+            background:
+                #fff7ed;
+
+            border:
+                1px solid
+                #fed7aa;
+
+            border-radius: 15px;
+
+            color:
+                var(--orange-dark);
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+        /* =========================
+           PAYMENT SECTION
+        ========================= */
+
+        .payment-section {
+
+            padding:
+                0 28px 28px;
+        }
+
+        .payment-heading {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            margin-bottom: 15px;
+        }
+
+        .payment-heading h3 {
+
+            margin: 0;
+
+            font-size: 18px;
+        }
+
+        .payment-heading span {
+
+            color:
+                var(--muted);
+
+            font-size: 12px;
+        }
+
+        .pay-button {
+
+            display:
+                inline-block;
+
+            text-decoration:
+                none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--orange),
+                    var(--orange-dark)
+                );
+
+            color: white;
+
+            padding:
+                12px 20px;
+
+            border-radius:
+                12px;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            transition:
+                0.2s ease;
+
+            margin-bottom:
+                20px;
+
+            box-shadow:
+                0 8px 20px
+                rgba(
+                    249,
+                    115,
+                    22,
+                    0.18
+                );
+        }
+
+        .pay-button:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(
+                    249,
+                    115,
+                    22,
+                    0.25
+                );
+        }
+
+        /* =========================
+           PAYMENT TABLE
+        ========================= */
+
+        .table-wrapper {
+
+            overflow-x: auto;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 15px;
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse:
+                collapse;
+
+            min-width:
+                650px;
+        }
+
+        th {
+
+            background:
+                #fafafa;
+
+            color:
+                var(--muted);
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.5px;
+
+            padding:
+                14px 16px;
+
+            text-align:
+                left;
+        }
+
+        td {
+
+            padding:
+                16px;
+
+            border-top:
+                1px solid
+                var(--border);
+
+            font-size: 13px;
+        }
+
+        tbody tr {
+
+            transition:
+                0.2s ease;
+        }
+
+        tbody tr:hover {
+
+            background:
+                #fffaf5;
+        }
+
+        .reference {
+
+            font-weight: 800;
+        }
+
+        .amount {
+
+            font-weight: 900;
+        }
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap: 6px;
+
+            padding:
+                6px 10px;
+
+            border-radius:
+                999px;
+
+            font-size: 10px;
+
+            font-weight: 900;
+        }
+
+        .status::before {
+
+            content: "";
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background:
+                currentColor;
+        }
+
+        .pending {
+
+            color:
+                var(--yellow);
+
+            background:
+                #fffbeb;
+        }
+
+        .verified {
+
+            color:
+                var(--green);
+
+            background:
+                #ecfdf5;
+        }
+
+        .rejected {
+
+            color:
+                var(--red);
+
+            background:
+                #fef2f2;
+        }
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty {
+
+            text-align:
+                center;
+
+            padding:
+                55px 20px;
+
+            color:
+                var(--muted);
+        }
+
+        .empty-icon {
+
+            width: 60px;
+            height: 60px;
+
+            margin:
+                0 auto 15px;
+
+            border-radius: 18px;
+
+            background:
+                var(--orange-light);
+
+            color:
+                var(--orange);
+
+            display: flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            font-size: 24px;
+
+            font-weight: 900;
+        }
+
+        .empty h3 {
+
+            color:
+                var(--text);
+
+            margin-bottom:
+                8px;
+        }
+
+        .empty p {
+
+            line-height:
+                1.6;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+
+            text-align:
+                center;
+
+            color:
+                #a3a3a3;
+
+            font-size:
+                12px;
+
+            padding:
+                20px;
+        }
+
+        footer strong {
+
+            color:
+                var(--orange);
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .fee-content {
+
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+        }
+
+        @media (max-width: 750px) {
+
+            .topbar-inner {
+
+                min-height:
+                    68px;
+
+                padding:
+                    0 16px;
+            }
+
+            .brand-text span {
+
+                display:
+                    none;
+            }
+
+            .container {
+
+                padding:
+                    25px 15px 50px;
+            }
+
+            .welcome {
+
+                padding:
+                    28px 23px;
+
+                border-radius:
+                    20px;
+            }
+
+            .welcome h1 {
+
+                font-size:
+                    30px;
+            }
+
+            .section-heading {
+
+                align-items:
+                    flex-start;
+            }
+
+            .section-heading h2 {
+
+                font-size:
+                    20px;
+            }
+
+            .add-student {
+
+                padding:
+                    10px 12px;
+            }
+
+            .student-header {
+
+                align-items:
+                    flex-start;
+
+                padding:
+                    22px;
+            }
+
+            .student-name {
+
+                font-size:
+                    18px;
+            }
+
+            .info-grid {
+
+                grid-template-columns:
+                    1fr;
+
+                padding:
+                    20px 22px;
+            }
+
+            .fee-panel {
+
+                margin:
+                    0 22px 22px;
+            }
+
+            .fee-header {
+
+                align-items:
+                    flex-start;
+
+                flex-direction:
+                    column;
+            }
+
+            .fee-session {
+
+                text-align:
+                    left;
+            }
+
+            .fee-content {
+
+                grid-template-columns:
+                    1fr;
+
+                padding:
+                    18px;
+            }
+
+            .fee-note {
+
+                padding:
+                    0 18px 18px;
+            }
+
+            .payment-section {
+
+                padding:
+                    0 22px 22px;
+            }
+
+            .payment-heading {
+
+                align-items:
+                    flex-start;
+
+                gap: 8px;
+
+                flex-direction:
+                    column;
+            }
+
+            .logout {
+
+                padding:
+                    9px 12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <!-- =========================
+         TOP BAR
+    ========================= -->
+
+    <header class="topbar">
+
+        <div class="topbar-inner">
+
+            <div class="brand">
+
+                <div class="brand-logo">
+                    R
+                </div>
+
+                <div class="brand-text">
+
+                    <strong>
+                        Rock Foundation
+                    </strong>
+
+                    <span>
+                        Parent Portal
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'parent_logout' %}"
+                class="logout"
+            >
+                Logout
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="container">
+
+
+        <!-- WELCOME -->
+
+        <section class="welcome">
+
+            <div class="welcome-content">
+
+                <div class="welcome-label">
+                    Parent Portal
+                </div>
+
+                <h1>
+                    Welcome,
+                    {{ parent.full_name }}
+                </h1>
+
+                <p>
+
+                    Manage your children's school
+                    fees and payment records
+                    from one secure place.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- STUDENT HEADING -->
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    Your Students
+                </h2>
+
+                <span>
+                    Rock Foundation Academy
+                </span>
+
+            </div>
+
+
+            <a
+                href="{% url 'add_student' %}"
+                class="add-student"
+            >
+                + Add Student
+            </a>
+
+        </div>
+
+
+        <!-- =========================
+             STUDENTS
+        ========================= -->
+
+        {% if students %}
+
+
+            {% for student in students %}
+
+
+                <section class="student-card">
+
+
+                    <!-- STUDENT HEADER -->
+
+                    <div class="student-header">
+
+                        <div class="student-info">
+
+
+                            <div class="student-avatar">
+
+                                {{ student.full_name|first|upper }}
+
+                            </div>
+
+
+                            <div>
+
+                                <h2 class="student-name">
+
+                                    {{ student.full_name }}
+
+                                </h2>
+
+
+                                <div class="student-id">
+
+                                    Student ID:
+                                    {{ student.student_id }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        {% if student.is_active %}
+
+                            <span class="active-badge">
+                                ● Active
+                            </span>
+
+                        {% else %}
+
+                            <span class="inactive-badge">
+                                ● Inactive
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =========================
+                         STUDENT INFORMATION
+                    ========================= -->
+
+                    <div class="info-grid">
+
+
+                        <div class="info-box">
+
+                            <span class="info-box-label">
+                                Class
+                            </span>
+
+                            <span class="info-box-value">
+
+                                {{ student.student_class }}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-box">
+
+                            <span class="info-box-label">
+                                Parent
+                            </span>
+
+                            <span class="info-box-value">
+
+                                {{ parent.full_name }}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-box">
+
+                            <span class="info-box-label">
+                                Account
+                            </span>
+
+                            <span class="info-box-value">
+
+                                {% if student.is_active %}
+                                    Active
+                                {% else %}
+                                    Inactive
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- =========================
+                         FEE INFORMATION
+                    ========================= -->
+
+                    {% if student.current_fee %}
+
+
+                        <div class="fee-panel">
+
+
+                            <div class="fee-header">
+
+                                <div>
+
+                                    <h3>
+                                        School Fees
+                                    </h3>
+
+                                </div>
+
+
+                                <div class="fee-session">
+
+                                    {{ student.current_fee.session.name }}
+
+                                    <br>
+
+                                    {{ student.current_fee.term.name }}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="fee-content">
+
+
+                                <!-- TOTAL -->
+
+                                <div class="fee-box main">
+
+                                    <span class="fee-label">
+                                        Total School Fee
+                                    </span>
+
+                                    <span class="fee-value">
+
+                                        ₦{{ student.current_fee.total_fee|floatformat:"0" }}
+
+                                    </span>
+
+                                </div>
+
+
+                                <!-- 75% -->
+
+                                <div class="fee-box">
+
+                                    <span class="fee-label">
+                                        First 75%
+                                    </span>
+
+                                    <span class="fee-value">
+
+                                        ₦{{ student.current_fee.first_installment|floatformat:"0" }}
+
+                                    </span>
+
+                                </div>
+
+
+                                <!-- 25% -->
+
+                                <div class="fee-box">
+
+                                    <span class="fee-label">
+                                        Final 25%
+                                    </span>
+
+                                    <span class="fee-value">
+
+                                        ₦{{ student.current_fee.final_installment|floatformat:"0" }}
+
+                                    </span>
+
+                                </div>
+
+
+                                <!-- DEADLINE -->
+
+                                <div class="fee-box">
+
+                                    <span class="fee-label">
+                                        Payment Deadline
+                                    </span>
+
+                                    <span class="fee-value"
+                                          style="font-size:16px;">
+
+                                        {% if student.current_fee.payment_deadline %}
+
+                                            {{ student.current_fee.payment_deadline|date:"d M Y" }}
+
+                                        {% else %}
+
+                                            Not set
+
+                                        {% endif %}
+
+                                    </span>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="fee-note">
+
+                                Your school fee is automatically
+                                determined by the student's class.
+
+                                The first installment is 75% of
+                                the total fee and the final
+                                installment is 25%.
+
+                            </div>
+
+
+                        </div>
+
+
+                    {% else %}
+
+
+                        <div class="no-fee">
+
+                            ⚠️ No school fee has been configured
+                            yet for
+                            <strong>
+                                {{ student.student_class }}
+                            </strong>.
+
+                            Please check back later.
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                    <!-- =========================
+                         PAYMENT SECTION
+                    ========================= -->
+
+                    <div class="payment-section">
+
+
+                        <div class="payment-heading">
+
+                            <h3>
+                                Payment History
+                            </h3>
+
+                            <span>
+                                Recent transactions
+                            </span>
+
+                        </div>
+
+
+                        {% if student.current_fee %}
+
+
+                            <a
+                                href="{% url 'make_payment' student.id %}"
+                                class="pay-button"
+                            >
+
+                                💳 Make Payment
+
+                            </a>
+
+
+                        {% endif %}
+
+
+                        <!-- PAYMENT HISTORY -->
+
+                        {% with payments=student.payments.all %}
+
+
+                            {% if payments %}
+
+
+                                <div class="table-wrapper">
+
+                                    <table>
+
+                                        <thead>
+
+                                            <tr>
+
+                                                <th>
+                                                    Reference
+                                                </th>
+
+                                                <th>
+                                                    Payment Type
+                                                </th>
+
+                                                <th>
+                                                    Amount
+                                                </th>
+
+                                                <th>
+                                                    Date
+                                                </th>
+
+                                                <th>
+                                                    Status
+                                                </th>
+
+                                            </tr>
+
+                                        </thead>
+
+
+                                        <tbody>
+
+
+                                            {% for payment in payments %}
+
+
+                                                <tr>
+
+
+                                                    <td class="reference">
+
+                                                        {{ payment.payment_reference }}
+
+                                                    </td>
+
+
+                                                    <td>
+
+                                                        {{ payment.get_payment_type_display }}
+
+                                                    </td>
+
+
+                                                    <td class="amount">
+
+                                                        ₦{{ payment.amount|floatformat:"0" }}
+
+                                                    </td>
+
+
+                                                    <td>
+
+                                                        {{ payment.transaction_date|date:"d M Y" }}
+
+                                                    </td>
+
+
+                                                    <td>
+
+
+                                                        {% if payment.status == "PENDING" %}
+
+                                                            <span class="status pending">
+                                                                Pending
+                                                            </span>
+
+                                                        {% elif payment.status == "VERIFIED" %}
+
+                                                            <span class="status verified">
+                                                                Verified
+                                                            </span>
+
+                                                        {% elif payment.status == "REJECTED" %}
+
+                                                            <span class="status rejected">
+                                                                Rejected
+                                                            </span>
+
+                                                        {% endif %}
+
+
+                                                    </td>
+
+
+                                                </tr>
+
+
+                                            {% endfor %}
+
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+
+                            {% else %}
+
+
+                                <div
+                                    style="
+                                        text-align:center;
+                                        padding:30px;
+                                        color:#737373;
+                                        background:#fafafa;
+                                        border-radius:15px;
+                                    "
+                                >
+
+                                    No payment records yet.
+
+                                </div>
+
+
+                            {% endif %}
+
+
+                        {% endwith %}
+
+
+                    </div>
+
+
+                </section>
+
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <!-- NO STUDENTS -->
+
+            <section class="student-card">
+
+
+                <div class="empty">
+
+
+                    <div class="empty-icon">
+                        +
+                    </div>
+
+
+                    <h3>
+                        No students linked yet
+                    </h3>
+
+
+                    <p>
+
+                        Add a student to begin
+                        managing school fee payments.
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'add_student' %}"
+                        class="add-student"
+                    >
+
+                        + Add Student
+
+                    </a>
+
+
+                </div>
+
+
+            </section>
+
+
+        {% endif %}
+
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        © 2026
+
+        <strong>
+            Rock Foundation Academy
+        </strong>.
+
+        Parent Fee Portal.
+
+    </footer>
+
+
+</div>
+
+</body>
+
+</html>

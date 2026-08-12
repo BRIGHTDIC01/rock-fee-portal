@@ -1,0 +1,85 @@
+from django import forms
+
+from .models import Payment
+
+
+class PaymentForm(forms.ModelForm):
+
+    class Meta:
+        model = Payment
+
+        fields = [
+            "payment_type",
+            "amount",
+            "payment_proof",
+        ]
+
+        widgets = {
+
+            "payment_type": forms.Select(
+                attrs={
+                    "class": "form-control",
+                }
+            ),
+
+            "amount": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter amount paid",
+                    "min": "0",
+                    "step": "1",
+                }
+            ),
+
+            "payment_proof": forms.ClearableFileInput(
+                attrs={
+                    "class": "form-control",
+                    "accept": ".jpg,.jpeg,.png,.pdf",
+                }
+            ),
+        }
+
+    def clean_amount(self):
+
+        amount = self.cleaned_data.get("amount")
+
+        if amount is None:
+            raise forms.ValidationError(
+                "Please enter the amount paid."
+            )
+
+        if amount <= 0:
+            raise forms.ValidationError(
+                "Payment amount must be greater than ₦0."
+            )
+
+        return amount
+
+    def clean_payment_proof(self):
+
+        proof = self.cleaned_data.get("payment_proof")
+
+        if not proof:
+            raise forms.ValidationError(
+                "Please upload your payment proof."
+            )
+
+        max_size = 5 * 1024 * 1024
+
+        if proof.size > max_size:
+            raise forms.ValidationError(
+                "Payment proof must not be larger than 5MB."
+            )
+
+        allowed_types = [
+            "image/jpeg",
+            "image/png",
+            "application/pdf",
+        ]
+
+        if proof.content_type not in allowed_types:
+            raise forms.ValidationError(
+                "Only JPG, PNG, and PDF files are allowed."
+            )
+
+        return proof

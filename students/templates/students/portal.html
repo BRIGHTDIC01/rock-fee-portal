@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Fee Portal | Rock Foundation</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            color: #d1d5db;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .search-card {
+            text-align: center;
+        }
+
+        .search-card h2 {
+            margin-top: 0;
+        }
+
+        input,
+        select {
+            width: 100%;
+            max-width: 450px;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        button {
+            width: 100%;
+            max-width: 450px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #1f2937;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .student-header {
+            text-align: center;
+        }
+
+        .student-header h2 {
+            margin-bottom: 5px;
+        }
+
+        .student-id {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .detail-box {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .detail-box strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .fee-card {
+            border: 1px solid #ddd;
+        }
+
+        .fee-title {
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .fee-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .fee-row:last-child {
+            border-bottom: none;
+        }
+
+        .balance {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .paid {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .part-paid {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .not-paid {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .pending {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .payment-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .payment-section h3 {
+            margin-top: 0;
+        }
+
+        .upload-label {
+            display: block;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .warning {
+            background: #fff7ed;
+            color: #9a3412;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .no-fees {
+            text-align: center;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            .details {
+                grid-template-columns: 1fr;
+            }
+
+            .fee-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Rock Foundation</h1>
+    <p>Student Fee Portal</p>
+</div>
+
+<div class="container">
+
+    <!-- STUDENT ID SEARCH -->
+    <div class="card search-card">
+
+        <h2>Check Your School Fees</h2>
+
+        <p>
+            Enter your Student ID to view your current fee information.
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <input
+                type="text"
+                name="student_id"
+                placeholder="Enter Student ID"
+                required
+            >
+
+            <br>
+
+            <button type="submit">
+                View Fee Information
+            </button>
+        </form>
+
+        {% if error_message %}
+            <div class="error">
+                {{ error_message }}
+            </div>
+        {% endif %}
+
+    </div>
+
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    {% if student %}
+
+        <!-- STUDENT INFORMATION -->
+        <div class="card student-header">
+
+            <h2>{{ student.full_name }}</h2>
+
+            <div class="student-id">
+                {{ student.student_id }}
+            </div>
+
+            <div class="details">
+
+                <div class="detail-box">
+                    <strong>Class</strong>
+                    {{ student.student_class }}
+                </div>
+
+                <div class="detail-box">
+                    <strong>Parent/Guardian</strong>
+                    {{ student.parent_name }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% if fee_records %}
+
+            {% for fee in fee_records %}
+
+                <div class="card fee-card">
+
+                    <div class="fee-title">
+                        {{ fee.session }} — {{ fee.term }}
+                    </div>
+
+                    <div class="fee-row">
+                        <span>Total School Fee</span>
+
+                        <strong>
+                            ₦{{ fee.total_fee|floatformat:2 }}
+                        </strong>
+                    </div>
+
+                    <div class="fee-row">
+                        <span>Total Paid</span>
+
+                        <strong>
+                            ₦{{ fee.total_paid|floatformat:2 }}
+                        </strong>
+                    </div>
+
+                    <div class="fee-row">
+                        <span>Outstanding Balance</span>
+
+                        <strong class="balance">
+                            ₦{{ fee.balance|floatformat:2 }}
+                        </strong>
+                    </div>
+
+                    <div class="fee-row">
+                        <span>Status</span>
+
+                        {% if fee.payment_status == "FULLY PAID" %}
+
+                            <span class="status paid">
+                                FULLY PAID
+                            </span>
+
+                        {% elif fee.payment_status == "PART PAYMENT" %}
+
+                            <span class="status part-paid">
+                                PART PAYMENT
+                            </span>
+
+                        {% else %}
+
+                            <span class="status not-paid">
+                                NOT PAID
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- PAYMENT FORM -->
+                    {% if fee.balance > 0 %}
+
+                        <div class="payment-section">
+
+                            <h3>Submit Payment</h3>
+
+                            <p>
+                                Select the payment you are making and
+                                upload your payment receipt.
+                            </p>
+
+                            <form
+                                method="POST"
+                                enctype="multipart/form-data"
+                            >
+
+                                {% csrf_token %}
+
+                                <input
+                                    type="hidden"
+                                    name="action"
+                                    value="submit_payment"
+                                >
+
+                                <input
+                                    type="hidden"
+                                    name="student_id"
+                                    value="{{ student.student_id }}"
+                                >
+
+                                <input
+                                    type="hidden"
+                                    name="fee_structure"
+                                    value="{{ fee.id }}"
+                                >
+
+
+                                <label class="upload-label">
+                                    Payment Type
+                                </label>
+
+                                <select
+                                    name="payment_type"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select payment type
+                                    </option>
+
+                                    <option value="75%">
+                                        75% Installment
+                                    </option>
+
+                                    <option value="25%">
+                                        25% Final Payment
+                                    </option>
+
+                                    <option value="FULL">
+                                        Full Payment
+                                    </option>
+
+                                </select>
+
+
+                                <label class="upload-label">
+                                    Payment Receipt / Proof
+                                </label>
+
+                                <input
+                                    type="file"
+                                    name="payment_proof"
+                                    accept="image/*"
+                                    required
+                                >
+
+                                <div class="warning">
+                                    Please upload a clear photo or screenshot
+                                    of your payment receipt. Your payment will
+                                    remain pending until the school verifies it.
+                                </div>
+
+
+                                <button type="submit">
+                                    Submit Payment Proof
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="card no-fees">
+
+                <h3>No Current Fee Record</h3>
+
+                <p>
+                    There is currently no active fee structure
+                    for your class.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

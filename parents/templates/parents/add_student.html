@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Add Student | Rock Foundation</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff7ed,
+                    #f8f8f8
+                );
+
+            color: #171717;
+        }
+
+        .page {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 25px;
+        }
+
+        .card {
+
+            width: 100%;
+            max-width: 560px;
+
+            background: white;
+
+            border-radius: 24px;
+
+            padding: 38px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.10);
+
+            animation:
+                enter 0.6s ease;
+        }
+
+        @keyframes enter {
+
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        .logo {
+
+            width: 58px;
+            height: 58px;
+
+            border-radius: 17px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f97316,
+                    #ea580c
+                );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+            font-weight: 900;
+
+            margin-bottom: 22px;
+
+            box-shadow:
+                0 10px 25px
+                rgba(249, 115, 22, 0.25);
+        }
+
+        h1 {
+
+            margin: 0;
+
+            font-size: 31px;
+
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+
+            color: #737373;
+
+            line-height: 1.6;
+
+            margin:
+                10px 0 30px;
+        }
+
+        label {
+
+            display: block;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border:
+                1px solid #ddd;
+
+            border-radius: 11px;
+
+            font-size: 15px;
+
+            background: white;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+
+            border-color: #f97316;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(249,115,22,0.12);
+        }
+
+        .field {
+
+            margin-bottom: 20px;
+        }
+
+        .hint {
+
+            color: #737373;
+
+            font-size: 11px;
+
+            margin-top: 7px;
+
+            line-height: 1.5;
+        }
+
+        /* DEPARTMENT */
+
+        #department-field {
+
+            display: none;
+
+            animation:
+                slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        .student-type-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 12px;
+        }
+
+        .type-option {
+
+            position: relative;
+        }
+
+        .type-option input {
+
+            position: absolute;
+
+            opacity: 0;
+
+            pointer-events: none;
+        }
+
+        .type-label {
+
+            display: block;
+
+            border:
+                1px solid #e5e5e5;
+
+            border-radius: 13px;
+
+            padding: 16px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            background: #fafafa;
+        }
+
+        .type-label strong {
+
+            display: block;
+
+            font-size: 14px;
+
+            margin-bottom: 5px;
+        }
+
+        .type-label span {
+
+            display: block;
+
+            font-size: 11px;
+
+            color: #737373;
+
+            line-height: 1.4;
+        }
+
+        .type-option input:checked + .type-label {
+
+            border-color: #f97316;
+
+            background: #fff7ed;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(249,115,22,0.10);
+        }
+
+        .button {
+
+            width: 100%;
+
+            border: none;
+
+            border-radius: 12px;
+
+            padding: 16px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f97316,
+                    #ea580c
+                );
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            margin-top: 5px;
+
+            box-shadow:
+                0 10px 25px
+                rgba(249,115,22,0.20);
+        }
+
+        .button:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 15px 30px
+                rgba(249,115,22,0.25);
+        }
+
+        .back {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #737373;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+        .back:hover {
+
+            color: #f97316;
+        }
+
+        .message {
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            background: #fff1f2;
+
+            color: #be123c;
+
+            margin-bottom: 20px;
+
+            font-size: 13px;
+        }
+
+        .info-box {
+
+            background: #fff7ed;
+
+            border:
+                1px solid #fed7aa;
+
+            border-radius: 13px;
+
+            padding: 14px;
+
+            margin-bottom: 22px;
+
+            color: #9a3412;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+        @media (max-width: 550px) {
+
+            .page {
+                padding: 15px;
+            }
+
+            .card {
+                padding: 26px 20px;
+                border-radius: 20px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .student-type-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <div class="card">
+
+
+        <div class="logo">
+            R
+        </div>
+
+
+        <h1>
+            Add a Student
+        </h1>
+
+
+        <p class="subtitle">
+
+            Add your child to your Rock Foundation
+            parent account.
+
+        </p>
+
+
+        <div class="info-box">
+
+            💡 Your child's school fee will be
+            automatically determined by their
+            class, student type and department.
+
+        </div>
+
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="message">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <form
+            method="POST"
+            id="student-form"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- STUDENT NAME -->
+
+            <div class="field">
+
+                <label for="full_name">
+
+                    Student Full Name
+
+                </label>
+
+                <input
+                    type="text"
+                    id="full_name"
+                    name="full_name"
+                    placeholder="Enter student's full name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- CLASS -->
+
+            <div class="field">
+
+                <label for="student_class">
+
+                    Class
+
+                </label>
+
+                <select
+                    id="student_class"
+                    name="student_class"
+                    required
+                >
+
+                    <option value="">
+
+                        Select student's class
+
+                    </option>
+
+
+                    <optgroup label="Primary">
+
+                        <option value="Primary 1">
+                            Primary 1
+                        </option>
+
+                        <option value="Primary 2">
+                            Primary 2
+                        </option>
+
+                        <option value="Primary 3">
+                            Primary 3
+                        </option>
+
+                        <option value="Primary 4">
+                            Primary 4
+                        </option>
+
+                        <option value="Primary 5">
+                            Primary 5
+                        </option>
+
+                    </optgroup>
+
+
+                    <optgroup label="Junior Secondary">
+
+                        <option value="JSS 1">
+                            JSS 1
+                        </option>
+
+                        <option value="JSS 2">
+                            JSS 2
+                        </option>
+
+                        <option value="JSS 3">
+                            JSS 3
+                        </option>
+
+                    </optgroup>
+
+
+                    <optgroup label="Senior Secondary">
+
+                        <option value="SSS 1">
+                            SSS 1
+                        </option>
+
+                        <option value="SSS 2">
+                            SSS 2
+                        </option>
+
+                        <option value="SSS 3">
+                            SSS 3
+                        </option>
+
+                    </optgroup>
+
+                </select>
+
+            </div>
+
+
+            <!-- STUDENT TYPE -->
+
+            <div class="field">
+
+                <label>
+
+                    Student Type
+
+                </label>
+
+
+                <div class="student-type-grid">
+
+
+                    <div class="type-option">
+
+                        <input
+                            type="radio"
+                            id="old_student"
+                            name="student_type"
+                            value="old"
+                            required
+                        >
+
+                        <label
+                            for="old_student"
+                            class="type-label"
+                        >
+
+                            <strong>
+                                🔄 Old Student
+                            </strong>
+
+                            <span>
+                                Already attending
+                                Rock Foundation.
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="type-option">
+
+                        <input
+                            type="radio"
+                            id="new_student"
+                            name="student_type"
+                            value="new"
+                        >
+
+                        <label
+                            for="new_student"
+                            class="type-label"
+                        >
+
+                            <strong>
+                                🆕 New Intake
+                            </strong>
+
+                            <span>
+                                Newly joining
+                                Rock Foundation.
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- DEPARTMENT -->
+
+            <div
+                class="field"
+                id="department-field"
+            >
+
+                <label for="department">
+
+                    Department
+
+                </label>
+
+                <select
+                    id="department"
+                    name="department"
+                >
+
+                    <option value="">
+
+                        Select department
+
+                    </option>
+
+                    <option value="science">
+
+                        Science
+
+                    </option>
+
+                    <option value="art">
+
+                        Art
+
+                    </option>
+
+                </select>
+
+                <div class="hint">
+
+                    Department is required for SSS
+                    students because Science and Art
+                    have different school fees.
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="button"
+            >
+
+                Add Student
+
+            </button>
+
+
+        </form>
+
+
+        <a
+            href="{% url 'parent_dashboard' %}"
+            class="back"
+        >
+
+            ← Back to Parent Portal
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+    const classSelect =
+        document.getElementById(
+            "student_class"
+        );
+
+    const departmentField =
+        document.getElementById(
+            "department-field"
+        );
+
+    const departmentSelect =
+        document.getElementById(
+            "department"
+        );
+
+
+    function checkDepartment() {
+
+        const selectedClass =
+            classSelect.value;
+
+
+        const isSSS =
+            selectedClass.startsWith("SSS");
+
+
+        if (isSSS) {
+
+            departmentField.style.display =
+                "block";
+
+            departmentSelect.required =
+                true;
+
+        } else {
+
+            departmentField.style.display =
+                "none";
+
+            departmentSelect.required =
+                false;
+
+            departmentSelect.value =
+                "";
+
+        }
+
+    }
+
+
+    classSelect.addEventListener(
+        "change",
+        checkDepartment
+    );
+
+
+    checkDepartment();
+
+</script>
+
+
+</body>
+
+</html>
