@@ -1,19 +1,36 @@
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / "subdir".
+# ============================================================
+# BASE DIRECTORY
+# ============================================================
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# ============================================================
+# SECURITY
+# ============================================================
+
 SECRET_KEY = "django-insecure-change-this-later"
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Render + local development
+ALLOWED_HOSTS = [
+    "rock-fee-portal-7xtr.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
+
+# Required for Django forms/POST requests on Render
+CSRF_TRUSTED_ORIGINS = [
+    "https://rock-fee-portal-7xtr.onrender.com",
+]
 
 
-# Application definition
+# ============================================================
+# APPLICATIONS
+# ============================================================
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -23,12 +40,16 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # Our Rock Foundation apps
+    # Rock Foundation apps
     "students",
     "fees",
     "parents",
-
 ]
+
+
+# ============================================================
+# MIDDLEWARE
+# ============================================================
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -40,12 +61,24 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+
+# ============================================================
+# URL CONFIGURATION
+# ============================================================
+
 ROOT_URLCONF = "rock_fee_portal.urls"
+
+
+# ============================================================
+# TEMPLATES
+# ============================================================
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [
+            BASE_DIR / "templates"
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -57,12 +90,17 @@ TEMPLATES = [
     },
 ]
 
+
+# ============================================================
+# WSGI
+# ============================================================
+
 WSGI_APPLICATION = "rock_fee_portal.wsgi.application"
 
 
-# Database
-# We will use SQLite during development.
-# Later, we'll move the live system to PostgreSQL.
+# ============================================================
+# DATABASE
+# ============================================================
 
 DATABASES = {
     "default": {
@@ -72,7 +110,9 @@ DATABASES = {
 }
 
 
-# Password validation
+# ============================================================
+# PASSWORD VALIDATION
+# ============================================================
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -90,7 +130,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
+# ============================================================
+# INTERNATIONALIZATION
+# ============================================================
 
 LANGUAGE_CODE = "en-us"
 
@@ -101,21 +143,32 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files
+# ============================================================
+# STATIC FILES
+# ============================================================
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+# Directory used by collectstatic on Render
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Media files (uploaded payment proofs)
+
+# ============================================================
+# MEDIA FILES
+# Uploaded payment proofs
+# ============================================================
 
 MEDIA_URL = "/media/"
+
 MEDIA_ROOT = BASE_DIR / "media"
 
 
-# Default primary key field type
+# ============================================================
+# DEFAULT PRIMARY KEY
+# ============================================================
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
