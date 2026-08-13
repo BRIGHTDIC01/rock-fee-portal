@@ -1,10 +1,30 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import include, path
 
 
+# ============================================================
+# HOMEPAGE
+# ============================================================
+
+def home(request):
+    return redirect("parent_register")
+
+
+# ============================================================
+# URL PATTERNS
+# ============================================================
+
 urlpatterns = [
+
+    # Homepage
+    path(
+        "",
+        home,
+        name="home"
+    ),
 
     # Django Admin
     path(
@@ -26,7 +46,10 @@ urlpatterns = [
 ]
 
 
-# Serve uploaded media files during development
+# ============================================================
+# MEDIA FILES
+# ============================================================
+
 if settings.DEBUG:
     urlpatterns += static(
         settings.MEDIA_URL,
