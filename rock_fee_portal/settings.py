@@ -1,9 +1,7 @@
 from pathlib import Path
+import os
 
-# ============================================================
-# BASE DIRECTORY
-# ============================================================
-
+# Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -11,18 +9,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # ============================================================
 
-SECRET_KEY = "django-insecure-change-this-later"
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-change-this-later"
+)
 
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-# Render + local development
 ALLOWED_HOSTS = [
     "rock-fee-portal-7xtr.onrender.com",
     "localhost",
     "127.0.0.1",
 ]
 
-# Required for Django forms/POST requests on Render
+
+# ============================================================
+# CSRF
+# ============================================================
+
 CSRF_TRUSTED_ORIGINS = [
     "https://rock-fee-portal-7xtr.onrender.com",
 ]
@@ -76,10 +80,13 @@ ROOT_URLCONF = "rock_fee_portal.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
+
         "DIRS": [
-            BASE_DIR / "templates"
+            BASE_DIR / "templates",
         ],
+
         "APP_DIRS": True,
+
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
@@ -116,16 +123,28 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "UserAttributeSimilarityValidator"
+        ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "MinimumLengthValidator"
+        ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "CommonPasswordValidator"
+        ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "NumericPasswordValidator"
+        ),
     },
 ]
 
@@ -149,17 +168,16 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-# Directory used by collectstatic on Render
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
 
 # ============================================================
 # MEDIA FILES
-# Uploaded payment proofs
+# Payment proof uploads
 # ============================================================
 
 MEDIA_URL = "/media/"
