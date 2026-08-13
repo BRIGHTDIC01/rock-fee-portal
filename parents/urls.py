@@ -1,37 +1,63 @@
-from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
+from django.shortcuts import redirect
 
-from . import views
 
+# ============================================================
+# HOME
+# ============================================================
+
+def home(request):
+    return redirect("parent_login")
+
+
+# ============================================================
+# URL PATTERNS
+# ============================================================
 
 urlpatterns = [
 
+    # Main Website
     path(
-        "register/",
-        views.parent_register,
-        name="parent_register"
+        "",
+        home,
+        name="home"
     ),
 
+    # Django Admin
     path(
-        "login/",
-        views.parent_login,
-        name="parent_login"
+        "admin/",
+        admin.site.urls
     ),
 
+    # Fees App
     path(
-        "dashboard/",
-        views.parent_dashboard,
-        name="parent_dashboard"
+        "fees/",
+        include("fees.urls")
     ),
 
+    # Parent Portal
     path(
-        "add-student/",
-        views.add_student,
-        name="add_student"
-    ),
-
-    path(
-        "logout/",
-        views.parent_logout,
-        name="parent_logout"
+        "parent/",
+        include("parents.urls")
     ),
 ]
+
+
+# ============================================================
+# MEDIA / STATIC FILES
+# ============================================================
+
+if settings.DEBUG:
+
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )
+
+    urlpatterns += static(
+        settings.STATIC_URL,
+        document_root=settings.STATIC_ROOT
+    )
