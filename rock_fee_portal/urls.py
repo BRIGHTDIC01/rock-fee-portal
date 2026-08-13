@@ -5,17 +5,12 @@ from django.shortcuts import redirect
 from django.urls import include, path
 
 
-# ============================================================
-# HOMEPAGE
-# ============================================================
-
 def home(request):
-    return redirect("parent_register")
 
+    return redirect(
+        "parent_register"
+    )
 
-# ============================================================
-# URL PATTERNS
-# ============================================================
 
 urlpatterns = [
 
@@ -26,13 +21,19 @@ urlpatterns = [
         name="home"
     ),
 
+    # Staff Dashboard
+    path(
+        "staff-dashboard/",
+        include("dashboard.urls")
+    ),
+
     # Django Admin
     path(
         "admin/",
         admin.site.urls
     ),
 
-    # Fees App
+    # Fees
     path(
         "fees/",
         include("fees.urls")
@@ -46,11 +47,8 @@ urlpatterns = [
 ]
 
 
-# ============================================================
-# MEDIA FILES
-# ============================================================
-
 if settings.DEBUG:
+
     urlpatterns += static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
