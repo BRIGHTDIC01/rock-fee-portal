@@ -43,6 +43,8 @@ pandas==2.3.3
 pefile==2024.8.26
 pillow==12.1.0
 protobuf==6.33.2
+psycopg==3.3.4
+psycopg-binary==3.3.4
 pyarrow==22.0.0
 PyAutoGUI==0.9.54
 pycparser==3.0
