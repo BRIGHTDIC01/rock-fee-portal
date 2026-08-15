@@ -1,0 +1,532 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {{ student.full_name }} - Student Details
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 20px 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            color: #d1d5db;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            text-decoration: none;
+            background: #374151;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: #1f2937;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #111827;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 12px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .detail {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .label {
+            display: block;
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+
+        .value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            word-break: break-word;
+        }
+
+        .active {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .inactive {
+            display: inline-block;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            border: none;
+            cursor: pointer;
+            padding: 11px 18px;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .deactivate {
+            background: #dc2626;
+            color: white;
+        }
+
+        .activate {
+            background: #16a34a;
+            color: white;
+        }
+
+        .payment-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .payment-table th,
+        .payment-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .payment-table th {
+            background: #f9fafb;
+        }
+
+        .empty {
+            color: #6b7280;
+            padding: 10px 0;
+        }
+
+        @media (max-width: 700px) {
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .container {
+                padding: 0 12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<!-- ========================================================
+     HEADER
+========================================================= -->
+
+<div class="header">
+
+    <h1>Student Details</h1>
+
+    <p>
+        Rock Fee Portal
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+    <!-- ====================================================
+         BACK BUTTON
+    ===================================================== -->
+
+    <a
+        href="{% url 'dashboard:students' %}"
+        class="back-button"
+    >
+        ← Back to Students
+    </a>
+
+
+    <!-- ====================================================
+         STUDENT INFORMATION
+    ===================================================== -->
+
+    <div class="card">
+
+        <h2>
+            {{ student.full_name }}
+        </h2>
+
+        <div class="details-grid">
+
+
+            <div class="detail">
+
+                <span class="label">
+                    Student ID
+                </span>
+
+                <span class="value">
+                    {{ student.student_id|default:"Not assigned" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    Full Name
+                </span>
+
+                <span class="value">
+                    {{ student.full_name }}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    Class
+                </span>
+
+                <span class="value">
+                    {{ student.student_class }}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    Student Type
+                </span>
+
+                <span class="value">
+                    {{ student.get_student_type_display }}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    Department
+                </span>
+
+                <span class="value">
+                    {{ student.get_department_display|default:"Not applicable" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    Parent/Guardian
+                </span>
+
+                <span class="value">
+                    {{ student.parent_name|default:"Not provided" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    Parent Phone
+                </span>
+
+                <span class="value">
+                    {{ student.parent_phone|default:"Not provided" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    Registration Date
+                </span>
+
+                <span class="value">
+                    {{ student.registered_at|date:"d M Y, h:i A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    Account Status
+                </span>
+
+                <span class="value">
+
+                    {% if student.is_active %}
+
+                        <span class="active">
+                            ACTIVE
+                        </span>
+
+                    {% else %}
+
+                        <span class="inactive">
+                            INACTIVE
+                        </span>
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ====================================================
+         ACTIONS
+    ===================================================== -->
+
+    <div class="card">
+
+        <h2>
+            Student Actions
+        </h2>
+
+        <div class="actions">
+
+            <form
+                method="POST"
+                action="{% url 'dashboard:toggle_student_status' student.id %}"
+            >
+
+                {% csrf_token %}
+
+                {% if student.is_active %}
+
+                    <button
+                        type="submit"
+                        class="button deactivate"
+                    >
+                        Deactivate Student
+                    </button>
+
+                {% else %}
+
+                    <button
+                        type="submit"
+                        class="button activate"
+                    >
+                        Activate Student
+                    </button>
+
+                {% endif %}
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ====================================================
+         PAYMENT HISTORY
+    ===================================================== -->
+
+    <div class="card">
+
+        <h2>
+            Payment History
+        </h2>
+
+        {% if student.payments.all %}
+
+            <div style="overflow-x:auto;">
+
+                <table class="payment-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Reference
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Payment Type
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for payment in student.payments.all %}
+
+                            <tr>
+
+                                <td>
+                                    {{ payment.payment_reference }}
+                                </td>
+
+                                <td>
+                                    ₦{{ payment.amount|floatformat:0 }}
+                                </td>
+
+                                <td>
+                                    {{ payment.get_payment_type_display }}
+                                </td>
+
+                                <td>
+                                    {{ payment.get_status_display }}
+                                </td>
+
+                                <td>
+                                    {{ payment.transaction_date|date:"d M Y, h:i A" }}
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="empty"
+                                >
+                                    No payments recorded for this student.
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <p class="empty">
+                No payments recorded for this student.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>
