@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ student.full_name }} - Student Details</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 20px 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            color: #d1d5db;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 12px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .info {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .label {
+            display: block;
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+
+        .value {
+            font-size: 16px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 18px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button {
+            background: #2563eb;
+            color: white;
+        }
+
+        .status-button {
+            background: #111827;
+            color: white;
+        }
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 18px;
+            }
+
+            .container {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Student Details</h1>
+    <p>Rock Fee Portal — Staff Dashboard</p>
+</div>
+
+<div class="container">
+
+    <a href="{% url 'dashboard:students' %}" class="back">
+        ← Back to Students
+    </a>
+
+    <div class="card">
+
+        <h2>{{ student.full_name }}</h2>
+
+        <div class="grid">
+
+            <div class="info">
+                <span class="label">Full Name</span>
+                <span class="value">
+                    {{ student.full_name|default:"Not provided" }}
+                </span>
+            </div>
+
+            <div class="info">
+                <span class="label">Student ID</span>
+                <span class="value">
+                    {{ student.student_id|default:"Not assigned" }}
+                </span>
+            </div>
+
+            <div class="info">
+                <span class="label">Class</span>
+                <span class="value">
+                    {{ student.student_class|default:"Not provided" }}
+                </span>
+            </div>
+
+            <div class="info">
+                <span class="label">Student Type</span>
+                <span class="value">
+                    {{ student.get_student_type_display|default:"Not provided" }}
+                </span>
+            </div>
+
+            <div class="info">
+                <span class="label">Department</span>
+                <span class="value">
+                    {% if student.department %}
+                        {{ student.get_department_display|default:student.department }}
+                    {% else %}
+                        Not applicable
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="info">
+                <span class="label">Status</span>
+
+                {% if student.is_active %}
+                    <span class="status active">
+                        Active
+                    </span>
+                {% else %}
+                    <span class="status inactive">
+                        Inactive
+                    </span>
+                {% endif %}
+            </div>
+
+            <div class="info">
+                <span class="label">Parent/Guardian Name</span>
+                <span class="value">
+                    {{ student.parent_name|default:"Not provided" }}
+                </span>
+            </div>
+
+            <div class="info">
+                <span class="label">Parent/Guardian Phone</span>
+                <span class="value">
+                    {{ student.parent_phone|default:"Not provided" }}
+                </span>
+            </div>
+
+            <div class="info">
+                <span class="label">Registration Date</span>
+                <span class="value">
+                    {% if student.registered_at %}
+                        {{ student.registered_at|date:"d M Y, h:i A" }}
+                    {% else %}
+                        Not available
+                    {% endif %}
+                </span>
+            </div>
+
+        </div>
+
+        <div class="actions">
+
+            <a
+                href="{% url 'dashboard:students' %}"
+                class="button back-button"
+            >
+                Back to Students
+            </a>
+
+            <form
+                method="POST"
+                action="{% url 'dashboard:toggle_student_status' student.id %}"
+                style="display:inline;"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="button status-button"
+                >
+                    {% if student.is_active %}
+                        Deactivate Student
+                    {% else %}
+                        Activate Student
+                    {% endif %}
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
