@@ -1,0 +1,399 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}
+Rock Fee Portal | Fee Structures
+{% endblock %}
+
+{% block page_title %}
+Fee Structures
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="page-header">
+
+    <h1>
+        Fee Structure Management
+    </h1>
+
+    <p>
+        Manage school fees for each class, student type, session and term.
+    </p>
+
+</div>
+
+
+<!-- =====================================================
+     SUMMARY
+====================================================== -->
+
+<div class="cards">
+
+
+    <div class="card">
+
+        <div class="card-label">
+            Total Fee Structures
+        </div>
+
+        <div class="card-value">
+            {{ total_fee_structures }}
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-label">
+            Active Session
+        </div>
+
+        <div class="card-value"
+             style="font-size:18px;">
+
+            {% if active_session %}
+
+                {{ active_session.name }}
+
+            {% else %}
+
+                No Active Session
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     FEE STRUCTURES
+====================================================== -->
+
+<div class="panel">
+
+
+    <div
+        style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:20px;
+            gap:15px;
+            flex-wrap:wrap;
+        "
+    >
+
+        <h3>
+            Fee Structures
+        </h3>
+
+    </div>
+
+
+    <!-- =================================================
+         FILTERS
+    ================================================== -->
+
+    <form method="GET" class="filters">
+
+
+        <!-- SEARCH -->
+
+        <input
+            type="text"
+            name="search"
+            placeholder="Search class or department..."
+            value="{{ search }}"
+        >
+
+
+        <!-- SESSION -->
+
+        <select name="session">
+
+            <option value="">
+                All Sessions
+            </option>
+
+
+            {% for session in sessions %}
+
+                <option
+                    value="{{ session.id }}"
+                    {% if selected_session == session.id|stringformat:"s" %}
+                        selected
+                    {% endif %}
+                >
+
+                    {{ session.name }}
+
+                    {% if session.is_active %}
+                        (Active)
+                    {% endif %}
+
+                </option>
+
+            {% endfor %}
+
+
+        </select>
+
+
+        <!-- TERM -->
+
+        <select name="term">
+
+            <option value="">
+                All Terms
+            </option>
+
+
+            {% for term in terms %}
+
+                <option
+                    value="{{ term.id }}"
+                    {% if selected_term == term.id|stringformat:"s" %}
+                        selected
+                    {% endif %}
+                >
+
+                    {{ term.name }}
+
+                </option>
+
+            {% endfor %}
+
+
+        </select>
+
+
+        <!-- STUDENT TYPE -->
+
+        <select name="student_type">
+
+            <option value="">
+                All Student Types
+            </option>
+
+
+            {% for value, label in student_type_choices %}
+
+                <option
+                    value="{{ value }}"
+                    {% if selected_type == value %}
+                        selected
+                    {% endif %}
+                >
+
+                    {{ label }}
+
+                </option>
+
+            {% endfor %}
+
+
+        </select>
+
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+
+            Filter
+
+        </button>
+
+
+        <a
+            href="{% url 'dashboard:fee_structures' %}"
+            class="btn"
+            style="
+                background:#e5e7eb;
+                color:#374151;
+            "
+        >
+
+            Reset
+
+        </a>
+
+
+    </form>
+
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    <div class="table-wrapper">
+
+
+        <table>
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Class
+                    </th>
+
+                    <th>
+                        Student Type
+                    </th>
+
+                    <th>
+                        Department
+                    </th>
+
+                    <th>
+                        Session
+                    </th>
+
+                    <th>
+                        Term
+                    </th>
+
+                    <th>
+                        Total Fee
+                    </th>
+
+                    <th>
+                        75%
+                    </th>
+
+                    <th>
+                        25%
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+            {% for fee in fee_structures %}
+
+
+                <tr>
+
+
+                    <td>
+
+                        <strong>
+                            {{ fee.student_class }}
+                        </strong>
+
+                    </td>
+
+
+                    <td>
+
+                        {{ fee.get_student_type_display }}
+
+                    </td>
+
+
+                    <td>
+
+                        {% if fee.department %}
+
+                            {{ fee.department }}
+
+                        {% else %}
+
+                            —
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ fee.session.name }}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ fee.term.name }}
+
+                    </td>
+
+
+                    <td>
+
+                        <strong>
+                            ₦{{ fee.total_fee|floatformat:2 }}
+                        </strong>
+
+                    </td>
+
+
+                    <td>
+
+                        ₦{{ fee.first_installment|floatformat:2 }}
+
+                    </td>
+
+
+                    <td>
+
+                        ₦{{ fee.final_installment|floatformat:2 }}
+
+                    </td>
+
+
+                </tr>
+
+
+            {% empty %}
+
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        style="
+                            text-align:center;
+                            padding:40px;
+                            color:#6b7280;
+                        "
+                    >
+
+                        No fee structures found.
+
+                    </td>
+
+                </tr>
+
+
+            {% endfor %}
+
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

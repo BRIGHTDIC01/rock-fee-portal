@@ -31,8 +31,6 @@
             min-height: 100vh;
         }
 
-        /* SIDEBAR */
-
         .sidebar {
             width: 250px;
             background: #111827;
@@ -42,6 +40,7 @@
             top: 0;
             bottom: 0;
             left: 0;
+            overflow-y: auto;
         }
 
         .brand {
@@ -90,7 +89,10 @@
             color: white;
         }
 
-        /* MAIN */
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+        }
 
         .main {
             margin-left: 250px;
@@ -135,8 +137,6 @@
             padding: 35px;
         }
 
-        /* HEADER */
-
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -165,8 +165,6 @@
         .add-btn:hover {
             background: #1d4ed8;
         }
-
-        /* SEARCH */
 
         .search-panel {
             background: white;
@@ -204,7 +202,9 @@
             cursor: pointer;
         }
 
-        /* TABLE */
+        .search-btn:hover {
+            background: #1d4ed8;
+        }
 
         .panel {
             background: white;
@@ -299,8 +299,6 @@
             color: #6b7280;
         }
 
-        /* MOBILE */
-
         @media (max-width: 700px) {
 
             .sidebar {
@@ -311,7 +309,7 @@
             .brand h1,
             .brand p,
             .nav-title,
-            .nav-item span {
+            .nav-item span:not(.nav-icon) {
                 display: none;
             }
 
@@ -335,6 +333,12 @@
                 flex-direction: column;
             }
 
+            .page-header {
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }
+
             .page-header h1 {
                 font-size: 23px;
             }
@@ -342,6 +346,7 @@
         }
 
     </style>
+
 </head>
 
 
@@ -349,98 +354,175 @@
 
 <div class="layout">
 
-    <!-- SIDEBAR -->
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
     <aside class="sidebar">
 
         <div class="brand">
-            <h1>Rock Fee Portal</h1>
-            <p>School Management System</p>
+
+            <h1>
+                Rock Fee Portal
+            </h1>
+
+            <p>
+                School Management System
+            </p>
+
         </div>
+
 
         <div class="nav-title">
             Overview
         </div>
 
+
+        <!-- DASHBOARD -->
+
         <a
             href="{% url 'dashboard:dashboard' %}"
             class="nav-item"
         >
-            <span>🏠</span>
-            <span>Dashboard</span>
+
+            <span class="nav-icon">🏠</span>
+
+            <span>
+                Dashboard
+            </span>
+
         </a>
+
 
         <div class="nav-title">
             Management
         </div>
 
+
+        <!-- STUDENTS -->
+
         <a
             href="{% url 'dashboard:students' %}"
             class="nav-item active"
         >
-            <span>🎓</span>
-            <span>Students</span>
+
+            <span class="nav-icon">🎓</span>
+
+            <span>
+                Students
+            </span>
+
         </a>
 
-        <a
-            href="#"
-            class="nav-item"
-        >
-            <span>👨‍👩‍👧</span>
-            <span>Parents</span>
-        </a>
+
+        <!-- PARENTS -->
 
         <a
-            href="#"
+            href="{% url 'dashboard:parents' %}"
             class="nav-item"
         >
-            <span>💰</span>
-            <span>Fee Structures</span>
+
+            <span class="nav-icon">👨‍👩‍👧</span>
+
+            <span>
+                Parents
+            </span>
+
         </a>
+
+
+        <!-- FEE STRUCTURES -->
+
+        <a
+            href="{% url 'dashboard:fee_structures' %}"
+            class="nav-item"
+        >
+
+            <span class="nav-icon">💰</span>
+
+            <span>
+                Fee Structures
+            </span>
+
+        </a>
+
+
+        <!-- PAYMENTS -->
 
         <a
             href="{% url 'dashboard:payment_list' %}"
             class="nav-item"
         >
-            <span>💳</span>
-            <span>Payments</span>
+
+            <span class="nav-icon">💳</span>
+
+            <span>
+                Payments
+            </span>
+
         </a>
+
 
         <div class="nav-title">
             System
         </div>
 
+
+        <!-- DJANGO ADMIN -->
+
         <a
             href="{% url 'admin:index' %}"
             class="nav-item"
         >
-            <span>⚙️</span>
-            <span>Django Admin</span>
+
+            <span class="nav-icon">⚙️</span>
+
+            <span>
+                Django Admin
+            </span>
+
         </a>
+
+
+        <!-- LOGOUT -->
 
         <a
             href="{% url 'admin:logout' %}"
             class="nav-item"
         >
-            <span>🚪</span>
-            <span>Logout</span>
+
+            <span class="nav-icon">🚪</span>
+
+            <span>
+                Logout
+            </span>
+
         </a>
 
     </aside>
 
 
-    <!-- MAIN -->
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
 
     <main class="main">
 
+
         <header class="topbar">
 
-            <h2>Students</h2>
+            <h2>
+                Students
+            </h2>
+
 
             <div class="admin-user">
 
                 <div class="avatar">
+
                     {{ request.user.username|first|upper }}
+
                 </div>
 
                 {{ request.user.username }}
@@ -451,6 +533,7 @@
 
 
         <section class="content">
+
 
             <div class="page-header">
 
@@ -466,15 +549,20 @@
 
                 </div>
 
+
                 <a
-                    href="{% url 'admin:students_student_add' %}"
+                    href="#"
                     class="add-btn"
+                    onclick="return false;"
+                    title="Custom student registration will be added here"
                 >
                     + Add Student
                 </a>
 
             </div>
 
+
+            <!-- SEARCH -->
 
             <div class="search-panel">
 
@@ -503,6 +591,8 @@
             </div>
 
 
+            <!-- STUDENT TABLE -->
+
             <div class="panel">
 
                 <table>
@@ -523,7 +613,9 @@
 
                     </thead>
 
+
                     <tbody>
+
 
                     {% for student in students %}
 
@@ -541,6 +633,7 @@
 
                             </td>
 
+
                             <td>
 
                                 <span class="class-badge">
@@ -549,17 +642,21 @@
 
                             </td>
 
+
                             <td>
                                 {{ student.get_student_type_display }}
                             </td>
+
 
                             <td>
                                 {{ student.parent_name }}
                             </td>
 
+
                             <td>
                                 {{ student.parent_phone }}
                             </td>
+
 
                             <td>
 
@@ -579,10 +676,11 @@
 
                             </td>
 
+
                             <td>
 
                                 <a
-                                    href="{% url 'admin:students_student_change' student.id %}"
+                                    href="{% url 'dashboard:student_detail' student.id %}"
                                     class="view-btn"
                                 >
                                     View
@@ -592,6 +690,7 @@
 
                         </tr>
 
+
                     {% empty %}
 
                         <tr>
@@ -600,18 +699,22 @@
                                 colspan="7"
                                 class="empty"
                             >
+
                                 No students found.
+
                             </td>
 
                         </tr>
 
                     {% endfor %}
 
+
                     </tbody>
 
                 </table>
 
             </div>
+
 
         </section>
 

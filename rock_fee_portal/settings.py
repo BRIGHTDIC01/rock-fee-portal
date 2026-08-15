@@ -1,7 +1,11 @@
 from pathlib import Path
 import os
 
-# Build paths inside the project like this: BASE_DIR / "subdir".
+
+# ============================================================
+# BASE DIRECTORY
+# ============================================================
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -14,7 +18,7 @@ SECRET_KEY = os.environ.get(
     "django-insecure-change-this-later"
 )
 
-DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "rock-fee-portal-7xtr.onrender.com",
@@ -37,18 +41,26 @@ CSRF_TRUSTED_ORIGINS = [
 # ============================================================
 
 INSTALLED_APPS = [
+
+    # --------------------------------------------------------
+    # Django
+    # --------------------------------------------------------
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "dashboard",
 
-    # Rock Foundation apps
+    # --------------------------------------------------------
+    # Rock Fee Portal
+    # --------------------------------------------------------
+
+    "dashboard",
     "students",
-    "fees",
     "parents",
+    "fees",
 ]
 
 
@@ -57,12 +69,19 @@ INSTALLED_APPS = [
 # ============================================================
 
 MIDDLEWARE = [
+
     "django.middleware.security.SecurityMiddleware",
+
     "django.contrib.sessions.middleware.SessionMiddleware",
+
     "django.middleware.common.CommonMiddleware",
+
     "django.middleware.csrf.CsrfViewMiddleware",
+
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+
     "django.contrib.messages.middleware.MessageMiddleware",
+
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -79,20 +98,35 @@ ROOT_URLCONF = "rock_fee_portal.urls"
 # ============================================================
 
 TEMPLATES = [
+
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "BACKEND":
+            "django.template.backends.django.DjangoTemplates",
 
         "DIRS": [
             BASE_DIR / "templates",
         ],
 
+        # VERY IMPORTANT
+        # Allows Django to find:
+        #
+        # fees/templates/fees/
+        # parents/templates/parents/
+        # students/templates/students/
+        # dashboard/templates/dashboard/
+
         "APP_DIRS": True,
 
         "OPTIONS": {
+
             "context_processors": [
+
                 "django.template.context_processors.request",
+
                 "django.contrib.auth.context_processors.auth",
+
                 "django.contrib.messages.context_processors.messages",
+
             ],
         },
     },
@@ -111,9 +145,14 @@ WSGI_APPLICATION = "rock_fee_portal.wsgi.application"
 # ============================================================
 
 DATABASES = {
+
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+
+        "ENGINE":
+            "django.db.backends.sqlite3",
+
+        "NAME":
+            BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -123,29 +162,29 @@ DATABASES = {
 # ============================================================
 
 AUTH_PASSWORD_VALIDATORS = [
+
     {
-        "NAME": (
+        "NAME":
             "django.contrib.auth.password_validation."
-            "UserAttributeSimilarityValidator"
-        ),
+            "UserAttributeSimilarityValidator",
     },
+
     {
-        "NAME": (
+        "NAME":
             "django.contrib.auth.password_validation."
-            "MinimumLengthValidator"
-        ),
+            "MinimumLengthValidator",
     },
+
     {
-        "NAME": (
+        "NAME":
             "django.contrib.auth.password_validation."
-            "CommonPasswordValidator"
-        ),
+            "CommonPasswordValidator",
     },
+
     {
-        "NAME": (
+        "NAME":
             "django.contrib.auth.password_validation."
-            "NumericPasswordValidator"
-        ),
+            "NumericPasswordValidator",
     },
 ]
 
@@ -178,7 +217,6 @@ STATICFILES_DIRS = [
 
 # ============================================================
 # MEDIA FILES
-# Payment proof uploads
 # ============================================================
 
 MEDIA_URL = "/media/"

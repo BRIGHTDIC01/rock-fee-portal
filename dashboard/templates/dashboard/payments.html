@@ -56,6 +56,8 @@
             top: 0;
             bottom: 0;
             left: 0;
+
+            overflow-y: auto;
         }
 
         .brand {
@@ -509,6 +511,8 @@
         </div>
 
 
+        <!-- DASHBOARD -->
+
         <a
             href="{% url 'dashboard:dashboard' %}"
             class="nav-item"
@@ -528,8 +532,12 @@
         </div>
 
 
+        <!-- =================================================
+             STUDENTS
+        ================================================== -->
+
         <a
-            href="{% url 'admin:students_student_changelist' %}"
+            href="{% url 'dashboard:students' %}"
             class="nav-item"
         >
 
@@ -542,8 +550,12 @@
         </a>
 
 
+        <!-- =================================================
+             PARENTS
+        ================================================== -->
+
         <a
-            href="{% url 'admin:parents_parent_changelist' %}"
+            href="{% url 'dashboard:parents' %}"
             class="nav-item"
         >
 
@@ -556,8 +568,12 @@
         </a>
 
 
+        <!-- =================================================
+             FEE STRUCTURES
+        ================================================== -->
+
         <a
-            href="{% url 'admin:fees_feestructure_changelist' %}"
+            href="{% url 'dashboard:fee_structures' %}"
             class="nav-item"
         >
 
@@ -569,6 +585,10 @@
 
         </a>
 
+
+        <!-- =================================================
+             PAYMENTS
+        ================================================== -->
 
         <a
             href="{% url 'dashboard:payment_list' %}"
@@ -589,6 +609,8 @@
         </div>
 
 
+        <!-- DJANGO ADMIN -->
+
         <a
             href="{% url 'admin:index' %}"
             class="nav-item"
@@ -602,6 +624,8 @@
 
         </a>
 
+
+        <!-- LOGOUT -->
 
         <a
             href="{% url 'admin:logout' %}"
@@ -627,8 +651,6 @@
     <main class="main">
 
 
-        <!-- TOP BAR -->
-
         <header class="topbar">
 
             <h2>
@@ -651,12 +673,8 @@
         </header>
 
 
-        <!-- CONTENT -->
-
         <section class="content">
 
-
-            <!-- PAGE HEADER -->
 
             <div class="page-header">
 
@@ -674,8 +692,6 @@
                 </div>
 
 
-                <!-- EXCEL DOWNLOAD -->
-
                 <a
                     href="{% url 'dashboard:download_payments_excel' %}"
                     class="download-button"
@@ -688,10 +704,6 @@
 
             </div>
 
-
-            <!-- =================================================
-                 PAYMENT TABLE
-            ================================================== -->
 
             <div class="panel">
 
@@ -745,8 +757,6 @@
                         <tr>
 
 
-                            <!-- REFERENCE -->
-
                             <td>
 
                                 <span class="reference">
@@ -757,8 +767,6 @@
 
                             </td>
 
-
-                            <!-- STUDENT -->
 
                             <td>
 
@@ -777,8 +785,6 @@
                             </td>
 
 
-                            <!-- AMOUNT -->
-
                             <td>
 
                                 <span class="amount">
@@ -790,16 +796,12 @@
                             </td>
 
 
-                            <!-- PAYMENT TYPE -->
-
                             <td>
 
                                 {{ payment.get_payment_type_display }}
 
                             </td>
 
-
-                            <!-- STATUS -->
 
                             <td>
 
@@ -828,8 +830,6 @@
                             </td>
 
 
-                            <!-- DATE -->
-
                             <td>
 
                                 <span class="date">
@@ -840,8 +840,6 @@
 
                             </td>
 
-
-                            <!-- ACTION -->
 
                             <td>
 

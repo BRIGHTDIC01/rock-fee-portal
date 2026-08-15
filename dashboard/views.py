@@ -5,7 +5,13 @@ from django.db.models import Sum, Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 
-from fees.models import AcademicSession, FeeStructure, Payment
+from fees.models import (
+    AcademicSession,
+    Term,
+    FeeStructure,
+    Payment,
+)
+
 from parents.models import Parent
 from students.models import Student
 
@@ -102,7 +108,7 @@ def dashboard(request):
 
     outstanding = expected_fees - total_collected
 
-    if outstanding < 0:
+    if outstanding < Decimal("0"):
         outstanding = Decimal("0")
 
     recent_payments = (
@@ -117,27 +123,20 @@ def dashboard(request):
     )
 
     context = {
-
         "total_students": total_students,
-
         "total_parents": total_parents,
-
         "total_fee_structures": total_fee_structures,
 
         "active_session": active_session,
 
         "total_collected": total_collected,
-
         "pending_amount": pending_amount,
-
         "rejected_amount": rejected_amount,
 
         "pending_count": pending_payments.count(),
-
         "rejected_count": rejected_payments.count(),
 
         "expected_fees": expected_fees,
-
         "outstanding": outstanding,
 
         "recent_payments": recent_payments,
@@ -157,8 +156,10 @@ def dashboard(request):
 @staff_member_required
 def student_list(request):
 
-    students = Student.objects.all().order_by(
-        "-registered_at"
+    students = (
+        Student.objects
+        .all()
+        .order_by("-registered_at")
     )
 
     search = request.GET.get(
@@ -176,10 +177,6 @@ def student_list(request):
         ""
     )
 
-    # ========================================================
-    # SEARCH
-    # ========================================================
-
     if search:
 
         students = students.filter(
@@ -192,19 +189,11 @@ def student_list(request):
             Q(parent_phone__icontains=search)
         )
 
-    # ========================================================
-    # CLASS FILTER
-    # ========================================================
-
     if selected_class:
 
         students = students.filter(
             student_class=selected_class
         )
-
-    # ========================================================
-    # STATUS FILTER
-    # ========================================================
 
     if selected_status == "active":
 
@@ -218,22 +207,7 @@ def student_list(request):
             is_active=False
         )
 
-    # ========================================================
-    # COUNTS
-    # ========================================================
-
-    total_students = Student.objects.count()
-
-    active_students = Student.objects.filter(
-        is_active=True
-    ).count()
-
-    inactive_students = Student.objects.filter(
-        is_active=False
-    ).count()
-
     context = {
-
         "students": students,
 
         "search": search,
@@ -244,16 +218,20 @@ def student_list(request):
 
         "class_choices": Student.CLASS_CHOICES,
 
-        "total_students": total_students,
+        "total_students": Student.objects.count(),
 
-        "active_students": active_students,
+        "active_students": Student.objects.filter(
+            is_active=True
+        ).count(),
 
-        "inactive_students": inactive_students,
+        "inactive_students": Student.objects.filter(
+            is_active=False
+        ).count(),
     }
 
     return render(
         request,
-        "dashboard/students.html",
+        "dashboard/student_management.html",
         context
     )
 
@@ -270,47 +248,12 @@ def student_detail(request, student_id):
         id=student_id
     )
 
-    # Get all payments belonging to this student
-
-    payments = (
-        Payment.objects
-        .filter(
-            student=student
-        )
-        .select_related(
-            "fee_structure"
-        )
-        .order_by(
-            "-transaction_date"
-        )
-    )
-
-    # Calculate total paid
-
-    total_paid = (
-        payments
-        .filter(
-            status="VERIFIED"
-        )
-        .aggregate(
-            total=Sum("amount")
-        )["total"]
-        or Decimal("0")
-    )
-
-    context = {
-
-        "student": student,
-
-        "payments": payments,
-
-        "total_paid": total_paid,
-    }
-
     return render(
         request,
         "dashboard/student_detail.html",
-        context
+        {
+            "student": student
+        }
     )
 
 
@@ -333,7 +276,203 @@ def toggle_student_status(request, student_id):
         student.save()
 
     return redirect(
-        "dashboard:student_list"
+        "dashboard:students"
+    )
+
+
+# ============================================================
+# PARENTS
+# ============================================================
+
+@staff_member_required
+def parent_list(request):
+
+    parents = (
+        Parent.objects
+        .select_related("user")
+        .prefetch_related("students")
+        .order_by("-created_at")
+    )
+
+    search = request.GET.get(
+        "search",
+        ""
+    ).strip()
+
+    selected_status = request.GET.get(
+        "status",
+        ""
+    ).strip()
+
+    if search:
+
+        parents = parents.filter(
+            Q(full_name__icontains=search)
+            |
+            Q(phone__icontains=search)
+            |
+            Q(user__username__icontains=search)
+        )
+
+    if selected_status == "active":
+
+        parents = parents.filter(
+            is_active=True
+        )
+
+    elif selected_status == "inactive":
+
+        parents = parents.filter(
+            is_active=False
+        )
+
+    total_parents = Parent.objects.count()
+
+    active_parents = Parent.objects.filter(
+        is_active=True
+    ).count()
+
+    inactive_parents = Parent.objects.filter(
+        is_active=False
+    ).count()
+
+    context = {
+        "parents": parents,
+
+        "search": search,
+
+        "selected_status": selected_status,
+
+        "total_parents": total_parents,
+
+        "active_parents": active_parents,
+
+        "inactive_parents": inactive_parents,
+    }
+
+    return render(
+        request,
+        "parents/parent_management.html",
+        context
+    )
+
+
+# ============================================================
+# FEE STRUCTURES
+# ============================================================
+
+@staff_member_required
+def fee_structure_list(request):
+
+    fee_structures = (
+        FeeStructure.objects
+        .select_related(
+            "session",
+            "term",
+        )
+        .order_by(
+            "student_class",
+            "student_type",
+            "department",
+        )
+    )
+
+    search = request.GET.get(
+        "search",
+        ""
+    ).strip()
+
+    selected_session = request.GET.get(
+        "session",
+        ""
+    )
+
+    selected_term = request.GET.get(
+        "term",
+        ""
+    )
+
+    selected_type = request.GET.get(
+        "student_type",
+        ""
+    )
+
+    if search:
+
+        fee_structures = fee_structures.filter(
+            Q(student_class__icontains=search)
+            |
+            Q(department__icontains=search)
+            |
+            Q(session__name__icontains=search)
+            |
+            Q(term__name__icontains=search)
+        )
+
+    if selected_session:
+
+        fee_structures = fee_structures.filter(
+            session_id=selected_session
+        )
+
+    if selected_term:
+
+        fee_structures = fee_structures.filter(
+            term_id=selected_term
+        )
+
+    if selected_type:
+
+        fee_structures = fee_structures.filter(
+            student_type=selected_type
+        )
+
+    context = {
+
+        "fee_structures": fee_structures,
+
+        "search": search,
+
+        "selected_session": selected_session,
+
+        "selected_term": selected_term,
+
+        "selected_type": selected_type,
+
+        "sessions": (
+            AcademicSession.objects
+            .all()
+            .order_by(
+                "-is_active",
+                "-created_at"
+            )
+        ),
+
+        "terms": (
+            Term.objects
+            .all()
+            .order_by("id")
+        ),
+
+        "student_type_choices": (
+            FeeStructure.STUDENT_TYPE_CHOICES
+        ),
+
+        "total_fee_structures": (
+            FeeStructure.objects.count()
+        ),
+
+        "active_session": (
+            AcademicSession.objects
+            .filter(is_active=True)
+            .first()
+        ),
+    }
+
+    return render(
+        request,
+        "fees/fee_structure_management.html",
+        context
     )
 
 
@@ -355,15 +494,12 @@ def payment_list(request):
         )
     )
 
-    context = {
-
-        "payments": payments,
-    }
-
     return render(
         request,
         "dashboard/payments.html",
-        context
+        {
+            "payments": payments,
+        }
     )
 
 
@@ -386,13 +522,13 @@ def payment_detail(request, payment_id):
         request,
         "dashboard/payment_detail.html",
         {
-            "payment": payment
+            "payment": payment,
         }
     )
 
 
 # ============================================================
-# DOWNLOAD PAYMENTS AS EXCEL
+# DOWNLOAD PAYMENTS EXCEL
 # ============================================================
 
 @staff_member_required
@@ -415,13 +551,7 @@ def download_payments_excel(request):
 
     worksheet.title = "Payments"
 
-    # ========================================================
-    # TITLE
-    # ========================================================
-
-    worksheet.merge_cells(
-        "A1:H1"
-    )
+    worksheet.merge_cells("A1:H1")
 
     worksheet["A1"] = (
         "ROCK FEE PORTAL - PAYMENT REPORT"
@@ -436,26 +566,14 @@ def download_payments_excel(request):
         horizontal="center"
     )
 
-    # ========================================================
-    # HEADERS
-    # ========================================================
-
     headers = [
-
         "Payment Reference",
-
         "Student Name",
-
         "Student ID",
-
         "Class",
-
         "Payment Type",
-
         "Amount",
-
         "Status",
-
         "Transaction Date",
     ]
 
@@ -478,10 +596,6 @@ def download_payments_excel(request):
         cell.alignment = Alignment(
             horizontal="center"
         )
-
-    # ========================================================
-    # PAYMENT DATA
-    # ========================================================
 
     row_number = 4
 
@@ -517,9 +631,7 @@ def download_payments_excel(request):
         worksheet.cell(
             row=row_number,
             column=6
-        ).value = float(
-            payment.amount
-        )
+        ).value = float(payment.amount)
 
         worksheet.cell(
             row=row_number,
@@ -533,10 +645,6 @@ def download_payments_excel(request):
 
         row_number += 1
 
-    # ========================================================
-    # FORMAT DATA
-    # ========================================================
-
     for row in worksheet.iter_rows(
         min_row=4,
         max_row=worksheet.max_row
@@ -548,10 +656,6 @@ def download_payments_excel(request):
                 vertical="center"
             )
 
-    # ========================================================
-    # CURRENCY + DATE FORMATTING
-    # ========================================================
-
     for row in range(
         4,
         worksheet.max_row + 1
@@ -560,7 +664,7 @@ def download_payments_excel(request):
         worksheet.cell(
             row=row,
             column=6
-        ).number_format = '₦#,##0.00'
+        ).number_format = "₦#,##0.00"
 
         worksheet.cell(
             row=row,
@@ -569,26 +673,14 @@ def download_payments_excel(request):
             "dd mmm yyyy hh:mm AM/PM"
         )
 
-    # ========================================================
-    # COLUMN WIDTHS
-    # ========================================================
-
     column_widths = {
-
         "A": 25,
-
         "B": 28,
-
         "C": 18,
-
         "D": 15,
-
         "E": 22,
-
         "F": 18,
-
         "G": 15,
-
         "H": 25,
     }
 
@@ -604,10 +696,6 @@ def download_payments_excel(request):
         f"A3:H{worksheet.max_row}"
     )
 
-    # ========================================================
-    # DOWNLOAD
-    # ========================================================
-
     response = HttpResponse(
         content_type=(
             "application/vnd.openxmlformats-"
@@ -615,9 +703,7 @@ def download_payments_excel(request):
         )
     )
 
-    response[
-        "Content-Disposition"
-    ] = (
+    response["Content-Disposition"] = (
         'attachment; '
         'filename="rock_fee_payments.xlsx"'
     )

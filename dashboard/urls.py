@@ -7,25 +7,18 @@ app_name = "dashboard"
 
 urlpatterns = [
 
-    # ========================================================
-    # MAIN DASHBOARD
-    # ========================================================
-
+    # DASHBOARD
     path(
         "",
         views.dashboard,
         name="dashboard"
     ),
 
-
-    # ========================================================
     # STUDENTS
-    # ========================================================
-
     path(
         "students/",
         views.student_list,
-        name="student_list"
+        name="students"
     ),
 
     path(
@@ -40,11 +33,21 @@ urlpatterns = [
         name="toggle_student_status"
     ),
 
+    # PARENTS
+    path(
+        "parents/",
+        views.parent_list,
+        name="parents"
+    ),
 
-    # ========================================================
+    # FEE STRUCTURES
+    path(
+        "fee-structures/",
+        views.fee_structure_list,
+        name="fee_structures"
+    ),
+
     # PAYMENTS
-    # ========================================================
-
     path(
         "payments/",
         views.payment_list,
@@ -57,10 +60,10 @@ urlpatterns = [
         name="payment_detail"
     ),
 
+    # EXCEL
     path(
         "payments/download-excel/",
         views.download_payments_excel,
         name="download_payments_excel"
     ),
-
 ]

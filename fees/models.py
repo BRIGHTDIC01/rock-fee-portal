@@ -156,6 +156,7 @@ class FeeStructure(models.Model):
         )
 
 
+
 # ============================================================
 # PAYMENT
 # FULL PAYMENT ONLY

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Rock Fee Portal | Fee Structures</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .layout {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #111827;
+            color: white;
+            padding: 25px 16px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
+        }
+
+        .brand {
+            padding: 5px 14px 30px;
+        }
+
+        .brand h1 {
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand p {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .nav-title {
+            color: #6b7280;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 15px 14px 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 9px;
+            color: #d1d5db;
+            margin-bottom: 4px;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .nav-item:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav-item.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 35px;
+        }
+
+        .topbar h2 {
+            font-size: 20px;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 35px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 28px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .button {
+            background: #2563eb;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        /* STAT */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        /* TOOLBAR */
+
+        .toolbar {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .toolbar form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .toolbar input,
+        .toolbar select {
+            padding: 11px 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 13px;
+            background: white;
+        }
+
+        .toolbar input {
+            flex: 1;
+        }
+
+        .search-button {
+            background: #111827;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0 20px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        /* TABLE */
+
+        .panel {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .panel-header h3 {
+            font-size: 17px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            color: #6b7280;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 14px 15px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f1f3;
+            font-size: 13px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .class-name {
+            font-weight: 800;
+        }
+
+        .fee {
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .student-type {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .old {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .new {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .department {
+            color: #4b5563;
+        }
+
+        .active-session {
+            background: #dcfce7;
+            color: #166534;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .inactive-session {
+            color: #6b7280;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px;
+            color: #6b7280;
+        }
+
+        @media (max-width: 1000px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 20px 8px;
+            }
+
+            .brand h1,
+            .brand p,
+            .nav-title,
+            .nav-item span {
+                display: none;
+            }
+
+            .nav-item {
+                justify-content: center;
+            }
+
+            .main {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .page-heading {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .toolbar form {
+                flex-direction: column;
+            }
+
+            .search-button {
+                padding: 12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <h1>Rock Fee Portal</h1>
+
+            <p>School Management System</p>
+
+        </div>
+
+        <div class="nav-title">
+            Overview
+        </div>
+
+        <a
+            href="{% url 'dashboard:dashboard' %}"
+            class="nav-item"
+        >
+            <span>🏠</span>
+            <span>Dashboard</span>
+        </a>
+
+        <div class="nav-title">
+            Management
+        </div>
+
+        <a
+            href="{% url 'dashboard:students' %}"
+            class="nav-item"
+        >
+            <span>🎓</span>
+            <span>Students</span>
+        </a>
+
+        <a
+            href="{% url 'dashboard:parents' %}"
+            class="nav-item"
+        >
+            <span>👨‍👩‍👧</span>
+            <span>Parents</span>
+        </a>
+
+        <a
+            href="{% url 'dashboard:fee_structures' %}"
+            class="nav-item active"
+        >
+            <span>💰</span>
+            <span>Fee Structures</span>
+        </a>
+
+        <a
+            href="{% url 'dashboard:payment_list' %}"
+            class="nav-item"
+        >
+            <span>💳</span>
+            <span>Payments</span>
+        </a>
+
+        <div class="nav-title">
+            System
+        </div>
+
+        <a
+            href="{% url 'admin:index' %}"
+            class="nav-item"
+        >
+            <span>⚙️</span>
+            <span>Django Admin</span>
+        </a>
+
+        <a
+            href="{% url 'admin:logout' %}"
+            class="nav-item"
+        >
+            <span>🚪</span>
+            <span>Logout</span>
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <h2>
+                Fee Structures
+            </h2>
+
+            <div class="admin-user">
+
+                <div class="avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+                {{ request.user.username }}
+
+            </div>
+
+        </header>
+
+
+        <section class="content">
+
+            <div class="page-heading">
+
+                <div>
+
+                    <h1>
+                        Fee Structures
+                    </h1>
+
+                    <p>
+                        Manage school fees by session, term, class and student type.
+                    </p>
+
+                </div>
+
+                <a
+                    href="{% url 'admin:fees_feestructure_add' %}"
+                    class="button"
+                >
+                    + Create Fee Structure
+                </a>
+
+            </div>
+
+
+            <!-- STATS -->
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <div class="stat-label">
+                        Total Fee Structures
+                    </div>
+
+                    <div class="stat-value">
+                        {{ total_fee_structures }}
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-label">
+                        Academic Sessions
+                    </div>
+
+                    <div class="stat-value">
+                        {{ sessions|length }}
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-label">
+                        Current Session
+                    </div>
+
+                    <div class="stat-value">
+
+                        {% if active_session %}
+                            {{ active_session.name }}
+                        {% else %}
+                            None
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FILTERS -->
+
+            <div class="toolbar">
+
+                <form method="get">
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="Search class, session or term..."
+                    >
+
+                    <select name="session">
+
+                        <option value="">
+                            All Sessions
+                        </option>
+
+                        {% for session in sessions %}
+
+                            <option
+                                value="{{ session.id }}"
+                                {% if selected_session == session.id|stringformat:"s" %}selected{% endif %}
+                            >
+                                {{ session.name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+
+                    <select name="term">
+
+                        <option value="">
+                            All Terms
+                        </option>
+
+                        {% for term in terms %}
+
+                            <option
+                                value="{{ term.id }}"
+                                {% if selected_term == term.id|stringformat:"s" %}selected{% endif %}
+                            >
+                                {{ term.name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+
+                    <button
+                        type="submit"
+                        class="search-button"
+                    >
+                        Search
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- TABLE -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h3>
+                        Fee Structure Records
+                    </h3>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Session
+                                </th>
+
+                                <th>
+                                    Term
+                                </th>
+
+                                <th>
+                                    Class
+                                </th>
+
+                                <th>
+                                    Student Type
+                                </th>
+
+                                <th>
+                                    Department
+                                </th>
+
+                                <th>
+                                    Total Fee
+                                </th>
+
+                                <th>
+                                    Deadline
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for fee in fee_structures %}
+
+                            <tr>
+
+                                <td>
+
+                                    {% if fee.session.is_active %}
+
+                                        <span class="active-session">
+                                            {{ fee.session.name }}
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="inactive-session">
+                                            {{ fee.session.name }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+                                    {{ fee.term.name }}
+                                </td>
+
+
+                                <td>
+
+                                    <span class="class-name">
+                                        {{ fee.student_class }}
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if fee.student_type == "new" %}
+
+                                        <span class="student-type new">
+                                            {{ fee.get_student_type_display }}
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="student-type old">
+                                            {{ fee.get_student_type_display }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td class="department">
+
+                                    {% if fee.department %}
+
+                                        {{ fee.get_department_display }}
+
+                                    {% else %}
+
+                                        —
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="fee">
+                                        ₦{{ fee.total_fee|floatformat:0 }}
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if fee.payment_deadline %}
+
+                                        {{ fee.payment_deadline|date:"d M Y" }}
+
+                                    {% else %}
+
+                                        —
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="empty"
+                                >
+                                    No fee structures found.
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
