@@ -117,20 +117,27 @@ def dashboard(request):
     )
 
     context = {
+
         "total_students": total_students,
+
         "total_parents": total_parents,
+
         "total_fee_structures": total_fee_structures,
 
         "active_session": active_session,
 
         "total_collected": total_collected,
+
         "pending_amount": pending_amount,
+
         "rejected_amount": rejected_amount,
 
         "pending_count": pending_payments.count(),
+
         "rejected_count": rejected_payments.count(),
 
         "expected_fees": expected_fees,
+
         "outstanding": outstanding,
 
         "recent_payments": recent_payments,
@@ -211,6 +218,20 @@ def student_list(request):
             is_active=False
         )
 
+    # ========================================================
+    # COUNTS
+    # ========================================================
+
+    total_students = Student.objects.count()
+
+    active_students = Student.objects.filter(
+        is_active=True
+    ).count()
+
+    inactive_students = Student.objects.filter(
+        is_active=False
+    ).count()
+
     context = {
 
         "students": students,
@@ -223,15 +244,11 @@ def student_list(request):
 
         "class_choices": Student.CLASS_CHOICES,
 
-        "total_students": Student.objects.count(),
+        "total_students": total_students,
 
-        "active_students": Student.objects.filter(
-            is_active=True
-        ).count(),
+        "active_students": active_students,
 
-        "inactive_students": Student.objects.filter(
-            is_active=False
-        ).count(),
+        "inactive_students": inactive_students,
     }
 
     return render(
@@ -253,17 +270,52 @@ def student_detail(request, student_id):
         id=student_id
     )
 
+    # Get all payments belonging to this student
+
+    payments = (
+        Payment.objects
+        .filter(
+            student=student
+        )
+        .select_related(
+            "fee_structure"
+        )
+        .order_by(
+            "-transaction_date"
+        )
+    )
+
+    # Calculate total paid
+
+    total_paid = (
+        payments
+        .filter(
+            status="VERIFIED"
+        )
+        .aggregate(
+            total=Sum("amount")
+        )["total"]
+        or Decimal("0")
+    )
+
+    context = {
+
+        "student": student,
+
+        "payments": payments,
+
+        "total_paid": total_paid,
+    }
+
     return render(
         request,
         "dashboard/student_detail.html",
-        {
-            "student": student
-        }
+        context
     )
 
 
 # ============================================================
-# STUDENT DEACTIVATE / ACTIVATE
+# ACTIVATE / DEACTIVATE STUDENT
 # ============================================================
 
 @staff_member_required
@@ -303,12 +355,15 @@ def payment_list(request):
         )
     )
 
+    context = {
+
+        "payments": payments,
+    }
+
     return render(
         request,
         "dashboard/payments.html",
-        {
-            "payments": payments,
-        }
+        context
     )
 
 
@@ -331,7 +386,7 @@ def payment_detail(request, payment_id):
         request,
         "dashboard/payment_detail.html",
         {
-            "payment": payment,
+            "payment": payment
         }
     )
 
@@ -357,6 +412,7 @@ def download_payments_excel(request):
     workbook = Workbook()
 
     worksheet = workbook.active
+
     worksheet.title = "Payments"
 
     # ========================================================
@@ -385,13 +441,21 @@ def download_payments_excel(request):
     # ========================================================
 
     headers = [
+
         "Payment Reference",
+
         "Student Name",
+
         "Student ID",
+
         "Class",
+
         "Payment Type",
+
         "Amount",
+
         "Status",
+
         "Transaction Date",
     ]
 
@@ -453,7 +517,9 @@ def download_payments_excel(request):
         worksheet.cell(
             row=row_number,
             column=6
-        ).value = float(payment.amount)
+        ).value = float(
+            payment.amount
+        )
 
         worksheet.cell(
             row=row_number,
@@ -468,7 +534,7 @@ def download_payments_excel(request):
         row_number += 1
 
     # ========================================================
-    # FORMAT COLUMNS
+    # FORMAT DATA
     # ========================================================
 
     for row in worksheet.iter_rows(
@@ -481,6 +547,10 @@ def download_payments_excel(request):
             cell.alignment = Alignment(
                 vertical="center"
             )
+
+    # ========================================================
+    # CURRENCY + DATE FORMATTING
+    # ========================================================
 
     for row in range(
         4,
@@ -495,20 +565,30 @@ def download_payments_excel(request):
         worksheet.cell(
             row=row,
             column=8
-        ).number_format = "dd mmm yyyy hh:mm AM/PM"
+        ).number_format = (
+            "dd mmm yyyy hh:mm AM/PM"
+        )
 
     # ========================================================
     # COLUMN WIDTHS
     # ========================================================
 
     column_widths = {
+
         "A": 25,
+
         "B": 28,
+
         "C": 18,
+
         "D": 15,
+
         "E": 22,
+
         "F": 18,
+
         "G": 15,
+
         "H": 25,
     }
 
@@ -545,28 +625,3 @@ def download_payments_excel(request):
     workbook.save(response)
 
     return response
-
-@staff_member_required
-def students(request):
-
-    students_queryset = Student.objects.all().order_by("-registered_at")
-
-    search = request.GET.get("search", "").strip()
-
-    if search:
-        students_queryset = students_queryset.filter(
-            full_name__icontains=search
-        ) | students_queryset.filter(
-            student_id__icontains=search
-        ) | students_queryset.filter(
-            student_class__icontains=search
-        )
-
-    return render(
-        request,
-        "dashboard/student_management.html",
-        {
-            "students": students_queryset,
-            "search": search,
-        }
-    )
