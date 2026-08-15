@@ -1,10 +1,684 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Payments | Rock Fee Portal</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .layout {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #111827;
+            color: white;
+            padding: 25px 16px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .brand {
+            padding: 5px 14px 30px;
+        }
+
+        .brand h1 {
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand p {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .nav-title {
+            color: #6b7280;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 15px 14px 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 9px;
+            color: #d1d5db;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav-item.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+        }
+
+        .topbar h2 {
+            font-size: 20px;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 35px;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .page-title p {
+            color: #6b7280;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+
+        .search {
+            flex: 1;
+            min-width: 220px;
+            padding: 11px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .filter-btn {
+            padding: 11px 15px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            color: #6b7280;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 12px 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 15px 10px;
+            border-bottom: 1px solid #f0f1f3;
+            font-size: 13px;
+        }
+
+        .student-name {
+            font-weight: 700;
+        }
+
+        .student-id {
+            color: #6b7280;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .verified {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .review-btn {
+            display: inline-block;
+            padding: 8px 13px;
+            background: #2563eb;
+            color: white;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .review-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 20px 8px;
+            }
+
+            .brand h1,
+            .brand p,
+            .nav-title,
+            .nav-item span {
+                display: none;
+            }
+
+            .nav-item {
+                justify-content: center;
+            }
+
+            .main {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                overflow-x: auto;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 <body>
-$END$
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <h1>Rock Fee Portal</h1>
+            <p>School Management System</p>
+        </div>
+
+        <div class="nav-title">
+            Overview
+        </div>
+
+        <a
+            href="{% url 'dashboard:dashboard' %}"
+            class="nav-item"
+        >
+            <span>🏠</span>
+            <span>Dashboard</span>
+        </a>
+
+        <div class="nav-title">
+            Management
+        </div>
+
+        <a
+            href="#"
+            class="nav-item"
+        >
+            <span>🎓</span>
+            <span>Students</span>
+        </a>
+
+        <a
+            href="#"
+            class="nav-item"
+        >
+            <span>👨‍👩‍👧</span>
+            <span>Parents</span>
+        </a>
+
+        <a
+            href="#"
+            class="nav-item"
+        >
+            <span>💰</span>
+            <span>Fee Structures</span>
+        </a>
+
+        <a
+            href="{% url 'dashboard:payment_list' %}"
+            class="nav-item active"
+        >
+            <span>💳</span>
+            <span>Payments</span>
+        </a>
+
+        <div class="nav-title">
+            System
+        </div>
+
+        <a
+            href="{% url 'admin:index' %}"
+            class="nav-item"
+        >
+            <span>⚙️</span>
+            <span>Django Admin</span>
+        </a>
+
+        <a
+            href="{% url 'admin:logout' %}"
+            class="nav-item"
+        >
+            <span>🚪</span>
+            <span>Logout</span>
+        </a>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <h2>Payments</h2>
+
+            <div class="admin-user">
+
+                <div class="avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+                {{ request.user.username }}
+
+            </div>
+
+        </header>
+
+
+        <section class="content">
+
+            <div class="page-title">
+
+                <h1>Payment Management</h1>
+
+                <p>
+                    Review, verify and manage school fee payments.
+                </p>
+
+            </div>
+
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <div class="stat-label">
+                        Pending Payments
+                    </div>
+
+                    <div class="stat-value">
+                        {{ pending_count }}
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-label">
+                        Verified Payments
+                    </div>
+
+                    <div class="stat-value">
+                        {{ verified_count }}
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-label">
+                        Rejected Payments
+                    </div>
+
+                    <div class="stat-value">
+                        {{ rejected_count }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <form
+                    method="GET"
+                    class="filters"
+                >
+
+                    <input
+                        type="text"
+                        name="search"
+                        class="search"
+                        placeholder="Search student, student ID or payment reference..."
+                        value="{{ search }}"
+                    >
+
+                    <button
+                        type="submit"
+                        class="filter-btn"
+                    >
+                        🔍 Search
+                    </button>
+
+                    <a
+                        href="{% url 'dashboard:payment_list' %}"
+                        class="filter-btn"
+                    >
+                        All
+                    </a>
+
+                    <a
+                        href="?status=PENDING"
+                        class="filter-btn {% if current_status == 'PENDING' %}active{% endif %}"
+                    >
+                        Pending
+                    </a>
+
+                    <a
+                        href="?status=VERIFIED"
+                        class="filter-btn {% if current_status == 'VERIFIED' %}active{% endif %}"
+                    >
+                        Verified
+                    </a>
+
+                    <a
+                        href="?status=REJECTED"
+                        class="filter-btn {% if current_status == 'REJECTED' %}active{% endif %}"
+                    >
+                        Rejected
+                    </a>
+
+                </form>
+
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Reference
+                            </th>
+
+                            <th>
+                                Student
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for payment in payments %}
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    {{ payment.payment_reference }}
+                                </strong>
+                            </td>
+
+
+                            <td>
+
+                                <div class="student-name">
+                                    {{ payment.student.full_name }}
+                                </div>
+
+                                <div class="student-id">
+                                    {{ payment.student.student_id }}
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                ₦{{ payment.amount|floatformat:0 }}
+                            </td>
+
+
+                            <td>
+
+                                {% if payment.status == "VERIFIED" %}
+
+                                    <span class="status verified">
+                                        VERIFIED
+                                    </span>
+
+                                {% elif payment.status == "PENDING" %}
+
+                                    <span class="status pending">
+                                        PENDING
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status rejected">
+                                        REJECTED
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+                                {{ payment.transaction_date|date:"d M Y, H:i" }}
+                            </td>
+
+
+                            <td>
+
+                                <a
+                                    href="{% url 'dashboard:payment_detail' payment.id %}"
+                                    class="review-btn"
+                                >
+                                    Review
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="empty"
+                            >
+                                No payments found.
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
 </body>
+
 </html>

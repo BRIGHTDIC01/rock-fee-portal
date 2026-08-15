@@ -428,7 +428,7 @@
         </a>
 
         <a
-            href="{% url 'admin:parents_parent_changelist' %}"
+            href="{% url 'dashboard:students' %}"
             class="nav-item"
         >
             <span>👨‍👩‍👧</span>
@@ -444,9 +444,10 @@
         </a>
 
         <a
-            href="{% url 'admin:fees_payment_changelist' %}"
-            class="nav-item"
+                href="{% url 'admin:fees_payment_changelist' %}"
+                class="nav-item"
         >
+
             <span>💳</span>
             <span>Payments</span>
         </a>
@@ -676,7 +677,7 @@
                         </h3>
 
                         <a
-                            href="{% url 'admin:fees_payment_changelist' %}"
+                                href="{% url 'dashboard:payment_list' %}"
                         >
                             View all
                         </a>
