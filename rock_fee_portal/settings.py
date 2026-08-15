@@ -21,9 +21,9 @@ SECRET_KEY = os.environ.get(
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "rock-fee-portal-7xtr.onrender.com",
-    "localhost",
     "127.0.0.1",
+    "localhost",
+    "rock-fee-portal.onrender.com",
 ]
 
 
