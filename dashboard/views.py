@@ -5,6 +5,8 @@ from django.db.models import Sum, Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 
+from django.utils import timezone
+
 from fees.models import (
     AcademicSession,
     Term,
@@ -17,8 +19,6 @@ from students.models import Student
 
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment
-
-from django.utils import timezone
 
 
 # ============================================================
@@ -189,6 +189,8 @@ def student_list(request):
             Q(parent_name__icontains=search)
             |
             Q(parent_phone__icontains=search)
+            |
+            Q(parent_email__icontains=search)
         )
 
     if selected_class:
@@ -211,9 +213,13 @@ def student_list(request):
 
     context = {
         "students": students,
+
         "search": search,
+
         "selected_class": selected_class,
+
         "selected_status": selected_status,
+
         "class_choices": Student.CLASS_CHOICES,
 
         "total_students": Student.objects.count(),
@@ -231,27 +237,6 @@ def student_list(request):
         request,
         "dashboard/student_management.html",
         context
-    )
-
-
-# ============================================================
-# STUDENT DETAIL
-# ============================================================
-
-@staff_member_required
-def student_detail(request, student_id):
-
-    student = get_object_or_404(
-        Student,
-        id=student_id
-    )
-
-    return render(
-        request,
-        "dashboard/student_detail.html",
-        {
-            "student": student
-        }
     )
 
 
@@ -310,6 +295,8 @@ def parent_list(request):
             Q(phone__icontains=search)
             |
             Q(user__username__icontains=search)
+            |
+            Q(user__email__icontains=search)
         )
 
     if selected_status == "active":
@@ -335,12 +322,19 @@ def parent_list(request):
     ).count()
 
     context = {
+
         "parents": parents,
+
         "search": search,
+
         "selected_status": selected_status,
+
         "total_parents": total_parents,
+
         "active_parents": active_parents,
+
         "inactive_parents": inactive_parents,
+
     }
 
     return render(
@@ -497,7 +491,7 @@ def payment_list(request):
 
 
 # ============================================================
-# PAYMENT DETAIL / REVIEW
+# PAYMENT DETAIL
 # ============================================================
 
 @staff_member_required
@@ -507,75 +501,9 @@ def payment_detail(request, payment_id):
         Payment.objects.select_related(
             "student",
             "fee_structure",
-            "fee_structure__session",
-            "fee_structure__term",
         ),
         id=payment_id
     )
-
-    if request.method == "POST":
-
-        action = request.POST.get("action")
-
-        # ====================================================
-        # VERIFY
-        # ====================================================
-
-        if action == "verify":
-
-            payment.status = "VERIFIED"
-            payment.verified_at = timezone.now()
-            payment.save(
-                update_fields=[
-                    "status",
-                    "verified_at",
-                ]
-            )
-
-            return redirect(
-                "dashboard:payment_detail",
-                payment_id=payment.id
-            )
-
-        # ====================================================
-        # REJECT
-        # ====================================================
-
-        elif action == "reject":
-
-            payment.status = "REJECTED"
-            payment.verified_at = None
-            payment.save(
-                update_fields=[
-                    "status",
-                    "verified_at",
-                ]
-            )
-
-            return redirect(
-                "dashboard:payment_detail",
-                payment_id=payment.id
-            )
-
-        # ====================================================
-        # MOVE BACK TO PENDING
-        # ====================================================
-
-        elif action == "pending":
-
-            payment.status = "PENDING"
-            payment.verified_at = None
-            payment.save(
-                update_fields=[
-                    "status",
-                    "verified_at",
-                ]
-            )
-
-            return redirect(
-                "dashboard:payment_detail",
-                payment_id=payment.id
-            )
 
     return render(
         request,
@@ -584,6 +512,7 @@ def payment_detail(request, payment_id):
             "payment": payment,
         }
     )
+
 
 # ============================================================
 # DOWNLOAD PAYMENTS AS EXCEL
@@ -609,10 +538,6 @@ def download_payments_excel(request):
 
     worksheet.title = "Payments"
 
-    # ========================================================
-    # TITLE
-    # ========================================================
-
     worksheet.merge_cells("A1:H1")
 
     worksheet["A1"] = (
@@ -627,10 +552,6 @@ def download_payments_excel(request):
     worksheet["A1"].alignment = Alignment(
         horizontal="center"
     )
-
-    # ========================================================
-    # HEADERS
-    # ========================================================
 
     headers = [
         "Payment Reference",
@@ -662,10 +583,6 @@ def download_payments_excel(request):
         cell.alignment = Alignment(
             horizontal="center"
         )
-
-    # ========================================================
-    # PAYMENT DATA
-    # ========================================================
 
     row_number = 4
 
@@ -708,13 +625,6 @@ def download_payments_excel(request):
             column=7
         ).value = payment.status
 
-        # ----------------------------------------------------
-        # FIX:
-        # Excel cannot store timezone-aware datetimes.
-        # Convert Django's timezone-aware datetime to
-        # a timezone-naive datetime before writing to Excel.
-        # ----------------------------------------------------
-
         transaction_date = payment.transaction_date
 
         if transaction_date:
@@ -727,16 +637,12 @@ def download_payments_excel(request):
                     tzinfo=None
                 )
 
-            worksheet.cell(
-                row=row_number,
-                column=8
-            ).value = transaction_date
+        worksheet.cell(
+            row=row_number,
+            column=8
+        ).value = transaction_date
 
         row_number += 1
-
-    # ========================================================
-    # FORMATTING
-    # ========================================================
 
     for row in worksheet.iter_rows(
         min_row=4,
@@ -766,10 +672,6 @@ def download_payments_excel(request):
             "dd mmm yyyy hh:mm AM/PM"
         )
 
-    # ========================================================
-    # COLUMN WIDTHS
-    # ========================================================
-
     column_widths = {
         "A": 25,
         "B": 28,
@@ -793,10 +695,6 @@ def download_payments_excel(request):
         f"A3:H{worksheet.max_row}"
     )
 
-    # ========================================================
-    # DOWNLOAD
-    # ========================================================
-
     response = HttpResponse(
         content_type=(
             "application/vnd.openxmlformats-"
@@ -807,6 +705,418 @@ def download_payments_excel(request):
     response["Content-Disposition"] = (
         'attachment; '
         'filename="rock_fee_payments.xlsx"'
+    )
+
+    workbook.save(response)
+
+    return response
+
+
+# ============================================================
+# DOWNLOAD STUDENTS AS EXCEL
+# ============================================================
+
+@staff_member_required
+def download_students_excel(request):
+
+    students = (
+        Student.objects
+        .all()
+        .order_by(
+            "student_class",
+            "full_name"
+        )
+    )
+
+    workbook = Workbook()
+
+    worksheet = workbook.active
+
+    worksheet.title = "Students"
+
+    worksheet.merge_cells("A1:J1")
+
+    worksheet["A1"] = (
+        "ROCK FOUNDATION - STUDENT REPORT"
+    )
+
+    worksheet["A1"].font = Font(
+        bold=True,
+        size=16
+    )
+
+    worksheet["A1"].alignment = Alignment(
+        horizontal="center"
+    )
+
+    headers = [
+        "Student ID",
+        "Full Name",
+        "Class",
+        "Student Type",
+        "Department",
+        "Parent / Guardian",
+        "Parent Phone",
+        "Parent Email",
+        "Status",
+        "Registration Date",
+    ]
+
+    for column_number, header in enumerate(
+        headers,
+        start=1
+    ):
+
+        cell = worksheet.cell(
+            row=3,
+            column=column_number
+        )
+
+        cell.value = header
+
+        cell.font = Font(
+            bold=True
+        )
+
+        cell.alignment = Alignment(
+            horizontal="center"
+        )
+
+    row_number = 4
+
+    for student in students:
+
+        worksheet.cell(
+            row=row_number,
+            column=1
+        ).value = student.student_id
+
+        worksheet.cell(
+            row=row_number,
+            column=2
+        ).value = student.full_name
+
+        worksheet.cell(
+            row=row_number,
+            column=3
+        ).value = student.student_class
+
+        worksheet.cell(
+            row=row_number,
+            column=4
+        ).value = student.get_student_type_display()
+
+        worksheet.cell(
+            row=row_number,
+            column=5
+        ).value = (
+            student.get_department_display()
+            if student.department
+            else "Not Applicable"
+        )
+
+        worksheet.cell(
+            row=row_number,
+            column=6
+        ).value = student.parent_name
+
+        worksheet.cell(
+            row=row_number,
+            column=7
+        ).value = student.parent_phone
+
+        worksheet.cell(
+            row=row_number,
+            column=8
+        ).value = student.parent_email
+
+        worksheet.cell(
+            row=row_number,
+            column=9
+        ).value = (
+            "ACTIVE"
+            if student.is_active
+            else "INACTIVE"
+        )
+
+        registration_date = student.registered_at
+
+        if registration_date:
+
+            if timezone.is_aware(registration_date):
+
+                registration_date = timezone.localtime(
+                    registration_date
+                ).replace(
+                    tzinfo=None
+                )
+
+        worksheet.cell(
+            row=row_number,
+            column=10
+        ).value = registration_date
+
+        row_number += 1
+
+    for row in worksheet.iter_rows(
+        min_row=4,
+        max_row=worksheet.max_row
+    ):
+
+        for cell in row:
+
+            cell.alignment = Alignment(
+                vertical="center"
+            )
+
+    for row in range(
+        4,
+        worksheet.max_row + 1
+    ):
+
+        worksheet.cell(
+            row=row,
+            column=10
+        ).number_format = (
+            "dd mmm yyyy hh:mm AM/PM"
+        )
+
+    column_widths = {
+        "A": 18,
+        "B": 30,
+        "C": 15,
+        "D": 18,
+        "E": 20,
+        "F": 28,
+        "G": 20,
+        "H": 35,
+        "I": 15,
+        "J": 25,
+    }
+
+    for column, width in column_widths.items():
+
+        worksheet.column_dimensions[
+            column
+        ].width = width
+
+    worksheet.freeze_panes = "A4"
+
+    worksheet.auto_filter.ref = (
+        f"A3:J{worksheet.max_row}"
+    )
+
+    response = HttpResponse(
+        content_type=(
+            "application/vnd.openxmlformats-"
+            "officedocument.spreadsheetml.sheet"
+        )
+    )
+
+    response["Content-Disposition"] = (
+        'attachment; '
+        'filename="rock_foundation_students.xlsx"'
+    )
+
+    workbook.save(response)
+
+    return response
+
+
+# ============================================================
+# DOWNLOAD PARENTS AS EXCEL
+# ============================================================
+
+@staff_member_required
+def download_parents_excel(request):
+
+    parents = (
+        Parent.objects
+        .select_related("user")
+        .prefetch_related("students")
+        .order_by("full_name")
+    )
+
+    workbook = Workbook()
+
+    worksheet = workbook.active
+
+    worksheet.title = "Parents"
+
+    worksheet.merge_cells("A1:H1")
+
+    worksheet["A1"] = (
+        "ROCK FOUNDATION - PARENT REPORT"
+    )
+
+    worksheet["A1"].font = Font(
+        bold=True,
+        size=16
+    )
+
+    worksheet["A1"].alignment = Alignment(
+        horizontal="center"
+    )
+
+    headers = [
+        "Parent Name",
+        "Phone",
+        "Email",
+        "Username",
+        "Students",
+        "Number of Students",
+        "Status",
+        "Registration Date",
+    ]
+
+    for column_number, header in enumerate(
+        headers,
+        start=1
+    ):
+
+        cell = worksheet.cell(
+            row=3,
+            column=column_number
+        )
+
+        cell.value = header
+
+        cell.font = Font(
+            bold=True
+        )
+
+        cell.alignment = Alignment(
+            horizontal="center"
+        )
+
+    row_number = 4
+
+    for parent in parents:
+
+        students = list(
+            parent.students.all()
+        )
+
+        student_names = ", ".join(
+            student.full_name
+            for student in students
+        )
+
+        worksheet.cell(
+            row=row_number,
+            column=1
+        ).value = parent.full_name
+
+        worksheet.cell(
+            row=row_number,
+            column=2
+        ).value = parent.phone
+
+        worksheet.cell(
+            row=row_number,
+            column=3
+        ).value = parent.user.email
+
+        worksheet.cell(
+            row=row_number,
+            column=4
+        ).value = parent.user.username
+
+        worksheet.cell(
+            row=row_number,
+            column=5
+        ).value = student_names or "None"
+
+        worksheet.cell(
+            row=row_number,
+            column=6
+        ).value = len(students)
+
+        worksheet.cell(
+            row=row_number,
+            column=7
+        ).value = (
+            "ACTIVE"
+            if parent.is_active
+            else "INACTIVE"
+        )
+
+        created_date = parent.created_at
+
+        if created_date:
+
+            if timezone.is_aware(created_date):
+
+                created_date = timezone.localtime(
+                    created_date
+                ).replace(
+                    tzinfo=None
+                )
+
+        worksheet.cell(
+            row=row_number,
+            column=8
+        ).value = created_date
+
+        row_number += 1
+
+    for row in worksheet.iter_rows(
+        min_row=4,
+        max_row=worksheet.max_row
+    ):
+
+        for cell in row:
+
+            cell.alignment = Alignment(
+                vertical="center",
+                wrap_text=True
+            )
+
+    for row in range(
+        4,
+        worksheet.max_row + 1
+    ):
+
+        worksheet.cell(
+            row=row,
+            column=8
+        ).number_format = (
+            "dd mmm yyyy hh:mm AM/PM"
+        )
+
+    column_widths = {
+        "A": 28,
+        "B": 20,
+        "C": 35,
+        "D": 25,
+        "E": 45,
+        "F": 20,
+        "G": 15,
+        "H": 25,
+    }
+
+    for column, width in column_widths.items():
+
+        worksheet.column_dimensions[
+            column
+        ].width = width
+
+    worksheet.freeze_panes = "A4"
+
+    worksheet.auto_filter.ref = (
+        f"A3:H{worksheet.max_row}"
+    )
+
+    response = HttpResponse(
+        content_type=(
+            "application/vnd.openxmlformats-"
+            "officedocument.spreadsheetml.sheet"
+        )
+    )
+
+    response["Content-Disposition"] = (
+        'attachment; '
+        'filename="rock_foundation_parents.xlsx"'
     )
 
     workbook.save(response)

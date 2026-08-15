@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -142,6 +143,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
+            gap: 20px;
         }
 
         .page-header h1 {
@@ -153,17 +155,28 @@
             color: #6b7280;
         }
 
-        .add-btn {
-            background: #2563eb;
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            background: #16a34a;
             color: white;
             padding: 11px 17px;
             border-radius: 9px;
             font-size: 13px;
             font-weight: 700;
+            transition: .2s;
         }
 
-        .add-btn:hover {
-            background: #1d4ed8;
+        .download-btn:hover {
+            background: #15803d;
         }
 
         .search-panel {
@@ -217,7 +230,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 900px;
+            min-width: 850px;
         }
 
         th {
@@ -279,20 +292,6 @@
             font-weight: 700;
         }
 
-        .view-btn {
-            display: inline-block;
-            background: #f3f4f6;
-            color: #374151;
-            padding: 8px 12px;
-            border-radius: 7px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .view-btn:hover {
-            background: #e5e7eb;
-        }
-
         .empty {
             text-align: center;
             padding: 50px;
@@ -334,13 +333,20 @@
             }
 
             .page-header {
-                align-items: flex-start;
-                gap: 15px;
                 flex-direction: column;
+                align-items: flex-start;
             }
 
             .page-header h1 {
                 font-size: 23px;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .download-btn {
+                width: 100%;
             }
 
         }
@@ -355,9 +361,7 @@
 <div class="layout">
 
 
-    <!-- =====================================================
-         SIDEBAR
-    ====================================================== -->
+    <!-- SIDEBAR -->
 
     <aside class="sidebar">
 
@@ -379,8 +383,6 @@
         </div>
 
 
-        <!-- DASHBOARD -->
-
         <a
             href="{% url 'dashboard:dashboard' %}"
             class="nav-item"
@@ -400,8 +402,6 @@
         </div>
 
 
-        <!-- STUDENTS -->
-
         <a
             href="{% url 'dashboard:students' %}"
             class="nav-item active"
@@ -415,8 +415,6 @@
 
         </a>
 
-
-        <!-- PARENTS -->
 
         <a
             href="{% url 'dashboard:parents' %}"
@@ -432,8 +430,6 @@
         </a>
 
 
-        <!-- FEE STRUCTURES -->
-
         <a
             href="{% url 'dashboard:fee_structures' %}"
             class="nav-item"
@@ -447,8 +443,6 @@
 
         </a>
 
-
-        <!-- PAYMENTS -->
 
         <a
             href="{% url 'dashboard:payment_list' %}"
@@ -469,8 +463,6 @@
         </div>
 
 
-        <!-- DJANGO ADMIN -->
-
         <a
             href="{% url 'admin:index' %}"
             class="nav-item"
@@ -484,8 +476,6 @@
 
         </a>
 
-
-        <!-- LOGOUT -->
 
         <a
             href="{% url 'admin:logout' %}"
@@ -503,9 +493,7 @@
     </aside>
 
 
-    <!-- =====================================================
-         MAIN
-    ====================================================== -->
+    <!-- MAIN -->
 
     <main class="main">
 
@@ -520,9 +508,7 @@
             <div class="admin-user">
 
                 <div class="avatar">
-
                     {{ request.user.username|first|upper }}
-
                 </div>
 
                 {{ request.user.username }}
@@ -534,6 +520,8 @@
 
         <section class="content">
 
+
+            <!-- PAGE HEADER -->
 
             <div class="page-header">
 
@@ -550,14 +538,16 @@
                 </div>
 
 
-                <a
-                    href="#"
-                    class="add-btn"
-                    onclick="return false;"
-                    title="Custom student registration will be added here"
-                >
-                    + Add Student
-                </a>
+                <div class="header-actions">
+
+                    <a
+                        href="{% url 'dashboard:download_students_excel' %}"
+                        class="download-btn"
+                    >
+                        📊 Download Students Excel
+                    </a>
+
+                </div>
 
             </div>
 
@@ -601,13 +591,33 @@
 
                         <tr>
 
-                            <th>Student</th>
-                            <th>Class</th>
-                            <th>Student Type</th>
-                            <th>Parent</th>
-                            <th>Phone</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>
+                                Student
+                            </th>
+
+                            <th>
+                                Class
+                            </th>
+
+                            <th>
+                                Student Type
+                            </th>
+
+                            <th>
+                                Department
+                            </th>
+
+                            <th>
+                                Parent
+                            </th>
+
+                            <th>
+                                Phone
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
 
                         </tr>
 
@@ -615,7 +625,6 @@
 
 
                     <tbody>
-
 
                     {% for student in students %}
 
@@ -649,6 +658,11 @@
 
 
                             <td>
+                                {{ student.get_department_display|default:"Not applicable" }}
+                            </td>
+
+
+                            <td>
                                 {{ student.parent_name }}
                             </td>
 
@@ -676,18 +690,6 @@
 
                             </td>
 
-
-                            <td>
-
-                                <a
-                                    href="{% url 'dashboard:student_detail' student.id %}"
-                                    class="view-btn"
-                                >
-                                    View
-                                </a>
-
-                            </td>
-
                         </tr>
 
 
@@ -699,15 +701,12 @@
                                 colspan="7"
                                 class="empty"
                             >
-
                                 No students found.
-
                             </td>
 
                         </tr>
 
                     {% endfor %}
-
 
                     </tbody>
 
