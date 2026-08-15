@@ -18,6 +18,8 @@ from students.models import Student
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment
 
+from django.utils import timezone
+
 
 # ============================================================
 # STAFF DASHBOARD
@@ -209,13 +211,9 @@ def student_list(request):
 
     context = {
         "students": students,
-
         "search": search,
-
         "selected_class": selected_class,
-
         "selected_status": selected_status,
-
         "class_choices": Student.CLASS_CHOICES,
 
         "total_students": Student.objects.count(),
@@ -338,15 +336,10 @@ def parent_list(request):
 
     context = {
         "parents": parents,
-
         "search": search,
-
         "selected_status": selected_status,
-
         "total_parents": total_parents,
-
         "active_parents": active_parents,
-
         "inactive_parents": inactive_parents,
     }
 
@@ -504,7 +497,7 @@ def payment_list(request):
 
 
 # ============================================================
-# PAYMENT DETAIL
+# PAYMENT DETAIL / REVIEW
 # ============================================================
 
 @staff_member_required
@@ -514,9 +507,75 @@ def payment_detail(request, payment_id):
         Payment.objects.select_related(
             "student",
             "fee_structure",
+            "fee_structure__session",
+            "fee_structure__term",
         ),
         id=payment_id
     )
+
+    if request.method == "POST":
+
+        action = request.POST.get("action")
+
+        # ====================================================
+        # VERIFY
+        # ====================================================
+
+        if action == "verify":
+
+            payment.status = "VERIFIED"
+            payment.verified_at = timezone.now()
+            payment.save(
+                update_fields=[
+                    "status",
+                    "verified_at",
+                ]
+            )
+
+            return redirect(
+                "dashboard:payment_detail",
+                payment_id=payment.id
+            )
+
+        # ====================================================
+        # REJECT
+        # ====================================================
+
+        elif action == "reject":
+
+            payment.status = "REJECTED"
+            payment.verified_at = None
+            payment.save(
+                update_fields=[
+                    "status",
+                    "verified_at",
+                ]
+            )
+
+            return redirect(
+                "dashboard:payment_detail",
+                payment_id=payment.id
+            )
+
+        # ====================================================
+        # MOVE BACK TO PENDING
+        # ====================================================
+
+        elif action == "pending":
+
+            payment.status = "PENDING"
+            payment.verified_at = None
+            payment.save(
+                update_fields=[
+                    "status",
+                    "verified_at",
+                ]
+            )
+
+            return redirect(
+                "dashboard:payment_detail",
+                payment_id=payment.id
+            )
 
     return render(
         request,
@@ -526,9 +585,8 @@ def payment_detail(request, payment_id):
         }
     )
 
-
 # ============================================================
-# DOWNLOAD PAYMENTS EXCEL
+# DOWNLOAD PAYMENTS AS EXCEL
 # ============================================================
 
 @staff_member_required
@@ -551,6 +609,10 @@ def download_payments_excel(request):
 
     worksheet.title = "Payments"
 
+    # ========================================================
+    # TITLE
+    # ========================================================
+
     worksheet.merge_cells("A1:H1")
 
     worksheet["A1"] = (
@@ -565,6 +627,10 @@ def download_payments_excel(request):
     worksheet["A1"].alignment = Alignment(
         horizontal="center"
     )
+
+    # ========================================================
+    # HEADERS
+    # ========================================================
 
     headers = [
         "Payment Reference",
@@ -596,6 +662,10 @@ def download_payments_excel(request):
         cell.alignment = Alignment(
             horizontal="center"
         )
+
+    # ========================================================
+    # PAYMENT DATA
+    # ========================================================
 
     row_number = 4
 
@@ -638,12 +708,35 @@ def download_payments_excel(request):
             column=7
         ).value = payment.status
 
-        worksheet.cell(
-            row=row_number,
-            column=8
-        ).value = payment.transaction_date
+        # ----------------------------------------------------
+        # FIX:
+        # Excel cannot store timezone-aware datetimes.
+        # Convert Django's timezone-aware datetime to
+        # a timezone-naive datetime before writing to Excel.
+        # ----------------------------------------------------
+
+        transaction_date = payment.transaction_date
+
+        if transaction_date:
+
+            if timezone.is_aware(transaction_date):
+
+                transaction_date = timezone.localtime(
+                    transaction_date
+                ).replace(
+                    tzinfo=None
+                )
+
+            worksheet.cell(
+                row=row_number,
+                column=8
+            ).value = transaction_date
 
         row_number += 1
+
+    # ========================================================
+    # FORMATTING
+    # ========================================================
 
     for row in worksheet.iter_rows(
         min_row=4,
@@ -673,6 +766,10 @@ def download_payments_excel(request):
             "dd mmm yyyy hh:mm AM/PM"
         )
 
+    # ========================================================
+    # COLUMN WIDTHS
+    # ========================================================
+
     column_widths = {
         "A": 25,
         "B": 28,
@@ -695,6 +792,10 @@ def download_payments_excel(request):
     worksheet.auto_filter.ref = (
         f"A3:H{worksheet.max_row}"
     )
+
+    # ========================================================
+    # DOWNLOAD
+    # ========================================================
 
     response = HttpResponse(
         content_type=(
