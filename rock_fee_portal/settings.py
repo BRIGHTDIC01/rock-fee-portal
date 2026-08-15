@@ -33,12 +33,20 @@ ALLOWED_HOSTS = [
 
 
 # ============================================================
-# CSRF
+# CSRF / SECURITY
 # ============================================================
 
 CSRF_TRUSTED_ORIGINS = [
     "https://rock-fee-portal.onrender.com",
 ]
+
+# Render uses HTTPS
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Allow cookies to work normally with the site
+CSRF_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SAMESITE = "Lax"
 
 
 # ============================================================
