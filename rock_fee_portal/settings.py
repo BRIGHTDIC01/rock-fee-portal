@@ -40,11 +40,9 @@ CSRF_TRUSTED_ORIGINS = [
     "https://rock-fee-portal.onrender.com",
 ]
 
-# Render uses HTTPS
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
-# Allow cookies to work normally with the site
 CSRF_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SAMESITE = "Lax"
 
@@ -65,6 +63,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # --------------------------------------------------------
+    # Third-party
+    # --------------------------------------------------------
+
+    "storages",
 
     # --------------------------------------------------------
     # Rock Fee Portal
@@ -154,11 +158,6 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 
 if DATABASE_URL:
 
-    # --------------------------------------------------------
-    # PRODUCTION
-    # Render PostgreSQL
-    # --------------------------------------------------------
-
     DATABASES = {
 
         "default": dj_database_url.parse(
@@ -172,11 +171,6 @@ if DATABASE_URL:
     }
 
 else:
-
-    # --------------------------------------------------------
-    # LOCAL DEVELOPMENT
-    # SQLite
-    # --------------------------------------------------------
 
     DATABASES = {
 
@@ -250,16 +244,66 @@ STATICFILES_DIRS = [
 
 
 # ============================================================
+# SUPABASE STORAGE
+# ============================================================
+
+AWS_ACCESS_KEY_ID = os.environ.get(
+    "SUPABASE_ACCESS_KEY_ID"
+)
+
+AWS_SECRET_ACCESS_KEY = os.environ.get(
+    "SUPABASE_SECRET_ACCESS_KEY"
+)
+
+AWS_STORAGE_BUCKET_NAME = os.environ.get(
+    "SUPABASE_BUCKET_NAME"
+)
+
+AWS_S3_ENDPOINT_URL = os.environ.get(
+    "SUPABASE_S3_ENDPOINT"
+)
+
+AWS_S3_REGION_NAME = os.environ.get(
+    "AWS_S3_REGION_NAME",
+    "eu-central-1"
+)
+
+AWS_S3_SIGNATURE_VERSION = os.environ.get(
+    "AWS_S3_SIGNATURE_VERSION",
+    "s3v4"
+)
+
+AWS_S3_FILE_OVERWRITE = False
+
+AWS_DEFAULT_ACL = None
+
+AWS_QUERYSTRING_AUTH = False
+
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+}
+
+AWS_LOCATION = ""
+
+
+# ============================================================
 # MEDIA FILES
 # ============================================================
 
-MEDIA_URL = "/media/"
+DEFAULT_FILE_STORAGE = (
+    "storages.backends.s3.S3Storage"
+)
 
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = (
+    f"{AWS_S3_ENDPOINT_URL}/"
+    f"{AWS_STORAGE_BUCKET_NAME}/"
+)
 
 
 # ============================================================
 # DEFAULT PRIMARY KEY
 # ============================================================
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DEFAULT_AUTO_FIELD = (
+    "django.db.models.BigAutoField"
+)
