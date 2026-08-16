@@ -4,7 +4,6 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Sum, Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-
 from django.utils import timezone
 
 from fees.models import (
@@ -106,11 +105,13 @@ def dashboard(request):
             fee = fee_query.first()
 
             if fee:
+
                 expected_fees += fee.total_fee
 
     outstanding = expected_fees - total_collected
 
     if outstanding < Decimal("0"):
+
         outstanding = Decimal("0")
 
     recent_payments = (
@@ -125,23 +126,31 @@ def dashboard(request):
     )
 
     context = {
+
         "total_students": total_students,
+
         "total_parents": total_parents,
+
         "total_fee_structures": total_fee_structures,
 
         "active_session": active_session,
 
         "total_collected": total_collected,
+
         "pending_amount": pending_amount,
+
         "rejected_amount": rejected_amount,
 
         "pending_count": pending_payments.count(),
+
         "rejected_count": rejected_payments.count(),
 
         "expected_fees": expected_fees,
+
         "outstanding": outstanding,
 
         "recent_payments": recent_payments,
+
     }
 
     return render(
@@ -212,6 +221,7 @@ def student_list(request):
         )
 
     context = {
+
         "students": students,
 
         "search": search,
@@ -231,6 +241,7 @@ def student_list(request):
         "inactive_students": Student.objects.filter(
             is_active=False
         ).count(),
+
     }
 
     return render(
@@ -454,6 +465,7 @@ def fee_structure_list(request):
             .filter(is_active=True)
             .first()
         ),
+
     }
 
     return render(
@@ -501,9 +513,78 @@ def payment_detail(request, payment_id):
         Payment.objects.select_related(
             "student",
             "fee_structure",
+            "fee_structure__session",
+            "fee_structure__term",
         ),
         id=payment_id
     )
+
+    # ========================================================
+    # HANDLE VERIFY / REJECT / PENDING
+    # ========================================================
+
+    if request.method == "POST":
+
+        action = request.POST.get(
+            "action",
+            ""
+        )
+
+        # ----------------------------------------------------
+        # VERIFY PAYMENT
+        # ----------------------------------------------------
+
+        if action == "verify":
+
+            payment.status = "VERIFIED"
+
+            payment.verified_at = timezone.now()
+
+            payment.save(
+                update_fields=[
+                    "status",
+                    "verified_at",
+                ]
+            )
+
+        # ----------------------------------------------------
+        # REJECT PAYMENT
+        # ----------------------------------------------------
+
+        elif action == "reject":
+
+            payment.status = "REJECTED"
+
+            payment.verified_at = None
+
+            payment.save(
+                update_fields=[
+                    "status",
+                    "verified_at",
+                ]
+            )
+
+        # ----------------------------------------------------
+        # MOVE BACK TO PENDING
+        # ----------------------------------------------------
+
+        elif action == "pending":
+
+            payment.status = "PENDING"
+
+            payment.verified_at = None
+
+            payment.save(
+                update_fields=[
+                    "status",
+                    "verified_at",
+                ]
+            )
+
+        return redirect(
+            "dashboard:payment_detail",
+            payment_id=payment.id
+        )
 
     return render(
         request,

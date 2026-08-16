@@ -1,0 +1,478 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$1dfTxt3zGtBU1Kt7bmSXJ8$N/6KqHGkA2BiKFzhwvXmNOuYHAjsiAdBExJj1Aw/ucI=",
+    "last_login": "2026-08-15T03:38:58.165Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "brightthankgod001@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-08-12T06:51:23.940Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$UvDWgl5wQDkWE0hzZt3Vks$K4KERnS3kXcUYKYjqv+8r5NIdY0lg9set3r6l9TUPAE=",
+    "last_login": "2026-08-12T08:44:37.151Z",
+    "is_superuser": false,
+    "username": "Mercy2021",
+    "first_name": "",
+    "last_name": "",
+    "email": "brightmercy834@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-08-12T06:52:04.735Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$9yGbDkSZRhRr42tfZw3N2G$r+GP4BVub2TX4yBrcMBhlLze7pddzsZu9pSA2mRHUec=",
+    "last_login": "2026-08-12T09:19:06.650Z",
+    "is_superuser": false,
+    "username": "Gft55",
+    "first_name": "",
+    "last_name": "",
+    "email": "gift66@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-08-12T08:45:20.405Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$YQKZYm4XRHaRAmyBT59HgD$zaUTBTY9GRNhDLmRVr9M6jeo8DXwnb3KFRsMrU6vIgY=",
+    "last_login": "2026-08-12T15:51:01.375Z",
+    "is_superuser": false,
+    "username": "ataguba46",
+    "first_name": "",
+    "last_name": "",
+    "email": "ataguba77@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-08-12T15:46:42.469Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "fees.academicsession",
+  "pk": 1,
+  "fields": {
+    "name": "2026/2027",
+    "is_active": true,
+    "created_at": "2026-08-12T07:07:51.572Z"
+  }
+},
+{
+  "model": "fees.term",
+  "pk": 1,
+  "fields": {
+    "name": "First Term"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 1,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "Primary 1",
+    "student_type": "old",
+    "department": null,
+    "total_fee": "31800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.605Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 2,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "Primary 1",
+    "student_type": "new",
+    "department": null,
+    "total_fee": "40300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.618Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 3,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "Primary 2",
+    "student_type": "old",
+    "department": null,
+    "total_fee": "31800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.627Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 4,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "Primary 2",
+    "student_type": "new",
+    "department": null,
+    "total_fee": "40300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.642Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 5,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "Primary 3",
+    "student_type": "old",
+    "department": null,
+    "total_fee": "38800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.642Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 6,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "Primary 3",
+    "student_type": "new",
+    "department": null,
+    "total_fee": "47300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.658Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 7,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "Primary 4",
+    "student_type": "old",
+    "department": null,
+    "total_fee": "38800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.675Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 8,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "Primary 4",
+    "student_type": "new",
+    "department": null,
+    "total_fee": "47300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.675Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 9,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "Primary 5",
+    "student_type": "old",
+    "department": null,
+    "total_fee": "38800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.694Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 10,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "Primary 5",
+    "student_type": "new",
+    "department": null,
+    "total_fee": "47300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.709Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 11,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "JSS 1",
+    "student_type": "old",
+    "department": null,
+    "total_fee": "48300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.709Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 12,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "JSS 1",
+    "student_type": "new",
+    "department": null,
+    "total_fee": "48300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.726Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 13,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "JSS 2",
+    "student_type": "old",
+    "department": null,
+    "total_fee": "39800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.742Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 14,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "JSS 2",
+    "student_type": "new",
+    "department": null,
+    "total_fee": "48300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.757Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 15,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "JSS 3",
+    "student_type": "old",
+    "department": null,
+    "total_fee": "41800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.768Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 16,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "JSS 3",
+    "student_type": "new",
+    "department": null,
+    "total_fee": "50300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.778Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 17,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "SSS 1",
+    "student_type": "old",
+    "department": "science",
+    "total_fee": "46800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.791Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 18,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "SSS 1",
+    "student_type": "new",
+    "department": "science",
+    "total_fee": "55300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.801Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 19,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "SSS 1",
+    "student_type": "old",
+    "department": "art",
+    "total_fee": "43800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.805Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 20,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "SSS 1",
+    "student_type": "new",
+    "department": "art",
+    "total_fee": "52300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.821Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 21,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "SSS 2",
+    "student_type": "old",
+    "department": "science",
+    "total_fee": "46800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.834Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 22,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "SSS 2",
+    "student_type": "new",
+    "department": "science",
+    "total_fee": "55300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.836Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 23,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "SSS 2",
+    "student_type": "old",
+    "department": "art",
+    "total_fee": "43800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.853Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 24,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "SSS 2",
+    "student_type": "new",
+    "department": "art",
+    "total_fee": "52300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.866Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 25,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "SSS 3",
+    "student_type": "old",
+    "department": "science",
+    "total_fee": "52800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.870Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 26,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "SSS 3",
+    "student_type": "new",
+    "department": "science",
+    "total_fee": "61300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.887Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 27,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "SSS 3",
+    "student_type": "old",
+    "department": "art",
+    "total_fee": "48800",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.899Z"
+  }
+},
+{
+  "model": "fees.feestructure",
+  "pk": 28,
+  "fields": {
+    "session": 1,
+    "term": 1,
+    "student_class": "SSS 3",
+    "student_type": "new",
+    "department": "art",
+    "total_fee": "57300",
+    "payment_deadline": null,
+    "created_at": "2026-08-12T07:07:51.901Z"
+  }
+}
+]
