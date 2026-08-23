@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -907,7 +908,7 @@ Expected Fees
 </div>
 
 <div class="card-value">
-₦{{ expected_fees|floatformat:0 }}
+₦{{ expected_fees|floatformat:0|intcomma }}
 </div>
 
 </div>
@@ -924,7 +925,7 @@ Collected
 </div>
 
 <div class="card-value">
-₦{{ total_collected|floatformat:0 }}
+₦{{ total_collected|floatformat:0|intcomma }}
 </div>
 
 </div>
@@ -943,7 +944,7 @@ Outstanding
 </div>
 
 <div class="card-value">
-₦{{ outstanding|floatformat:0 }}
+₦{{ outstanding|floatformat:0|intcomma }}
 </div>
 
 </div>
@@ -969,7 +970,7 @@ Pending Amount
 </div>
 
 <div class="card-value">
-₦{{ pending_amount|floatformat:0 }}
+₦{{ pending_amount|floatformat:0|intcomma }}
 </div>
 
 </div>
@@ -1062,7 +1063,7 @@ Date
 </td>
 
 <td>
-₦{{ payment.amount|floatformat:0 }}
+₦{{ payment.amount|floatformat:0|intcomma }}
 </td>
 
 <td>

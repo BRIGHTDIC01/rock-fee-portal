@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -866,7 +867,7 @@
                         </span>
 
                         <span class="detail-value">
-                            ₦{{ payment.fee_structure.total_fee|floatformat:"0" }}
+                            ₦{{ payment.fee_structure.total_fee|floatformat:"0"|intcomma }}
                         </span>
 
                     </div>
@@ -914,7 +915,7 @@
                     </span>
 
                     <span class="amount">
-                        ₦{{ payment.amount|floatformat:"0" }}
+                        ₦{{ payment.amount|floatformat:"0"|intcomma }}
                     </span>
 
                 </div>

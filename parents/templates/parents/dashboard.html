@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1847,7 +1848,7 @@
 
                                     <span class="fee-value">
 
-                                        ₦{{ student.current_fee.total_fee|floatformat:"0" }}
+                                        ₦{{ student.current_fee.total_fee|floatformat:"0"|intcomma }}
 
                                     </span>
 
@@ -2087,6 +2088,10 @@
                                                     Status
                                                 </th>
 
+                                                <th>
+                                                    Receipt
+                                                </th>
+
                                             </tr>
 
                                         </thead>
@@ -2117,7 +2122,7 @@
 
                                                     <td class="amount">
 
-                                                        ₦{{ payment.amount|floatformat:"0" }}
+                                                        ₦{{ payment.amount|floatformat:"0"|intcomma }}
 
                                                     </td>
 
@@ -2152,6 +2157,23 @@
 
                                                         {% endif %}
 
+
+                                                    </td>
+
+
+                                                    <td>
+
+                                                        <a
+                                                            href="{% url 'receipt' payment.id %}"
+                                                            style="
+                                                                color: var(--accent, #e5700d);
+                                                                font-weight: 600;
+                                                                text-decoration: none;
+                                                                white-space: nowrap;
+                                                            "
+                                                        >
+                                                            View →
+                                                        </a>
 
                                                     </td>
 

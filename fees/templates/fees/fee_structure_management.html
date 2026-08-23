@@ -1,4 +1,5 @@
 {% extends "dashboard/base.html" %}
+{% load humanize %}
 
 {% block title %}
 Rock Fee Portal | Fee Structures
@@ -337,7 +338,7 @@ Fee Structures
                     <td>
 
                         <strong>
-                            ₦{{ fee.total_fee|floatformat:2 }}
+                            ₦{{ fee.total_fee|floatformat:2|intcomma }}
                         </strong>
 
                     </td>
@@ -345,14 +346,14 @@ Fee Structures
 
                     <td>
 
-                        ₦{{ fee.first_installment|floatformat:2 }}
+                        ₦{{ fee.first_installment|floatformat:2|intcomma }}
 
                     </td>
 
 
                     <td>
 
-                        ₦{{ fee.final_installment|floatformat:2 }}
+                        ₦{{ fee.final_installment|floatformat:2|intcomma }}
 
                     </td>
 

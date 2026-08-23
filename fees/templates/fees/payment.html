@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1214,7 +1215,7 @@
 
                 <span class="fee-value naira">
 
-                    ₦{{ balance|floatformat:"0" }}
+                    ₦{{ balance|floatformat:"0"|intcomma }}
 
                 </span>
 
@@ -1340,7 +1341,7 @@
                                 data-amount="{{ first_payment|floatformat:'0' }}"
                             >
                                 75% Installment —
-                                ₦{{ first_payment|floatformat:"0" }}
+                                ₦{{ first_payment|floatformat:"0"|intcomma }}
                             </option>
 
                         {% endif %}
@@ -1353,7 +1354,7 @@
                                 data-amount="{{ balance|floatformat:'0' }}"
                             >
                                 Final 25% Payment —
-                                ₦{{ balance|floatformat:"0" }}
+                                ₦{{ balance|floatformat:"0"|intcomma }}
                             </option>
 
                         {% endif %}
@@ -1366,7 +1367,7 @@
                                 data-amount="{{ balance|floatformat:'0' }}"
                             >
                                 Full Payment —
-                                ₦{{ balance|floatformat:"0" }}
+                                ₦{{ balance|floatformat:"0"|intcomma }}
                             </option>
 
                         {% endif %}
@@ -1484,7 +1485,7 @@
                     </span>
 
                     <strong>
-                        ₦{{ total_fee|floatformat:"0" }}
+                        ₦{{ total_fee|floatformat:"0"|intcomma }}
                     </strong>
 
                 </div>
@@ -1497,7 +1498,7 @@
                     </span>
 
                     <strong class="green">
-                        ₦{{ total_paid|floatformat:"0" }}
+                        ₦{{ total_paid|floatformat:"0"|intcomma }}
                     </strong>
 
                 </div>
@@ -1510,7 +1511,7 @@
                     </span>
 
                     <strong class="yellow">
-                        ₦{{ balance|floatformat:"0" }}
+                        ₦{{ balance|floatformat:"0"|intcomma }}
                     </strong>
 
                 </div>

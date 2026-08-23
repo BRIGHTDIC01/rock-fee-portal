@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1176,7 +1177,7 @@
                             data-total="{{ fee_structure.total_fee }}"
                         >
 
-                            ₦{{ fee_structure.total_fee|floatformat:"0" }}
+                            ₦{{ fee_structure.total_fee|floatformat:"0"|intcomma }}
 
                         </span>
 
@@ -1191,7 +1192,7 @@
 
                         <span class="fee-value">
 
-                            ₦{{ fee_structure.total_fee|floatformat:"0" }}
+                            ₦{{ fee_structure.total_fee|floatformat:"0"|intcomma }}
 
                         </span>
 
@@ -1378,45 +1379,12 @@
 
                     <!-- AMOUNT -->
 
-                    <div class="form-group">
-
-
-                        <label
-                            class="form-label"
-                            for="amount"
-                        >
-
-                            Full Payment Amount
-
-                            <span class="required">
-                                *
-                            </span>
-
-                        </label>
-
-
-                        <input
-                            type="number"
-                            name="amount"
-                            id="amount"
-                            min="{{ fee_structure.total_fee }}"
-                            max="{{ fee_structure.total_fee }}"
-                            step="1"
-                            value="{{ fee_structure.total_fee|floatformat:'0' }}"
-                            required
-                        >
-
-
-                        <div class="help-text">
-
-                            The amount must be exactly
-
-                            ₦{{ fee_structure.total_fee|floatformat:"0" }}.
-
-                        </div>
-
-
-                    </div>
+                    <input
+                        type="hidden"
+                        name="amount"
+                        id="amount"
+                        value="{{ fee_structure.total_fee|floatformat:'0' }}"
+                    >
 
 
                     <!-- AMOUNT DISPLAY -->
@@ -1435,7 +1403,7 @@
                             id="amountPreview"
                         >
 
-                            ₦{{ fee_structure.total_fee|floatformat:"0" }}
+                            ₦{{ fee_structure.total_fee|floatformat:"0"|intcomma }}
 
                         </span>
 

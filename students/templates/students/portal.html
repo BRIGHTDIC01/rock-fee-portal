@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -328,7 +329,7 @@
                         <span>Total School Fee</span>
 
                         <strong>
-                            ₦{{ fee.total_fee|floatformat:2 }}
+                            ₦{{ fee.total_fee|floatformat:2|intcomma }}
                         </strong>
                     </div>
 
@@ -336,7 +337,7 @@
                         <span>Total Paid</span>
 
                         <strong>
-                            ₦{{ fee.total_paid|floatformat:2 }}
+                            ₦{{ fee.total_paid|floatformat:2|intcomma }}
                         </strong>
                     </div>
 
@@ -344,7 +345,7 @@
                         <span>Outstanding Balance</span>
 
                         <strong class="balance">
-                            ₦{{ fee.balance|floatformat:2 }}
+                            ₦{{ fee.balance|floatformat:2|intcomma }}
                         </strong>
                     </div>
 

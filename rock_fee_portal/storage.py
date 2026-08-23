@@ -5,5 +5,4 @@ class SupabaseStorage(S3Storage):
     location = "payment_proofs"
     file_overwrite = False
     default_acl = None
-    querystring_auth = False
     signature_version = "s3v4"
