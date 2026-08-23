@@ -52,8 +52,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-
-    # WhiteNoise serves static files on Render
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -105,7 +103,7 @@ if IS_RENDER and DATABASE_URL:
         "default": dj_database_url.parse(
             DATABASE_URL,
             conn_max_age=600,
-            ssl_require=True
+            ssl_require=True,
         )
     }
 else:
@@ -146,7 +144,6 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Africa/Lagos"
 
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -181,12 +178,10 @@ if IS_RENDER:
         "default": {
             "BACKEND": "rock_fee_portal.storage.SupabaseStorage",
         },
-
         "staticfiles": {
             "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
         },
     }
-
 else:
     STORAGES = {
         "default": {
@@ -196,7 +191,6 @@ else:
                 "base_url": MEDIA_URL,
             },
         },
-
         "staticfiles": {
             "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
         },
@@ -233,7 +227,11 @@ AWS_S3_SIGNATURE_VERSION = os.environ.get(
     "s3v4"
 )
 
-AWS_QUERYSTRING_AUTH = False
+# Required for Supabase S3-compatible storage
+AWS_S3_ADDRESSING_STYLE = "path"
+
+# Payment-proof bucket is private, so URLs need signatures
+AWS_QUERYSTRING_AUTH = True
 
 AWS_DEFAULT_ACL = None
 
