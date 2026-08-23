@@ -5,85 +5,21 @@ from django.shortcuts import redirect
 from django.urls import include, path
 
 
-# ============================================================
-# HOMEPAGE
-# ============================================================
-
 def home(request):
+    return redirect("parent_register")
 
-    return redirect(
-        "parent_register"
-    )
-
-
-# ============================================================
-# URL PATTERNS
-# ============================================================
 
 urlpatterns = [
-
-    # --------------------------------------------------------
-    # Homepage
-    # --------------------------------------------------------
-
-    path(
-        "",
-        home,
-        name="home"
-    ),
-
-
-    # --------------------------------------------------------
-    # Staff Dashboard
-    # --------------------------------------------------------
-
-    path(
-        "staff-dashboard/",
-        include("dashboard.urls")
-    ),
-
-
-    # --------------------------------------------------------
-    # Django Admin
-    # --------------------------------------------------------
-
-    path(
-        "admin/",
-        admin.site.urls
-    ),
-
-
-    # --------------------------------------------------------
-    # Fees
-    # --------------------------------------------------------
-
-    path(
-        "fees/",
-        include("fees.urls")
-    ),
-
-
-    # --------------------------------------------------------
-    # Parent Portal
-    # --------------------------------------------------------
-
-    path(
-        "parent/",
-        include("parents.urls")
-    ),
+    path("", home, name="home"),
+    path("admin/", admin.site.urls),
+    path("dashboard/", include("dashboard.urls")),
+    path("parents/", include("parents.urls")),
+    path("students/", include("students.urls")),
+    path("fees/", include("fees.urls")),
 ]
 
-
-# ============================================================
-# MEDIA FILES
-#
-# Payment proofs are uploaded into MEDIA_ROOT.
-#
-# This is deliberately enabled in production too so Render
-# can serve the uploaded payment-proof files.
-# ============================================================
-
-urlpatterns += static(
-    settings.MEDIA_URL,
-    document_root=settings.MEDIA_ROOT
-)
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )

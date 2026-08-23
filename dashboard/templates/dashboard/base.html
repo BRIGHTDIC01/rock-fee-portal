@@ -1,7 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
 
     <meta charset="UTF-8">
 
@@ -176,14 +179,14 @@
             background:
                 linear-gradient(
                     135deg,
-                    #2563eb,
-                    #3b82f6
+                    #e5700d,
+                    #f2861f
                 );
 
             color: white;
 
             box-shadow:
-                0 7px 18px rgba(37,99,235,.28);
+                0 7px 18px rgba(229,112,13,.28);
         }
 
 
@@ -265,8 +268,8 @@
             background:
                 linear-gradient(
                     135deg,
-                    #2563eb,
-                    #4f46e5
+                    #e5700d,
+                    #c25a00
                 );
 
             color: white;
@@ -522,15 +525,23 @@
     <aside class="sidebar">
 
 
-        <div class="brand">
+        <div class="brand" style="display:flex; align-items:center; gap:10px;">
 
-            <h1>
-                Rock Fee Portal
-            </h1>
+            <img
+                src="{% static 'images/logo.png' %}"
+                alt="Rock Foundation crest"
+                style="width:36px; height:36px; object-fit:contain; background:white; border-radius:8px; padding:3px; flex-shrink:0;"
+            >
 
-            <p>
-                School Management System
-            </p>
+            <div>
+                <h1 style="margin:0;">
+                    Rock Fee Portal
+                </h1>
+
+                <p style="margin:0;">
+                    School Management System
+                </p>
+            </div>
 
         </div>
 

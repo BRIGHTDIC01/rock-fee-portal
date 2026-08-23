@@ -1,374 +1,376 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account | Rock Foundation</title>
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 
     <style>
+
+        :root {
+            --orange: #e5700d;
+            --orange-deep: #c25a00;
+            --orange-light: #f2861f;
+            --orange-tint: #fff1e2;
+            --cream: #fffaf5;
+            --paper: #ffffff;
+            --slate: #6b6259;
+            --text: #241c15;
+            --error-bg: #fdeceb;
+            --error-text: #9a3327;
+        }
 
         * {
             box-sizing: border-box;
         }
 
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+            }
+        }
+
         body {
             margin: 0;
             min-height: 100vh;
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--cream);
+            display: flex;
+        }
 
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
+        /* ============================================
+           LEFT PANEL - BRAND
+        ============================================ */
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #fff7ed,
-                    #ffffff
-                );
+        .brand-panel {
+            position: relative;
+            width: 40%;
+            min-height: 100vh;
+            background: linear-gradient(160deg, var(--orange-light) 0%, var(--orange) 55%, var(--orange-deep) 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 48px 40px;
+            overflow: hidden;
+        }
 
+        .brand-eyebrow {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.85);
+        }
+
+        .brand-name {
+            font-family: "Fraunces", serif;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-top: 10px;
+            line-height: 1.15;
+        }
+
+        .badge-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 24px auto;
+            opacity: 0;
+            transform: translateY(14px) scale(0.96);
+            animation: badgeIn 0.7s ease forwards;
+            animation-delay: 0.1s;
+        }
+
+        @keyframes badgeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .badge {
+            width: 148px;
+            height: 148px;
+            border-radius: 50%;
+            background: white;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 20px 45px rgba(120,45,0,0.28), 0 0 0 8px rgba(255,255,255,0.16);
+        }
 
-            padding: 25px;
+        .badge img {
+            width: 104px;
+            height: 104px;
+            object-fit: contain;
+        }
+
+        .brand-caption {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.92);
+            max-width: 300px;
+        }
+
+        .brand-footer {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 11px;
+            color: rgba(255,255,255,0.75);
+            letter-spacing: 0.04em;
+        }
+
+        /* ============================================
+           RIGHT PANEL - FORM
+        ============================================ */
+
+        .form-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
         }
 
         .card {
             width: 100%;
-            max-width: 480px;
-
-            background: white;
-
-            padding: 38px;
-
-            border-radius: 24px;
-
-            box-shadow:
-                0 20px 60px
-                rgba(0,0,0,0.10);
-
-            animation:
-                enter 0.7s ease;
+            max-width: 420px;
+            animation: enter 0.5s ease;
         }
 
         @keyframes enter {
-
             from {
                 opacity: 0;
-                transform:
-                    translateY(25px)
-                    scale(0.97);
+                transform: translateY(12px);
             }
-
             to {
                 opacity: 1;
-                transform:
-                    translateY(0)
-                    scale(1);
+                transform: translateY(0);
             }
-
         }
 
-        .logo {
-            width: 58px;
-            height: 58px;
-
-            margin: 0 auto 18px;
-
-            border-radius: 17px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #f97316,
-                    #ea580c
-                );
-
-            color: white;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 25px;
-            font-weight: 900;
-
-            box-shadow:
-                0 10px 25px
-                rgba(249,115,22,0.25);
-        }
-
-        h1 {
-            margin: 0;
-
-            text-align: center;
-
-            color: #171717;
-
-            font-size: 28px;
+        .card h1 {
+            font-family: "Fraunces", serif;
+            font-weight: 600;
+            font-size: 26px;
+            color: var(--text);
+            margin: 0 0 6px;
         }
 
         .subtitle {
-            text-align: center;
-
-            color: #737373;
-
+            color: var(--slate);
             font-size: 14px;
-
-            margin:
-                8px 0 28px;
+            margin: 0 0 26px;
         }
 
         label {
             display: block;
-
-            margin:
-                16px 0 7px;
-
-            font-size: 13px;
-
-            font-weight: 800;
-
-            color: #262626;
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--text);
+            margin: 16px 0 7px;
         }
 
         input {
             width: 100%;
-
-            padding: 13px 14px;
-
-            border:
-                1px solid #e5e5e5;
-
-            border-radius: 10px;
-
+            padding: 12px 14px;
+            border: 1.5px solid #ecdfd0;
+            border-radius: 9px;
             font-size: 15px;
-
+            font-family: "Inter", sans-serif;
             outline: none;
-
-            transition: 0.2s;
+            background: var(--paper);
+            transition: border-color 0.15s, box-shadow 0.15s;
         }
 
         input:focus {
-            border-color: #f97316;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(249,115,22,0.10);
+            border-color: var(--orange);
+            box-shadow: 0 0 0 3px rgba(229,112,13,0.16);
         }
 
         .button {
             width: 100%;
-
             border: none;
-
-            margin-top: 25px;
-
-            padding: 15px;
-
-            border-radius: 11px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #f97316,
-                    #ea580c
-                );
-
+            margin-top: 24px;
+            padding: 14px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, var(--orange-light), var(--orange-deep));
             color: white;
-
             font-size: 15px;
-
-            font-weight: 900;
-
+            font-weight: 600;
+            font-family: "Inter", sans-serif;
             cursor: pointer;
-
-            transition: 0.2s;
+            transition: transform 0.15s, box-shadow 0.15s;
         }
 
         .button:hover {
-            transform: translateY(-2px);
-
-            box-shadow:
-                0 10px 25px
-                rgba(249,115,22,0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(194,90,0,0.28);
         }
 
         .message {
-            padding: 12px;
-
-            margin-bottom: 15px;
-
-            border-radius: 10px;
-
-            background: #fef2f2;
-
-            color: #991b1b;
-
-            font-size: 13px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            border-radius: 9px;
+            background: var(--error-bg);
+            color: var(--error-text);
+            font-size: 13.5px;
         }
 
         .login-link {
             text-align: center;
-
             margin-top: 22px;
-
             font-size: 13px;
-
-            color: #737373;
+            color: var(--slate);
         }
 
         .login-link a {
-            color: #ea580c;
-
-            font-weight: 800;
-
+            color: var(--orange-deep);
+            font-weight: 700;
             text-decoration: none;
         }
 
+        @media (max-width: 860px) {
+            body {
+                flex-direction: column;
+            }
+
+            .brand-panel {
+                width: 100%;
+                min-height: auto;
+                padding: 30px 26px;
+            }
+
+            .badge {
+                width: 100px;
+                height: 100px;
+            }
+
+            .badge img {
+                width: 70px;
+                height: 70px;
+            }
+
+            .brand-caption {
+                display: none;
+            }
+        }
+
     </style>
-
 </head>
-
 
 <body>
 
-<div class="card">
+    <div class="brand-panel">
+        <div>
+            <div class="brand-eyebrow">School Fee Portal</div>
+            <div class="brand-name">Rock<br>Foundation</div>
+        </div>
 
-    <div class="logo">
-        R
+        <div class="badge-wrap">
+            <div class="badge">
+                <img src="{% static 'images/logo.png' %}" alt="Rock Foundation College crest">
+            </div>
+        </div>
+
+        <div>
+            <p class="brand-caption">
+                One account, every student. Add your children,
+                see their fees calculated automatically, and
+                submit proof of payment in minutes.
+            </p>
+            <p class="brand-footer" style="margin-top: 24px;">
+                PARENT ACCESS
+            </p>
+        </div>
     </div>
 
-    <h1>
-        Create Parent Account
-    </h1>
+    <div class="form-panel">
+        <div class="card">
 
-    <p class="subtitle">
-        Create your Rock Foundation fee portal account
-    </p>
+            <h1>Create your account</h1>
+            <p class="subtitle">Set up parent access to the fee portal</p>
 
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
 
-    {% if messages %}
+            <form method="POST">
 
-        {% for message in messages %}
+                {% csrf_token %}
 
-            <div class="message">
-                {{ message }}
+                <label>Full Name</label>
+                <input
+                    type="text"
+                    name="full_name"
+                    placeholder="Enter your full name"
+                    required
+                >
+
+                <label>Phone Number</label>
+                <input
+                    type="tel"
+                    name="phone"
+                    placeholder="08012345678"
+                    required
+                >
+
+                <label>Email Address</label>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    required
+                >
+
+                <label>Username</label>
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Choose a username"
+                    required
+                >
+
+                <label>Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Create a password"
+                    required
+                >
+
+                <label>Confirm Password</label>
+                <input
+                    type="password"
+                    name="confirm_password"
+                    placeholder="Confirm your password"
+                    required
+                >
+
+                <button type="submit" class="button">
+                    Create Account
+                </button>
+
+            </form>
+
+            <div class="login-link">
+                Already have an account?
+                <a href="{% url 'parent_login' %}">Log in here</a>
             </div>
 
-        {% endfor %}
-
-    {% endif %}
-
-
-    <form method="POST">
-
-        {% csrf_token %}
-
-
-        <label>
-            Full Name
-        </label>
-
-        <input
-            type="text"
-            name="full_name"
-            placeholder="Enter your full name"
-            required
-        >
-
-
-        <label>
-            Phone Number
-        </label>
-
-        <input
-            type="tel"
-            name="phone"
-            placeholder="08012345678"
-            required
-        >
-
-
-        <label>
-            Email Address
-        </label>
-
-        <input
-            type="email"
-            name="email"
-            placeholder="you@example.com"
-            required
-        >
-
-
-        <label>
-            Username
-        </label>
-
-        <input
-            type="text"
-            name="username"
-            placeholder="Choose a username"
-            required
-        >
-
-
-        <label>
-            Password
-        </label>
-
-        <input
-            type="password"
-            name="password"
-            placeholder="Create a password"
-            required
-        >
-
-
-        <label>
-            Confirm Password
-        </label>
-
-        <input
-            type="password"
-            name="confirm_password"
-            placeholder="Confirm your password"
-            required
-        >
-
-
-        <button
-            type="submit"
-            class="button"
-        >
-            Create Account
-        </button>
-
-    </form>
-
-
-    <div class="login-link">
-
-        Already have an account?
-
-        <a href="{% url 'parent_login' %}">
-            Login here
-        </a>
-
+        </div>
     </div>
 
-</div>
-
-
 </body>
-
 </html>
