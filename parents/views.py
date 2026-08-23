@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.db import transaction
 
 from students.models import Student
 from fees.models import FeeStructure
@@ -110,19 +111,48 @@ def parent_register(request):
                 "parents/register.html"
             )
 
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password
-        )
+        # ----------------------------------------------------
+        # CREATE USER + PARENT AS ONE TRANSACTION
+        #
+        # If anything fails while creating either record,
+        # Django will automatically roll everything back.
+        # This prevents incomplete accounts from being saved.
+        # ----------------------------------------------------
 
-        from parents.models import Parent
+        try:
 
-        Parent.objects.create(
-            user=user,
-            full_name=full_name,
-            phone=phone
-        )
+            from parents.models import Parent
+
+            with transaction.atomic():
+
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=password
+                )
+
+                Parent.objects.create(
+                    user=user,
+                    full_name=full_name,
+                    phone=phone
+                )
+
+        except Exception:
+
+            messages.error(
+                request,
+                "We could not create your account. Please check your details and try again."
+            )
+
+            return render(
+                request,
+                "parents/register.html"
+            )
+
+        # ----------------------------------------------------
+        # LOGIN ONLY AFTER BOTH USER AND PARENT WERE CREATED
+        # SUCCESSFULLY
+        # ----------------------------------------------------
 
         login(
             request,
