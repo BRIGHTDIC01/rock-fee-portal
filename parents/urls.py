@@ -12,6 +12,12 @@ urlpatterns = [
     ),
 
     path(
+        "guide/",
+        views.parent_guide,
+        name="parent_guide"
+    ),
+
+    path(
         "login/",
         views.parent_login,
         name="parent_login"

@@ -210,6 +210,28 @@
             cursor: pointer;
         }
 
+        .guide-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 22px;
+            padding: 13px 16px;
+            border-radius: 10px;
+            background: #171717;
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 800;
+            transition: 0.2s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .guide-button:hover {
+            background: #2d2d2d;
+            transform: translateY(-2px);
+        }
+
         .login-button {
             width: 100%;
             margin-top: 26px;
@@ -320,6 +342,10 @@
 
             <h1>Welcome back</h1>
             <p class="subtitle">Log in to manage your children's fees</p>
+
+            <a href="{% url 'parent_guide' %}" class="guide-button">
+                📖 Read the Step-by-Step Portal Guide
+            </a>
 
             {% if messages %}
                 {% for message in messages %}

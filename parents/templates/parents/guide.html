@@ -1,0 +1,465 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Use the Parent Portal | Rock Foundation</title>
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        :root {
+            --orange: #f97316;
+            --orange-dark: #ea580c;
+            --orange-soft: #fff7ed;
+            --black: #171717;
+            --text: #262626;
+            --muted: #737373;
+            --border: #e7e7e7;
+            --white: #ffffff;
+            --green: #15803d;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Inter", Arial, sans-serif;
+            background: #f7f7f7;
+            color: var(--text);
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(255,255,255,0.96);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .topbar-inner {
+            width: min(1080px, 100%);
+            min-height: 72px;
+            margin: auto;
+            padding: 0 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .brand-logo {
+            width: 43px;
+            height: 43px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 19px;
+        }
+
+        .brand strong { display: block; font-size: 14px; }
+        .brand span { display: block; color: var(--muted); font-size: 11px; margin-top: 3px; }
+
+        .top-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            background: var(--black);
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .page {
+            width: min(940px, 100%);
+            margin: auto;
+            padding: 38px 22px 70px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #171717, #303030);
+            color: white;
+            border-radius: 24px;
+            padding: clamp(28px, 5vw, 46px);
+            margin-bottom: 22px;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+        }
+
+        .hero-label {
+            color: #fb923c;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            margin-bottom: 10px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-family: "Fraunces", Georgia, serif;
+            font-size: clamp(31px, 6vw, 50px);
+            line-height: 1.05;
+        }
+
+        .hero p {
+            max-width: 680px;
+            color: #d4d4d4;
+            line-height: 1.7;
+            margin: 14px 0 0;
+            font-size: 14px;
+        }
+
+        .notice {
+            background: var(--orange-soft);
+            border: 1px solid #fed7aa;
+            border-radius: 16px;
+            padding: 17px 18px;
+            margin-bottom: 24px;
+            line-height: 1.65;
+            font-size: 13px;
+        }
+
+        .notice strong { color: #9a3412; }
+
+        .step {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 16px;
+            box-shadow: 0 7px 25px rgba(0,0,0,0.04);
+        }
+
+        .step-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .number {
+            flex: 0 0 43px;
+            width: 43px;
+            height: 43px;
+            border-radius: 13px;
+            background: var(--orange);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            font-weight: 900;
+        }
+
+        .step h2 {
+            margin: 1px 0 6px;
+            font-size: 20px;
+        }
+
+        .step-intro {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .step-body {
+            margin: 20px 0 0 58px;
+        }
+
+        ol, ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 9px 0;
+            line-height: 1.6;
+            font-size: 13.5px;
+        }
+
+        .tip {
+            margin-top: 17px;
+            padding: 13px 15px;
+            border-radius: 12px;
+            background: #fafafa;
+            border-left: 4px solid var(--orange);
+            font-size: 12.5px;
+            line-height: 1.6;
+        }
+
+        .success {
+            margin-top: 8px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            border-radius: 18px;
+            padding: 22px;
+            line-height: 1.7;
+            font-size: 13px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            padding: 13px 18px;
+            border-radius: 11px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .action.primary {
+            background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+            color: white;
+        }
+
+        .action.secondary {
+            background: white;
+            color: var(--black);
+            border: 1px solid var(--border);
+        }
+
+        @media (max-width: 620px) {
+            .topbar-inner { padding: 0 15px; }
+            .brand span { display: none; }
+            .page { padding: 22px 14px 50px; }
+            .step { padding: 20px; }
+            .step-body { margin-left: 0; }
+            .step-head { gap: 12px; }
+            .number { flex-basis: 39px; width: 39px; height: 39px; }
+            .top-button { padding: 9px 11px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="topbar-inner">
+        <div class="brand">
+            <div class="brand-logo">R</div>
+            <div>
+                <strong>Rock Foundation</strong>
+                <span>Parent Portal Guide</span>
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'parent_dashboard' %}" class="top-button">← Back to Portal</a>
+        {% else %}
+            <a href="{% url 'parent_login' %}" class="top-button">Parent Login</a>
+        {% endif %}
+    </div>
+</header>
+
+<main class="page">
+
+    <section class="hero">
+        <div class="hero-label">Simple Step-by-Step Guide</div>
+        <h1>How to use the Parent Portal</h1>
+        <p>
+            Follow these steps to create your parent account, add your child,
+            make the school-fee payment, upload your payment proof and check
+            your payment status later.
+        </p>
+    </section>
+
+    <div class="notice">
+        <strong>Important:</strong> Keep your username and password somewhere safe.
+        You will need them to log back into the portal later to check your students,
+        payments, verification status and receipts.
+    </div>
+
+    <section class="step">
+        <div class="step-head">
+            <div class="number">1</div>
+            <div>
+                <h2>Create your parent account</h2>
+                <p class="step-intro">Start by registering your personal parent account.</p>
+            </div>
+        </div>
+        <div class="step-body">
+            <ol>
+                <li>Open the Rock Foundation Parent Portal.</li>
+                <li>Click <strong>Create Parent Account</strong> or <strong>Create Account</strong>.</li>
+                <li>Enter your full name and phone number.</li>
+                <li>Enter your email address.</li>
+                <li>Choose a username that you will remember.</li>
+                <li>Create a password and enter it again to confirm it.</li>
+                <li>Click <strong>Create Account</strong>.</li>
+            </ol>
+            <div class="tip">
+                <strong>Tip:</strong> Write down your username and password. Do not rely on memory alone.
+            </div>
+        </div>
+    </section>
+
+    <section class="step">
+        <div class="step-head">
+            <div class="number">2</div>
+            <div>
+                <h2>Log in to your parent account</h2>
+                <p class="step-intro">Use the same username and password whenever you return to the portal.</p>
+            </div>
+        </div>
+        <div class="step-body">
+            <ol>
+                <li>Go to the Parent Login page.</li>
+                <li>Enter your username.</li>
+                <li>Enter your password.</li>
+                <li>Click <strong>Log In</strong>.</li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="step">
+        <div class="step-head">
+            <div class="number">3</div>
+            <div>
+                <h2>Add your student</h2>
+                <p class="step-intro">You must add the student before you can make a fee payment for that student.</p>
+            </div>
+        </div>
+        <div class="step-body">
+            <ol>
+                <li>From your Parent Dashboard, click <strong>+ Add Student</strong>.</li>
+                <li>Enter the student's full name.</li>
+                <li>Select the student's class.</li>
+                <li>Select whether the student is an <strong>Old Student</strong> or <strong>New Intake</strong>.</li>
+                <li>If the student is in SSS, select the correct department: <strong>Science</strong> or <strong>Art</strong>.</li>
+                <li>Click <strong>Add Student</strong>.</li>
+            </ol>
+            <div class="tip">
+                <strong>Important:</strong> Make sure the student's name, class, student type and SSS department are correct before submitting.
+            </div>
+        </div>
+    </section>
+
+    <section class="step">
+        <div class="step-head">
+            <div class="number">4</div>
+            <div>
+                <h2>Open the student's payment page</h2>
+                <p class="step-intro">Your dashboard will show the student's current fee information.</p>
+            </div>
+        </div>
+        <div class="step-body">
+            <ol>
+                <li>Find the student you want to pay for on your dashboard.</li>
+                <li>Check the current session, term and school-fee amount shown.</li>
+                <li>Click the student's <strong>Make Payment</strong> button.</li>
+            </ol>
+            <div class="tip">
+                The portal uses the student's class, student type and, where applicable, SSS department to determine the current fee.
+            </div>
+        </div>
+    </section>
+
+    <section class="step">
+        <div class="step-head">
+            <div class="number">5</div>
+            <div>
+                <h2>Make the school-fee payment</h2>
+                <p class="step-intro">Pay the full amount shown on the payment page using the school's official payment details.</p>
+            </div>
+        </div>
+        <div class="step-body">
+            <ol>
+                <li>Read the school payment account details displayed on the payment page.</li>
+                <li>Make the <strong>full payment</strong> into the official school account shown there.</li>
+                <li>Confirm that the account details are correct before sending the money.</li>
+                <li>Keep your payment confirmation or transaction evidence.</li>
+            </ol>
+            <div class="tip">
+                <strong>Do not use an old bank-account screenshot or an account number from another source.</strong> Always use the official payment details displayed by the portal at the time you are paying.
+            </div>
+        </div>
+    </section>
+
+    <section class="step">
+        <div class="step-head">
+            <div class="number">6</div>
+            <div>
+                <h2>Upload your payment proof</h2>
+                <p class="step-intro">After paying, return to the payment page and submit evidence of the payment.</p>
+            </div>
+        </div>
+        <div class="step-body">
+            <ol>
+                <li>Make sure the payment amount matches the full school fee shown by the portal.</li>
+                <li>Choose <strong>Payment Proof</strong>.</li>
+                <li>Upload a clear screenshot, photograph or PDF showing the payment confirmation.</li>
+                <li>Check that the uploaded file is readable before submitting.</li>
+                <li>Click <strong>Submit Full Payment</strong>.</li>
+            </ol>
+            <div class="tip">
+                The portal accepts JPG, JPEG, PNG and PDF payment-proof files, with a maximum file size of 5 MB.
+            </div>
+        </div>
+    </section>
+
+    <section class="step">
+        <div class="step-head">
+            <div class="number">7</div>
+            <div>
+                <h2>Check your payment status and receipt</h2>
+                <p class="step-intro">Your payment is reviewed by the school after you submit it.</p>
+            </div>
+        </div>
+        <div class="step-body">
+            <ol>
+                <li>After submission, your payment appears in your Parent Dashboard.</li>
+                <li>A newly submitted payment will show as <strong>Pending</strong> until the school reviews it.</li>
+                <li>When the school verifies it, the payment status changes to <strong>Verified</strong>.</li>
+                <li>If there is a problem with the payment proof, the payment may be marked <strong>Rejected</strong>.</li>
+                <li>When a receipt is available, use the receipt option shown with the payment.</li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="success">
+        <strong>You're done!</strong><br>
+        Once your student has been added and the payment has been submitted,
+        you can leave the portal. Keep your login details safe and return later
+        using the same username and password to check your student's payment records.
+    </section>
+
+    <div class="actions">
+        {% if user.is_authenticated %}
+            <a href="{% url 'parent_dashboard' %}" class="action primary">← Return to Parent Dashboard</a>
+        {% else %}
+            <a href="{% url 'parent_register' %}" class="action primary">Create Parent Account</a>
+            <a href="{% url 'parent_login' %}" class="action secondary">Already Registered? Log In</a>
+        {% endif %}
+    </div>
+
+</main>
+
+</body>
+</html>
